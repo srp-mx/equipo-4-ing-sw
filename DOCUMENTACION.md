@@ -1,4 +1,14 @@
-# Estudiantica
+# Estudiántica
+
+## Tabla de contenidos
+
+* [Argumento](#argumento)
+* [Especificación](#especificación)
+* [Diseño](#diseño)
+    * [Base de datos](#base-de-datos)
+    * [Interfaz de usuario](#interfaz-de-usuario)
+    * [Diagrama de clases](#diagrama-de-clases)
+
 ## Argumento
 Convertirse en el mejor estudiante que uno puede ser es difícil. A pesar de
 saber lo que debemos hacer, es fácil distraerse con algo más. Las buenas
@@ -14,7 +24,7 @@ podrá organizar sus tareas, prácticas y exámenes, evaluando su progreso y
 también sus logros. A lo largo del ciclo escolar se planteará metas y se verá
 recompensado al cumplirlas.
 
-Con *Estudiantica*, buscamos darle un poco de emoción a la vida del estudiante
+Con *Estudiántica*, buscamos darle un poco de emoción a la vida del estudiante
 promedio, ayudando a que tome el control de sus estudios a través de incentivos
 en forma de un *videojuego-agenda*. El estudiante va a generar hábitos positivos
 con recompensas estilo *RPG* como: habilidades, items, mascotas y armaduras con
@@ -27,7 +37,7 @@ El componente más escencial de la aplicación es una agenda escolar. El aspecto
 de *ludificación* sirve para motivar al estudiante a interactuar con los
 sistemas de la agenda a través de incentivos y consecuencias.
 
-Para empezar a usar *Estudiantica* el usuario debe ingresar la fecha de incio y
+Para empezar a usar *Estudiántica* el usuario debe ingresar la fecha de incio y
 término de su periódo escolar actual (bimestre, cuatrimestre, semestre, etc.) y
 la carga de materias. Cada materia se puede personalizar agregándole las
 siguientes calificaciones subjetivas: el interés que tiene el estudiante por la
@@ -82,3 +92,20 @@ Por último, de manera opcional, los estudiantes podrán elegir entre diferentes
 clases dentro del juego, como el estratega, el multitarea o el metódico, cada
 una con habilidades que influirán en la manera en que interactúan con la agenda
 y los incentivos de la aplicación.
+
+## Diseño
+
+
+
+### Interfaz de usuario
+
+
+
+### Base de datos
+
+![Diagrama entidad-relación](.repo/EntidadRelaciónEstudiántica.drawio.png)
+
+### Diagrama de clases
+
+
+
