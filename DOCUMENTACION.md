@@ -292,3 +292,17 @@ Las clases que tiene el módulo DungeonView son:
 
 ### Interfaz de usuario
 
+Para esto, se divide la aplicación en los siguientes apartados con su respectivo maquetado:
+   - Login: En este apartado, se mostrará las funciones para ingresar a la aplicación y para poder crear
+     tu perfil.
+   - Profile: En este apartado, podras realizar la personalización de tu personaje, ver las tareas que tienes
+     como prioridad (fecha o importancia) y configuración de tu perfil.
+   - Dungeon: se puede ver la información de la mazmorra actual con las recompensas disponibles e
+     información.
+   - Clan: aqui se puede ver la información de los miembros, personalización del clan y edición de
+     información importante.
+   - Assigment: aqui se podra consultar el calendario con las actividades, y aqui mismo se podran agregar
+     más tareas con su respectiva materia. A su vez, podra modificar las ya existentes usando una busqueda
+     por nombre o similar.
+        
+
