@@ -6,8 +6,8 @@
 * [Especificación](#especificación)
 * [Diseño](#diseño)
     * [Base de datos](#base-de-datos)
-    * [Interfaz de usuario](#interfaz-de-usuario)
     * [Diagrama de clases](#diagrama-de-clases)
+    * [Interfaz de usuario](#interfaz-de-usuario)
 
 ## Argumento
 Convertirse en el mejor estudiante que uno puede ser es difícil. A pesar de
@@ -210,25 +210,29 @@ su lazo.
 
 ### Diagrama de clases
 El programa se divide en varias clases, las cuales componen todo el
-comportamiento, de este modo se divide en las siguientes secciónes.
+comportamiento, de este modo se divide en las siguientes secciones.
 
 #### User module
 Este módulo esta encargado de realizar las operaciones con la clase User y las
 relaciones con Clans, utilizando clases tipo DAO. Las clases de este módulo
 son:
-   - User: clase que tiene la información del usuario y a su vez, maneja la información de su login.
-   - Clans: clase que tiene la información del Clan, basada en el módelo entidad-relación, con las
+   - User: clase que tiene la información del usuario y a su vez, maneja la
+     información de su login.
+   - Clans: clase que tiene la información del Clan, basada en el modelo
+     entidad-relación, con las
      operaciones para agregar o eliminar integrantes.
-   - UserDao y ClansDao: clases para realizar las operaciones en bases de datos
+   - UserDao y ClansDao: clases para realizar las operaciones en bases de
+     datos.
 
-#### Studen Module
+#### Student Module
 Este módulo se encarga de manejar la información relacionada a la parte de la
 vida estudiantil (respecto a tareas) del usuario, principalmente la clase Class
-y Assigment, con suy respectivo Dao. La información especifica de cada uno esta
+y Assignment, con su respectivo DAO. La información especifica de cada uno esta
 dada por lo siguiente:
-   - Class: clase que refleja la materia basada en el módelo entidad-relación.
-   - Assigment: es la clase que refleja las tareas de un alumno.
-   - Class Dao y Assigment Dao: clases que realizan las operaciones internas de la base de datos.
+   - Class: clase que refleja la materia basada en el modelo entidad-relación.
+   - Assignment: es la clase que refleja las tareas de un alumno.
+   - Class Dao y Assignment Dao: clases que realizan las operaciones internas
+     de la base de datos.
 
 #### Event module
 Se encarga de realizar las notificaciones para el usuario con respecto a las
@@ -238,10 +242,11 @@ descripciones.
 #### RPG module
 Es el encargado de simular toda la parte de RPG de la aplicación,
 principalmente del uso del personaje y de los items que este puede llevar con
-sus respectivos Dao, donde cada esta detallada como:
-   - Character: clase que es el personaje del usuario con las distintas acciones del mismo.
-   - Item: indica el comportamiento de los items, donde se tiene la información y deriva en Armor, Weapon
-     y Pet
+sus respectivos DAO, donde cada esta detallada como:
+   - Character: clase que es el personaje del usuario con las distintas
+     acciones del mismo.
+   - Item: indica el comportamiento de los items, donde se tiene la información
+     y deriva en Armor, Weapon y Pet
    - BackPack: indica todos los elementos que tiene el usuario.
 
 #### Controller module y ORM module
@@ -250,7 +255,7 @@ utilizando un singleton.
 
 #### Cuenta Module, Stats Module y Agenda Module
 Estos módulos se encargan de mostrar en la parte visual del programa la
-información de las entidades del programa, especificamente de la información
+información de las entidades del programa, específicamente de la información
 del usuario.
 
 Para Cuenta module, se tienen las siguientes clase:
@@ -262,7 +267,7 @@ Para Cuenta module, se tienen las siguientes clase:
 Para Stats module, contiene las siguientes clases:
    - Stats view: vista de los stats del usuario.
    - ClassProgress: clase que muestra el progreso de la materia.
-   - AssigmentProgress: progreso de las tareas.
+   - AssignmentProgress: progreso de las tareas.
    - Stats y Average: muestra los stats del usuario y el promedio del mismo
 
 #### View module y Resources module
@@ -274,9 +279,10 @@ Estos módulos se encargan de mostrar y modificar la información de las Dungeon
 las cuales es un aditamento especial de nuestro sistema.
 
 Las clases del módulo Dungeon, tiene la siguiente información:
-   - DungeonEvent: tiene el calabozo del momento, donde guarda el listado de usuarios que
-     estan completando, los que ya se retiraron de la contienda y notifica al usuario de
-     su avance. De este modo, se tiene tres tipos de calabozo:
+   - DungeonEvent: tiene el calabozo del momento, donde guarda el listado de
+     usuarios que estan completando, los que ya se retiraron de la contienda y
+     notifica al usuario de su avance. De este modo, se tiene tres tipos de
+     calabozo:
      - BasicDungeon
      - AdvancedDungeon
      - SpecialDungeon
@@ -292,17 +298,20 @@ Las clases que tiene el módulo DungeonView son:
 
 ### Interfaz de usuario
 
-Para esto, se divide la aplicación en los siguientes apartados con su respectivo maquetado:
-   - Login: En este apartado, se mostrará las funciones para ingresar a la aplicación y para poder crear
-     tu perfil.
-   - Profile: En este apartado, podras realizar la personalización de tu personaje, ver las tareas que tienes
-     como prioridad (fecha o importancia) y configuración de tu perfil.
-   - Dungeon: se puede ver la información de la mazmorra actual con las recompensas disponibles e
-     información.
-   - Clan: aqui se puede ver la información de los miembros, personalización del clan y edición de
-     información importante.
-   - Assigment: aqui se podra consultar el calendario con las actividades, y aqui mismo se podran agregar
-     más tareas con su respectiva materia. A su vez, podra modificar las ya existentes usando una busqueda
-     por nombre o similar.
+Para esto, se divide la aplicación en los siguientes apartados con su
+respectivo maquetado:
+   - Login: En este apartado, se mostrará las funciones para ingresar a la
+     aplicación y para poder crear tu perfil.
+   - Profile: En este apartado, podras realizar la personalización de tu
+     personaje, ver las tareas que tienes como prioridad (fecha o importancia)
+     y configuración de tu perfil.
+   - Dungeon: se puede ver la información de la mazmorra actual con las
+     recompensas disponibles e información.
+   - Clan: aqui se puede ver la información de los miembros, personalización
+     del clan y edición de información importante.
+   - Assigment: aqui se podra consultar el calendario con las actividades, y
+     aqui mismo se podran agregar más tareas con su respectiva materia. A su
+     vez, podrá modificar las ya existentes usando una búsqueda por nombre o
+     similar.
         
 
