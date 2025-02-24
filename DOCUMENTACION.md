@@ -23,18 +23,18 @@ supuesto no todos) que se encuentre en su camino, el estudiante podrá recolecta
 distintas mejoras para su personaje, así como para su vida académica.
 
 ## Especificación
-El componente más escencial de la aplicación es una agenda escolar. El aspecto
+El componente más esencial de la aplicación es una agenda escolar. El aspecto
 de *ludificación* sirve para motivar al estudiante a interactuar con los
 sistemas de la agenda a través de incentivos y consecuencias.
 
-Para empezar a usar *Estudiantica* el usuario debe ingresar la fecha de incio y
-término de su periódo escolar actual (bimestre, cuatrimestre, semestre, etc.) y
+Para empezar a usar *Estudiantica* el usuario debe ingresar la fecha de inicio y
+término de su periodo escolar actual (bimestre, cuatrimestre, semestre, etc.) y
 la carga de materias. Cada materia se puede personalizar agregándole las
 siguientes calificaciones subjetivas: el interés que tiene el estudiante por la
 materia y el grado de dificultad de esta. Opcionalmente también se pueden
-asignar porcentajes personalizados al peso total de tareas, prácticas y examenes
+asignar porcentajes personalizados al peso total de tareas, prácticas y exámenes
 en la calificación de cada materia (por defecto 50/50 entre tareas/prácticas y
-examenes).
+exámenes).
 
 A partir de esto, se da lugar a la interacción principal de la agenda: la carga,
 personalización y manejo de trabajos. Las tareas/prácticas y las evaluaciones no
@@ -47,7 +47,7 @@ El estudiante tendrá acceso a distintas métricas respecto a su desempeño como
 calificación promedio por materia, porcentaje de trabajos entregados y
 puntualidad en realizar tareas. Además, podrá ver una lista de todos sus
 pendientes en el orden en el que se entregan. La aplicación alertará dentro de
-un periódo configurable que el estudiante debería empezar a trabajar en una
+un periodo configurable que el estudiante debería empezar a trabajar en una
 tarea. Para poder trabajar parcialmente en una tarea se le pueden agregar campos
 que son subtareas para realizarla, por ejemplo: escribir el borrador del
 documento, leer las notas correspondientes, contestar las primeras dos
@@ -57,7 +57,7 @@ En el aspecto más básico de *ludificación* tu personaje tendrá métricas com
 salud, experiencia, fuerza y habilidad. El personaje podrá subir de nivel a
 través de buen desempeño académico y buena organización al entregar trabajos.
 Por otro lado, perderá experiencia al tener calificaciones bajas o no
-aprobatorias. Como incentivo adicional, obtener una califiación perfecta en una
+aprobatorias. Como incentivo adicional, obtener una calificación perfecta en una
 evaluación tendrá una recompensa especial en el juego, como un insta-heal para
 su personaje.
 
