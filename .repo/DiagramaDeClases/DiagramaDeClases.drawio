@@ -1325,7 +1325,7 @@
         <mxCell id="koiM8iIUhASu4sqg_0I_-264" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;shadow=0;glass=0;sketch=1;curveFitting=1;jiggle=2;opacity=50;" vertex="1" parent="1">
           <mxGeometry x="-1425" y="-1450" width="765" height="336" as="geometry" />
         </mxCell>
-        <mxCell id="koiM8iIUhASu4sqg_0I_-265" value="Dungeon Module" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=25;" vertex="1" parent="1">
+        <mxCell id="koiM8iIUhASu4sqg_0I_-265" value="DungeonView Module" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=25;" vertex="1" parent="1">
           <mxGeometry x="-1430" y="-1448" width="265" height="90" as="geometry" />
         </mxCell>
         <mxCell id="koiM8iIUhASu4sqg_0I_-266" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;shadow=0;glass=0;sketch=1;curveFitting=1;jiggle=2;opacity=50;" vertex="1" parent="1">
