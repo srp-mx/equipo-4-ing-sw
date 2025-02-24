@@ -95,17 +95,43 @@ y los incentivos de la aplicación.
 
 ## Diseño
 
-
-
-### Interfaz de usuario
-
-
+Como parte del desarrollo del problema, se tiene el diseño de la base de datos,
+de los módulos y de la vista para el usuario.
 
 ### Base de datos
+
+Para esto, tendremos las siguientes estructuras, las cuales presentamos por
+medio de entidades:
+   - User: contiene la información de los usuarios para la aplicación, de esta manera
+     se requiere un nombre de usuario, correo y contraseña.
+   - Clan: es un grupo social dentro de la aplicación donde los distintos usuarios
+     se pueden relacionar, el cuál contiene un nombre,una descripción, números de victorias,
+     logotipo y experiencia.
+   - Character: es el personaje del usuario dentro del videojuego, donde existe tres distintas
+     clases (mago, caballero y ), donde cada personaje tiene su nombre, experiencia,nivel,legenda,
+     vida, última vez que estuvo en acción, su racha y sus stats (máximo de vida, inteligencia,
+     defensa y fuerza).
+   - Item: son los objetos que el personaje puede llevar, el cual tiene información de los mismos
+     stats (fuerza, defensa, inteligencia y vida), rareza y dependiendo de su tipo puede tener las
+     siguientes caracteristicas:
+     - Weapon:
+     - Armor: debe de tener el nivel de daño recibido.
+     - Pet: tiene el vinculo y su nombre.
+   - Class: son las materias que los usuarios tienen las cuales deben de tener su nombre,
+     fecha de inicio y fin, y .
+   - Assigment: es la lista de tareas del estudiante, la cual debe de tener nombre, grado, tipo,
+     fecha de finalización, notas, si es opcional y tags (las cuales pueden ser varias).
+
+Las entidades se tomaron de esta manera, ya que engloba la mayoría de las acciones que hará la aplicación
+y nos permite acoplarlo con el resto de los módulos, los cuales se detallarán en la siguiente sección.
 
 ![Diagrama entidad-relación](.repo/EntidadRelacion/EntidadRelaciónEstudiantica.png)
 
 ### Diagrama de clases
+
+![Diagrama-clase](.repo/DiagramaDeClases/DiagramaDeClases.png)
+
+### Interfaz de usuario
 
 
 
