@@ -103,7 +103,7 @@ y los incentivos de la aplicación.
 
 ### Base de datos
 
-![Diagrama entidad-relación](.repo/EntidadRelaciónEstudiántica.drawio.png)
+![Diagrama entidad-relación](.repo/EntidadRelacion/EntidadRelaciónEstudiantica.png)
 
 ### Diagrama de clases
 
