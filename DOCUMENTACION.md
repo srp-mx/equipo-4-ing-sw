@@ -314,4 +314,10 @@ respectivo maquetado:
      vez, podrá modificar las ya existentes usando una búsqueda por nombre o
      similar.
         
+![Wireframe 1](.repo/Wireframe/desk_1.jpg)
 
+![Wireframe 2](.repo/Wireframe/desk_2.jpg)
+
+![Wireframe 3](.repo/Wireframe/desk_3.jpg)
+
+![Wireframe 4](.repo/Wireframe/desk_4.jpg)
