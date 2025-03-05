@@ -4,8 +4,8 @@ import (
 	"time"
 )
 
-type Accompanies struct {
+type Equips struct {
     Character Character `gorm:"unique"`
-    Pet Pet
+    Weapon Weapon
     Since time.Time `gorm:"type:datetime;autoUpdateTime"`
 }
