@@ -1,5 +1,9 @@
 package models
 
+import (
+  "gorm.io/gorm"
+)
+
 type Clan struct {
     Name string `gorm:"primaryKey"`
     Admin User
