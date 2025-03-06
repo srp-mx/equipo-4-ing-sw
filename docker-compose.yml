@@ -23,13 +23,13 @@ services:
     volumes:
       - postgres-db:/var/lib/postgresql/data3
   frontend:
-    build: ./frontend/.
+    build: ./estudiantica/.
     env_file:
       - .env
     ports:
       - 3001:3001
     volumes:
-      - ./frontend/.:/usr/src/app/frontend
-    command: npm run start
+      - ./estudiantica/.:/usr/src/app/frontend
+    command: npm run dev
 volumes:
   postgres-db:
