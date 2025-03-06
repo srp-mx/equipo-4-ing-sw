@@ -1,9 +1,13 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"time"
+	"gorm.io/gorm"
+)
 
 type OwnsArmor struct {
-    gorm.Model
-    Armor Armor
-    Character Character
+	gorm.Model
+	Armor Armor
+	Character Character
+	since time.Time `gorm:"type:datetime"`
 }

@@ -1,9 +1,13 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"time"
+	"gorm.io/gorm"
+)
 
 type OwnsPet struct {
-    gorm.Model
-    Pet Pet
-    Character Character
+	gorm.Model
+	Pet Pet
+	Character Character
+	since time.Time `gorm:"type:datetime"`
 }

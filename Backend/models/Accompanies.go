@@ -6,9 +6,9 @@ import (
 )
 
 type Accompanies struct {
-    Character Character `gorm:"unique"`
-    Pet Pet
-    Since time.Time `gorm:"type:datetime;autoUpdateTime"`
+	Character Character `gorm:"unique"`
+	Pet Pet
+	since time.Time `gorm:"type:datetime;autoUpdateTime"`
 }
 
 
