@@ -9,5 +9,5 @@ type Befriends struct {
     gorm.Model
     SourceUser User
     DestinationUser User
-)
+}
 
