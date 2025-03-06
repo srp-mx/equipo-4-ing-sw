@@ -2,7 +2,7 @@ package models
 
 import (
     "time"
-    "gorm.io/gorm"
+    _ "gorm.io/gorm"
 )
 
 type Class struct {

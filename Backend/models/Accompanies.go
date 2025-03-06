@@ -2,6 +2,7 @@ package models
 
 import (
 	"time"
+	_ "gorm.io/gorm"
 )
 
 type Accompanies struct {
@@ -9,3 +10,6 @@ type Accompanies struct {
     Pet Pet
     Since time.Time `gorm:"type:datetime;autoUpdateTime"`
 }
+
+
+

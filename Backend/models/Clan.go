@@ -1,7 +1,7 @@
 package models
 
 import (
-  "gorm.io/gorm"
+  _ "gorm.io/gorm"
 )
 
 type Clan struct {
