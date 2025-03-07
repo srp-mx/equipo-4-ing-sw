@@ -14,9 +14,23 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  function regexTest(a:string, b:string){
+    let regexEmail = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+    let regexPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+    
+      if(regexEmail.test(a) && regexPassword.test(b))
+        return true;
+      
+      else{
+        alert('el formato de tu email o contrasena es incorrecto');
+        return false;
+      } 
+  }
+
   const handleLogin = () => {
-    console.log("Email:", email);
-    console.log("Password:", password);
+    if(regexTest(email, password)){
+
+    }
   };
 
   return (
