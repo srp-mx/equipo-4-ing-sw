@@ -6,7 +6,6 @@ import (
 	jwt "github.com/golang-jwt/jwt/v4"
 )
 
-// TODO: Make the landing page
 func Landing(c *fiber.Ctx) error {
     // Get user from context and return it
     user := c.Locals("user").(*jwt.Token)
@@ -18,3 +17,18 @@ func Landing(c *fiber.Ctx) error {
     email := claims["email"].(string)
     return c.SendString("Welcome " + email)
 }
+
+func LandingPostData(c *fiber.Ctx) error {
+    user := c.Locals("user").(*jwt.Token)
+
+    claims := user.Claims.(jwt.MapClaims)
+    exp := int64(claims["exp"].(float64))
+    if !user.Valid || time.Now().Unix() >= exp {
+        return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+            "error": "Token is either invalid or expired",
+        })
+    }
+
+    return c.JSON(claims)
+}
+
