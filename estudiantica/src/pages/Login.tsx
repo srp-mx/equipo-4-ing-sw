@@ -31,10 +31,11 @@ function fetchAuthentication(email: string, password: string) {
 }
 
 function regexTest(a:string, b:string){
-  let regexEmail = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');  
+  let regexEmail = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}'); 
+  let regexEmail2 = new RegExp('[a-z0-9]+@[a-z]+\.+[a-z]+\.+[a-z]{2,3}'); 
   let regexPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
   
-    if(regexEmail.test(a) && regexPassword.test(b))
+    if((regexEmail.test(a) && regexPassword.test(b))||(regexEmail2.test(a) && regexPassword.test(b)))
       return true;
     
     else{
