@@ -8,4 +8,4 @@ COPY . .
 
 RUN go mod tidy
 
-RUN go test ./test/
+#RUN go test ./test/

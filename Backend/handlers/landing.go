@@ -10,6 +10,10 @@ import (
 func Landing(c *fiber.Ctx) error {
     // Get user from context and return it
     user := c.Locals("user").(*jwt.Token)
+    if(user == nil){
+        return fiber.NewError(401,"Invalid Token")
+    }
+
     claims := user.Claims.(jwt.MapClaims)
     exp := int64(claims["exp"].(float64))
     if exp < time.Now().Unix() {
