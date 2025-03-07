@@ -12,7 +12,7 @@ import (
 
 func Login(c *fiber.Ctx) error {
     type loginRequest struct {
-        Username string `json:"username"`
+        Email string `json:"email"`
         Password string `json:"password"`
     }
 
@@ -30,7 +30,7 @@ func Login(c *fiber.Ctx) error {
 
     // Get the user by credentials
     userController := controllers.NewUserController(database.DB.Db)
-    user, err := userController.FindByCredentials(request.Username, request.Password)
+    user, err := userController.FindByCredentials(request.Email, request.Password)
     if err != nil {
         return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
             "error": fiber.Error{
