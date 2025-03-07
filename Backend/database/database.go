@@ -92,7 +92,7 @@ func UsuariosBase(db *gorm.DB){
         {Username: "admin", Password: "Admin123*", Email: "root@toor.uk"},
 		{Username: "pepito", Password: "Pepa24*", Email: "pepe.pica.papas@pepe.gov.mx"},
 		{Username: "pedrito", Password: "Piedras1#", Email: "pp@pemex.gov.mx"},
-        {Username: "marinela", Password: "Gansitos/02", Email: "bonais@ciencias.unam.mx"},
+        {Username: "marinela", Password: "Gansitos$02", Email: "bonais@ciencias.unam.mx"},
 	}
 
 	for _, user := range users {
