@@ -11,7 +11,7 @@ import {
 import LandingPage from './LandingPage';
 
 function fetchAuthentication(username: string, password: string) {
-  return fetch("https://dummyjson.com/auth/login", {
+  return fetch("http://localhost:3000/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
