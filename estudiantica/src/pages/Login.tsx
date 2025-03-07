@@ -10,13 +10,23 @@ import {
 } from "@chakra-ui/react";
 import LandingPage from './LandingPage';
 
-function fetchAuthentication(email: string, password: string) {
+  function fetchUsernameByEmail(email: string) {
+    return fetch("https://dummyjson.com/users")
+      .then((response) => response.json())
+      .then((data) => {
+        const user = data.users.find((u: any) => u.email === email);
+        if (!user) throw new Error("Email not found");
+      return user.username;
+    });
+}
+
+function fetchAuthentication(username: string, password: string) {
   return fetch("https://dummyjson.com/auth/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ username, password }),
   })
     .then((response) => {
       if (!response.ok) {
@@ -47,19 +57,23 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
-    if(regexTest(email,password))
-      try {
-        console.log("Intentando login con:", email, password);
-        const userData = await fetchAuthentication(email, password);
-    
-        console.log("Login exitoso:", userData);
-        alert("Login exitoso!");
-      } catch (error) {
-        console.error("Login fallido:", error);
-        alert("Login fallido, porfavor checa la veracidad de tus credenciales.");
-      }
-  };
+    const handleLogin = async () => {
+      if(regexTest(email, password))  
+        try {
+          console.log("Fetcheando el username a traves del email:", email);
+          const username = await fetchUsernameByEmail(email);
+          console.log("Username:", username);
+      
+          console.log("Intentando login con:", username, password);
+          const userData = await fetchAuthentication(username, password);
+      
+          console.log("Login exitoso:", userData);
+          alert("Login exitoso!");
+        } catch (error) {
+          console.error("Login fallido:", error);
+          alert("Login fallido, porfavor checa la veracidad de tus credenciales.");
+        }
+    };
   
   return (
     <Box 
