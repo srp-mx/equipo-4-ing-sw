@@ -100,10 +100,11 @@ func TestFindByCredentials(t *testing.T) {
 	user := &models.User{
 		Username: "testuser",
 		Password: "securepassword",
+		Email: "pp@pemex.gov.mx",
 	}
 	db.Create(user)
 
-	foundUser, err := controller.FindByCredentials("testuser", "securepassword")
+	foundUser, err := controller.FindByCredentials("pp@pemex.gov.mx", "securepassword")
 	assert.NoError(t, err)
 	assert.NotNil(t, foundUser)
 	assert.Equal(t, "testuser", foundUser.Username)

@@ -43,10 +43,10 @@ func(r *UserController) DeleteUser(user *models.User) error {
 }
 
 
-func (r *UserController) FindByCredentials (username string, password string) (*models.User, error) {
+func (r *UserController) FindByCredentials (email string, password string) (*models.User, error) {
 	var user models.User
 
-	err := r.DB.Where("username = ? AND password = ?", username, password).First(&user).Error
+	err := r.DB.Where("email = ? AND password = ?", email, password).First(&user).Error
 
 	if err != nil {
 		return nil, err
