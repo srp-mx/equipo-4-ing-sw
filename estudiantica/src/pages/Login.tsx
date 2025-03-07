@@ -11,7 +11,7 @@ import {
 import LandingPage from './LandingPage';
 
 function fetchAuthentication(email: string, password: string) {
-  return fetch("Access-Control-Allow-Origin: https://example.com", {
+  return fetch("http://localhost:3000/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -31,7 +31,7 @@ function fetchAuthentication(email: string, password: string) {
 }
 
 function regexTest(a:string, b:string){
-  let regexEmail = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+  let regexEmail = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');  
   let regexPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
   
     if(regexEmail.test(a) && regexPassword.test(b))
