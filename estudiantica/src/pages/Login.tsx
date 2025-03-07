@@ -10,13 +10,23 @@ import {
 } from "@chakra-ui/react";
 import LandingPage from './LandingPage';
 
-function fetchAuthentication(email: string, password: string) {
-  return fetch("/users-test.json", {
+function fetchUsernameByEmail(email: string) {
+  return fetch("https://dummyjson.com/users")
+    .then((response) => response.json())
+    .then((data) => {
+      const user = data.users.find((u: any) => u.email === email);
+      if (!user) throw new Error("Email not found");
+      return user.username;
+    });
+}
+
+function fetchAuthentication(username: string, password: string) {
+  return fetch("https://dummyjson.com/auth/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ username, password }),
   })
     .then((response) => {
       if (!response.ok) {
@@ -27,40 +37,42 @@ function fetchAuthentication(email: string, password: string) {
     .then((data) => {
       localStorage.setItem("token", data.token);
       return data;
-    })
-    .catch((error) => {
-      console.error("Login failed:", error);
-      throw error;
     });
 }
 
+function regexTest(a:string, b:string){
+  let regexEmail = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+  let regexPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+  
+    if(regexEmail.test(a) && regexPassword.test(b))
+      return true;
+    
+    else{
+      alert('el formato de tu email o contrasena es incorrecto');
+      return false;
+    } 
+}
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function regexTest(a:string, b:string){
-    let regexEmail = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
-    let regexPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-    
-      if(regexEmail.test(a) && regexPassword.test(b))
-        return true;
-      
-      else{
-        alert('el formato de tu email o contrasena es incorrecto');
-        return false;
-      } 
-  }
-
   const handleLogin = async () => {
     try {
-      const userData = await fetchAuthentication(email, password);
-      console.log("Login successful:", userData);
-      // Redirect to another page or update UI
+      console.log("Fetcheando el username a traves del email:", email);
+      const username = await fetchUsernameByEmail(email);
+      console.log("Username:", username);
+  
+      console.log("Intentando login con:", username, password);
+      const userData = await fetchAuthentication(username, password);
+  
+      console.log("Login exitoso:", userData);
+      alert("Login exitoso!");
     } catch (error) {
-      alert("Login failed. Please check your credentials.");
+      console.error("Login fallido:", error);
+      alert("Login fallido, porfavor checa la veracidad de tus credenciales.");
     }
-  }
+  };
   
   return (
     <Box 
