@@ -7,7 +7,7 @@ import (
 
 type OwnsPet struct {
 	gorm.Model
-	Pet Pet
-	Character Character
+	PetID uint
+	CharacterName string
 	since time.Time `gorm:"type:datetime"`
 }

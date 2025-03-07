@@ -5,9 +5,9 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	jwt "github.com/golang-jwt/jwt/v4"
+	"github.com/srp-mx/equipo-4-ing-sw/controllers"
+	"github.com/srp-mx/equipo-4-ing-sw/database"
 	"github.com/srp-mx/equipo-4-ing-sw/middlewares"
-	"github.com/srp-mx/equipo-4-ing-sw/models"
-	"gorm.io/gorm"
 )
 
 func Login(c *fiber.Ctx) error {
@@ -29,30 +29,22 @@ func Login(c *fiber.Ctx) error {
     }
 
     // Get the user by credentials
-    // TODO(srp): Change to real database lookup
-    if request.Username != "marinela" || request.Password != "gansitos" {
+    userController := controllers.NewUserController(database.DB.Db)
+    user, err := userController.FindByCredentials(request.Username, request.Password)
+    if err != nil {
         return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
             "error": fiber.Error{
-                Code: -69,
+                Code: 401,
                 Message: "El usuario o contraseña no es correcto.",
             },
         })
     }
-    user := models.User{
-        Model: gorm.Model{
-            ID: 1,
-        },
-        Username: "marinela",
-        Email: "juanin.juan.harry@ciencias.unam.mx",
-        Name: "Juanin Juan Harry",
-    }
 
     // Create JWT claims with user ID and expiry time
     claims := jwt.MapClaims{
-        "id": user.ID,
-        "email": user.Email,
         "username": user.Username,
         "name": user.Name,
+        "email": user.Email,
         "exp": time.Now().Add(time.Hour * 24).Unix(),
     }
 

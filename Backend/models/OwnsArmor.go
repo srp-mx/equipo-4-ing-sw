@@ -7,7 +7,7 @@ import (
 
 type OwnsArmor struct {
 	gorm.Model
-	Armor Armor
-	Character Character
+	ArmorID uint 
+	CharacterName string
 	since time.Time `gorm:"type:datetime"`
 }

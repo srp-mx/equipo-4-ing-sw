@@ -1,13 +1,19 @@
 package models
 
 import (
-	"gorm.io/gorm"
+	_ "gorm.io/gorm"
 )
 
 type User struct {
-	gorm.Model
-	Username string `json:"username" gorm:"text;not null;default:null;unique"`
-	Name string `json:"name" gorm:"text;not null;default:null"`
-	Email string `json:"email" gorm:"not null;unique"`
-	Password string `json:"password" gorm:"not null"`
+	Username string `gorm:"primaryKey"`
+	Name string 
+	Email string 
+	Password string 
+	DestinationUser []Befriends `gorm:"foreignKey:DestinationUser"`
+	SourceUser []Befriends `gorm:"foreignKey:SourceUser"`
+	//ClanName string
+	Invites []Invites 
+	Class []Class 
 }
+
+
