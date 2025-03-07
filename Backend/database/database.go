@@ -90,9 +90,9 @@ func clanesBase(db *gorm.DB){
 func UsuariosBase(db *gorm.DB){
 	users := []models.User {
         {Username: "admin", Password: "Admin123*", Email: "root@toor.uk"},
-		{Username: "pepito", Password: "pepa", Email: "pepe.pica.papas@pepe.gov.mx"},
-		{Username: "pedrito", Password: "piedras", Email: "pp@pemex.gov.mx"},
-        {Username: "marinela", Password: "gansitos", Email: "bonais@ciencias.unam.mx"},
+		{Username: "pepito", Password: "Pepa24*", Email: "pepe.pica.papas@pepe.gov.mx"},
+		{Username: "pedrito", Password: "Piedras1#", Email: "pp@pemex.gov.mx"},
+        {Username: "marinela", Password: "Gansitos/02", Email: "bonais@ciencias.unam.mx"},
 	}
 
 	for _, user := range users {
