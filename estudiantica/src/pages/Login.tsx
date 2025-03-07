@@ -60,13 +60,13 @@ export default function Login() {
         bg="white" 
         w="350px">
         <VStack spacing={4}>
-          <Heading size="lg" color='black'>Login</Heading>
+          <Heading size="lg" color='black'>Username</Heading>
 
           <Field.Root>
             <Field.Label color = 'black'>Email</Field.Label>
             <Input
-              type="email"
-              value={email}
+              type="username"
+              value={username}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
               placeholder="Enter your email"
             />
