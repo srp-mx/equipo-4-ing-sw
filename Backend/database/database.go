@@ -37,13 +37,15 @@ func ConnectDb() {
 	db.Logger = logger.Default.LogMode(logger.Info)
 
 	log.Println("running migrations")
+
 	db.AutoMigrate(
+		&models.Clan{},
 		&models.User{},
 		&models.Item{},
 		&models.Pet{},
 		&models.Armor{},
 		&models.Character{},
-		&models.Clan{},
+		
 		&models.Class{},
 		&models.Assignment{},
 		&models.Befriends{},
@@ -55,13 +57,57 @@ func ConnectDb() {
 		&models.OwnsPet{},
 		&models.OwnsWeapon{},
 		//&models.Tag{},
-		&models.User{},
 		&models.Wears{},
 	)
 
+	UsuariosBase(db)
 	DB = Dbinstance{
 		Db: db,
 	}
+
+	
 }
 
+func clanesBase(db *gorm.DB){
+	clan := &models.Clan{
+		Name: "clanito",
+	}
+
+	var existing models.Clan
+		err := db.Where("Name = ?", clan.Name).First(&existing).Error
+		if err != nil {
+			if err == gorm.ErrRecordNotFound{
+				db.Create(&clan)
+				fmt.Printf("Clan creado: %s\n", clan.Name)
+			} else {
+				log.Fatalf("Error al verificar usuario: %v", err)
+			}
+		} else {
+			fmt.Printf("Clan ya existe: %s\n", clan.Name)
+		}	
+}
+
+
+func UsuariosBase(db *gorm.DB){
+	users := []models.User {
+		{Username: "admin", Password: "admin123",},
+		{Username: "pepito", Password: "pepa", },
+		{Username: "pedrito", Password: "piedras",},
+	}
+
+	for _, user := range users {
+		var existing models.User
+		err := db.Where("username = ?", user.Username).First(&existing).Error
+		if err != nil {
+			if err == gorm.ErrRecordNotFound{
+				db.Create(&user)
+				fmt.Printf("Usuario creado: %s\n", user.Username)
+			} else {
+				log.Fatalf("Error al verificar usuario: %v", err)
+			}
+		} else {
+			fmt.Printf("Usuario ya existe: %s\n", user.Username)
+		}
+	}
+}
 

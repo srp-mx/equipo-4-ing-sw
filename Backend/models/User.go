@@ -11,7 +11,7 @@ type User struct {
 	Password string 
 	DestinationUser []Befriends `gorm:"foreignKey:DestinationUser"`
 	SourceUser []Befriends `gorm:"foreignKey:SourceUser"`
-	ClanName string 
+	//ClanName string
 	Invites []Invites 
 	Class []Class 
 }
