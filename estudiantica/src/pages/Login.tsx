@@ -20,7 +20,7 @@ function fetchAuthentication(username: string, password: string) {
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Invalid credentials");
+        throw new Error("Credenciales invalidas");
       }
       return response.json();
     })
@@ -30,11 +30,25 @@ function fetchAuthentication(username: string, password: string) {
     });
 }
 
+function regexTest(a:string, b:string){
+  let regexEmail = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+  let regexPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+  
+    if(regexEmail.test(a) && regexPassword.test(b))
+      return true;
+    
+    else{
+      alert('el formato de tu email o contrasena es incorrecto');
+      return false;
+    } 
+}
+
 export default function Login() {
   const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-    const handleLogin = async () => { 
+    const handleLogin = async () => {
+      if(regexTest(username, password)) 
         try {
           console.log("Intentando login con:", username, password);
           const userData = await fetchAuthentication(username, password);
