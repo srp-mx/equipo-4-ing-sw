@@ -10,6 +10,8 @@ services:
     volumes:
       - ./Backend/.:/usr/src/app/backend
     command: air cmd/main.go -b 0.0.0.0
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
 
   db:
     image: postgres:alpine
