@@ -10,16 +10,6 @@ import {
 } from "@chakra-ui/react";
 import LandingPage from './LandingPage';
 
-  function fetchUsernameByEmail(email: string) {
-    return fetch("https://dummyjson.com/users")
-      .then((response) => response.json())
-      .then((data) => {
-        const user = data.users.find((u: any) => u.email === email);
-        if (!user) throw new Error("Email not found");
-      return user.username;
-    });
-}
-
 function fetchAuthentication(username: string, password: string) {
   return fetch("https://dummyjson.com/auth/login", {
     method: "POST",
@@ -40,30 +30,12 @@ function fetchAuthentication(username: string, password: string) {
     });
 }
 
-function regexTest(a:string, b:string){
-  let regexEmail = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
-  let regexPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-  
-    if(regexEmail.test(a) && regexPassword.test(b))
-      return true;
-    
-    else{
-      alert('el formato de tu email o contrasena es incorrecto');
-      return false;
-    } 
-}
-
 export default function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-    const handleLogin = async () => {
-      if(regexTest(email, password))  
+    const handleLogin = async () => { 
         try {
-          console.log("Fetcheando el username a traves del email:", email);
-          const username = await fetchUsernameByEmail(email);
-          console.log("Username:", username);
-      
           console.log("Intentando login con:", username, password);
           const userData = await fetchAuthentication(username, password);
       
