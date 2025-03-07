@@ -10,13 +10,13 @@ import {
 } from "@chakra-ui/react";
 import LandingPage from './LandingPage';
 
-function fetchAuthentication(username: string, password: string) {
-  return fetch("http://localhost:3000/login", {
+function fetchAuthentication(email: string, password: string) {
+  return fetch("Access-Control-Allow-Origin: https://example.com", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ email, password }),
   })
     .then((response) => {
       if (!response.ok) {
@@ -44,14 +44,14 @@ function regexTest(a:string, b:string){
 }
 
 export default function Login() {
-  const [username, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
     const handleLogin = async () => {
-      if(regexTest(username, password)) 
+      if(regexTest(email, password)) 
         try {
-          console.log("Intentando login con:", username, password);
-          const userData = await fetchAuthentication(username, password);
+          console.log("Intentando login con:", email, password);
+          const userData = await fetchAuthentication(email, password);
       
           console.log("Login exitoso:", userData);
           alert("Login exitoso!");
@@ -74,13 +74,13 @@ export default function Login() {
         bg="white" 
         w="350px">
         <VStack spacing={4}>
-          <Heading size="lg" color='black'>Username</Heading>
+          <Heading size="lg" color='black'>Login</Heading>
 
           <Field.Root>
             <Field.Label color = 'black'>Email</Field.Label>
             <Input
-              type="username"
-              value={username}
+              type="email"
+              value={email}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
               placeholder="Enter your email"
             />
