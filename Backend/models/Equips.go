@@ -2,10 +2,11 @@ package models
 
 import (
 	"time"
+	_ "gorm.io/gorm"
 )
 
 type Equips struct {
-    Character Character `gorm:"unique"`
-    Weapon Weapon
-    Since time.Time `gorm:"type:datetime;autoUpdateTime"`
+    CharacterName string
+    WeaponID uint
+    Since time.Time 
 }

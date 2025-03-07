@@ -6,8 +6,8 @@ import (
 )
 
 type Accompanies struct {
-	Character Character `gorm:"unique"`
-	Pet Pet
+	CharacterName string 
+	PetID uint 
 	since time.Time `gorm:"type:datetime;autoUpdateTime"`
 }
 

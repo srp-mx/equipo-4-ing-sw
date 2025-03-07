@@ -5,7 +5,7 @@ import (
 )
 
 type Wears struct {
-    Character Character `gorm:"unique"`
-    Armor Armor
-    Since time.Time `gorm:"type:datetime;autoUpdateTime"`
+    CharacterName string 
+    ArmorID uint
+    Since time.Time
 }

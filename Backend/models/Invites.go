@@ -1,9 +1,13 @@
 package models
 
-import "time"
+import (
+	"gorm.io/gorm"
+	"time"
+)
 
 type Invites struct {
-    User User
-    Clan Clan
-    ExpiryDate time.Time `gorm:"type:datetime"`
+	gorm.Model
+	UserUsername string
+	ClanName string 
+	ExpiryDate time.Time 
 }

@@ -37,9 +37,31 @@ func ConnectDb() {
 	db.Logger = logger.Default.LogMode(logger.Info)
 
 	log.Println("running migrations")
-	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(
+		&models.User{},
+		&models.Item{},
+		&models.Pet{},
+		&models.Armor{},
+		&models.Character{},
+		&models.Clan{},
+		&models.Class{},
+		&models.Assignment{},
+		&models.Befriends{},
+		&models.Weapon{},
+		&models.Accompanies{},
+		&models.Equips{},
+		&models.Invites{},
+		&models.OwnsArmor{},
+		&models.OwnsPet{},
+		&models.OwnsWeapon{},
+		//&models.Tag{},
+		&models.User{},
+		&models.Wears{},
+	)
 
 	DB = Dbinstance{
 		Db: db,
 	}
 }
+
+
