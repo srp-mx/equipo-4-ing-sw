@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -9,6 +9,31 @@ import {
   Text,
 } from "@chakra-ui/react";
 import LandingPage from './LandingPage';
+
+function fetchAuthentication(email: string, password: string) {
+  return fetch("/users-test.json", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Invalid credentials");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      localStorage.setItem("token", data.token);
+      return data;
+    })
+    .catch((error) => {
+      console.error("Login failed:", error);
+      throw error;
+    });
+}
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -27,12 +52,16 @@ export default function Login() {
       } 
   }
 
-  const handleLogin = () => {
-    if(regexTest(email, password)){
-
+  const handleLogin = async () => {
+    try {
+      const userData = await fetchAuthentication(email, password);
+      console.log("Login successful:", userData);
+      // Redirect to another page or update UI
+    } catch (error) {
+      alert("Login failed. Please check your credentials.");
     }
-  };
-
+  }
+  
   return (
     <Box 
       minH="100vh" 
