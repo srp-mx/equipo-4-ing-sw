@@ -1,8 +1,9 @@
-import React from 'react';
-import Login from './pages/Login';
+import LandingPage from "./pages/LandingPage/LandingPage";
 
-export default function App() {
+const App = () => {
   return (
-    <Login />
+    <LandingPage/>
   );
-}
+};
+
+export default App;
