@@ -35,6 +35,6 @@ type Assignment struct {
 	Type int
 	Optional bool
 	Done bool
-	//Tag []Tag `gorm:"foreignKey:ID"` 
+    Tag string
 }
 
