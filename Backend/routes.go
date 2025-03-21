@@ -11,6 +11,7 @@ func setupRoutes(app *fiber.App) {
 	app.Get("/", handlers.Home)
 
 	app.Post("/login", handlers.Login)
+	app.Post("/register", handlers.Register)
 
 	app.Get("/landing", jwt, handlers.Landing)
 	app.Post("/landing", jwt, handlers.LandingPostData)
