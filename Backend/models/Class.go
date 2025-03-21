@@ -1,14 +1,16 @@
 package models
 
 import (
-    "time"
-    _ "gorm.io/gorm"
+	_ "gorm.io/gorm"
+	"time"
 )
 
 type Class struct {
-    Name string `gorm="primaryKey"`
-    StartDate time.Time `gorm="datetime;primaryKey"`
-    EndDate time.Time `gorm="datetime;primaryKey"`
-    UserUsername string `gorm="primaryKey"`
-    GradeFormula string `gorm="type:varchar(200)"`
+	ID            uint         `gorm:"primaryKey;autoIncrement"`
+	Name          string       `gorm:"not null;uniqueIndex:unique_class"`
+	StartDate     time.Time    `gorm:"datetime;not null;uniqueIndex:unique_class"`
+	EndDate       time.Time    `gorm:"datetime;not null;uniqueIndex:unique_class"`
+	OwnerUsername string       `gorm:"not null;uniqueIndex:unique_class"`
+	GradeFormula  string       `gorm:"not null;type:varchar(400)"`
+	Assignments   []Assignment `gorm:"foreignKey:ClassID;references:ID;constraint:OnDelete:CASCADE"`
 }
