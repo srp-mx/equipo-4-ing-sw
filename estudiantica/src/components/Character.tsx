@@ -1,7 +1,5 @@
 import { characterDates } from "@/constants";
 import Bandera from "@/assets/img/bandera.png";
-
-const Character = () => {
 import { useSelector } from "react-redux";
 import { RootState } from "@/constants/store";
 
