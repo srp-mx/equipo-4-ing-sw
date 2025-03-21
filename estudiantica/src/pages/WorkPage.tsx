@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
-import Searchbar from "@/components/Searchbar";
+import SearchbarWorks from "@/components/SearchbarWorks";
 
 export default function WorkPage(){
     return (
@@ -11,9 +11,7 @@ export default function WorkPage(){
                 <h1 className="title-section text-[60px]">
                     Tareas
                 </h1>
-                <div className="space-y-4">
-                    <Searchbar/>
-                </div>
+                <SearchbarWorks/>
             </div>
         </div>
     );

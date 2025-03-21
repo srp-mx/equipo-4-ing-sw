@@ -43,5 +43,5 @@ export default function App() {
 
   return isAuthenticated ? <LandingPage /> : <Login />;
   return <Login/>;*/
-  return <Inicio/>
+  return <WorkPage/>
 }
