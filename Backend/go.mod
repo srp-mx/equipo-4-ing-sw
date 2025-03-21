@@ -3,6 +3,7 @@ module github.com/srp-mx/equipo-4-ing-sw
 go 1.24.0
 
 require (
+	github.com/Knetic/govaluate v3.0.0+incompatible
 	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/gofiber/jwt/v3 v3.3.10
 	github.com/golang-jwt/jwt/v4 v4.5.0

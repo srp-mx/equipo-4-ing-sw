@@ -29,24 +29,26 @@ import (
 var db *gorm.DB
 
 func resetDb() {
-    db.Exec("DELETE from users")
+	db.Exec("DELETE from users")
+	db.Exec("DELETE from classes")
+	db.Exec("DELETE from assignments")
 }
 
 func TestMain(m *testing.M) {
-    log.Println("Starting tests...")
+	log.Println("Starting tests...")
 
-    var err error
-    db, err = gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
-    if err != nil {
-        panic("failed to connect database")
-    }
+	var err error
+	db, err = gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
 
-    db.AutoMigrate(
-        &models.User{},
-    )
+	db.AutoMigrate(&models.Assignment{})
+	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Class{})
 
-    code := m.Run()
+	code := m.Run()
 
-    log.Println("Testing finished")
-    os.Exit(code)
+	log.Println("Testing finished")
+	os.Exit(code)
 }

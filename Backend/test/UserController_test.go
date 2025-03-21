@@ -24,76 +24,102 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateUser(t *testing.T) {
-    resetDb()
-	controller := controllers.NewUserController(db)
+type userTestData struct {
+	user       *models.User
+	controller *controllers.UserController
+}
 
-	user := &models.User{
+func newUserTestData() (result userTestData) {
+	result = userTestData{}
+
+	result.controller = controllers.NewUserController(db)
+
+	result.user = &models.User{
 		Username: "testuser",
+		Name:     "Testing Testington",
+		Email:    "test@test.com",
 		Password: "securepassword",
 	}
 
-	err := controller.CreateUser(user)
+	return result
+}
+
+func TestCreateUser(t *testing.T) {
+	resetDb()
+	data := newUserTestData()
+
+	err := data.controller.CreateUser(data.user)
 	assert.NoError(t, err)
 
 	var foundUser models.User
 	db.First(&foundUser, "username = ?", "testuser")
 
-	assert.Equal(t, user.Username, foundUser.Username)
+	assert.Equal(t, data.user.Username, foundUser.Username)
 }
 
 func TestUpdateUser(t *testing.T) {
-    resetDb()
-    controller := controllers.NewUserController(db)
+	resetDb()
+	data := newUserTestData()
 
-    user := &models.User{
-        Username: "testuser",
-        Password: "oldpassword",
-    }
-    db.Create(user)
+	db.Create(data.user)
 
-    user.Password = "newpassword"
-    err := controller.UpdateUser(user)
-    assert.NoError(t, err)
+	data.user.Password = "newpassword"
+	err := data.controller.UpdateUser(data.user)
+	assert.NoError(t, err)
 
-    var updatedUser models.User
-    db.First(&updatedUser, "username = ?", "testuser")
+	var updatedUser models.User
+	db.First(&updatedUser, "username = ?", "testuser")
 
-    assert.Equal(t, "newpassword", updatedUser.Password)
+	assert.Equal(t, "newpassword", updatedUser.Password)
 }
 
 func TestDeleteUser(t *testing.T) {
-    resetDb()
-    controller := controllers.NewUserController(db)
+	resetDb()
+	data := newUserTestData()
 
-    user := &models.User{
-        Username: "testuser",
-        Password: "password",
-    }
-    db.Create(user)
+	db.Create(data.user)
 
-    err := controller.DeleteUser(user)
-    assert.NoError(t, err)
+	err := data.controller.DeleteUser(data.user)
+	assert.NoError(t, err)
 
-    var foundUser models.User
-    result := db.First(&foundUser, "username = ?", "testuser")
+	var foundUser models.User
+	result := db.First(&foundUser)
 
-    assert.Error(t, result.Error) 
+	assert.Error(t, result.Error)
 }
 
 func TestFindByCredentials(t *testing.T) {
-    resetDb()
-    controller := controllers.NewUserController(db)
+	resetDb()
+	data := newUserTestData()
 
-    user := &models.User{
-        Username: "testuser",
-        Password: "securepassword",
-        Email: "pp@pemex.gov.mx",
-    }
-    db.Create(user)
+	db.Create(data.user)
 
-    foundUser, err := controller.FindByCredentials("pp@pemex.gov.mx", "securepassword")
-    assert.NoError(t, err)
-    assert.NotNil(t, foundUser)
-    assert.Equal(t, "testuser", foundUser.Username)
+	foundUser, err := data.controller.FindByCredentials(
+		"test@test.com", "securepassword")
+	assert.NoError(t, err)
+	assert.NotNil(t, foundUser)
+	assert.Equal(t, "testuser", foundUser.Username)
+}
+
+func TestExists(t *testing.T) {
+	resetDb()
+	data := newUserTestData()
+
+	exists, err := data.controller.ExistsUsername(data.user.Username)
+	assert.NoError(t, err)
+	assert.False(t, exists)
+
+	exists, err = data.controller.ExistsEmail(data.user.Email)
+	assert.NoError(t, err)
+	assert.False(t, exists)
+
+	data.controller.CreateUser(data.user)
+
+	exists, err = data.controller.ExistsUsername(data.user.Username)
+	assert.NoError(t, err)
+	assert.True(t, exists)
+
+	exists, err = data.controller.ExistsEmail(data.user.Email)
+	assert.NoError(t, err)
+	assert.True(t, exists)
 }
