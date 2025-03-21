@@ -56,6 +56,18 @@ func (self *UserController) FindByCredentials(email string, password string) (*m
 	return &user, nil
 }
 
+func (self *UserController) Get(receiver *models.User) error {
+	err := self.DB.
+		Where("username = ?", receiver.Username).
+		First(receiver).Error
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (self *UserController) ExistsUsername(username string) (bool, error) {
 	var count int64
 	result := self.DB.Model(&models.User{}).Where("username = ?", username).Count(&count)

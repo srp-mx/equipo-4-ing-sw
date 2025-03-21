@@ -15,7 +15,7 @@
 
 */
 
-package controllers
+package utils
 
 import (
 	"fmt"
@@ -23,25 +23,51 @@ import (
 	"sort"
 
 	"github.com/Knetic/govaluate"
+	"github.com/srp-mx/equipo-4-ing-sw/models"
 )
 
 // Contains uninterpreted and interpreted data of a formula.
 type Formula struct {
-	Source     string
-	Expression *govaluate.EvaluableExpression
-	TagsUsed   []string
-	Error      error
+    Source     string `json:"source"`
+    Expression *govaluate.EvaluableExpression `json:"-"`
+    TagsUsed   []string `json:"tags"`
+    Error      error `json:"error,omitempty"`
+}
+
+// A simple struct for custom error marshalling
+type FormulaError struct {
+    Message string `json:"message"`
+}
+
+// Implements error interface
+func (e FormulaError) Error() string {
+    return e.Message
+}
+
+// Utility to wrap errors in custom error type
+func wrapError(e error) FormulaError {
+    return FormulaError{ Message: "[Formula error]: " + e.Error() }
 }
 
 // Formula constructor
 func NewFormula(input string) (*Formula, error) {
+    if input == "" || len(input) > models.MAX_FORMULA_LEN {
+        err := fmt.Errorf("La longitud de la fórmula debe estar entre 1 y 400")
+		return &Formula{
+			Source:     input,
+			Expression: nil,
+			TagsUsed:   []string{},
+			Error:      wrapError(err),
+		}, err
+    }
+
 	expr, err := govaluate.NewEvaluableExpressionWithFunctions(input, functions)
 	if err != nil {
 		return &Formula{
 			Source:     input,
 			Expression: nil,
 			TagsUsed:   []string{},
-			Error:      err,
+			Error:      wrapError(err),
 		}, err
 	}
 
@@ -74,6 +100,28 @@ func (self *Formula) parseTags() {
 	}
 
 	self.TagsUsed = tags
+}
+
+// Utility function that validates if a string can be a tag name.
+// We assume it's already trimmed.
+func ValidTagName(name string) bool {
+    if len(name) == 0 || len(name) > models.MAX_TAG_LEN {
+        return false
+    }
+
+    if _,exists := functions[name]; exists {
+        return false
+    }
+
+    expr, err := govaluate.NewEvaluableExpressionWithFunctions(name, functions)
+    if err != nil {
+        return false
+    }
+    tokens := expr.Tokens()
+    if len(tokens) != 1 {
+        return false
+    }
+    return true
 }
 
 // Given a tag-grades map, evaluates the formula.
@@ -129,11 +177,11 @@ func (self *Formula) VerifyPlausibility() (isValid bool) {
 	defer func() {
 		if catch := recover(); catch != nil {
 			isValid = false
-			self.Error = fmt.Errorf("La fórmula no es válida.")
+			self.Error = wrapError(fmt.Errorf("La fórmula no es válida."))
 		}
 	}()
 	_, err := self.Evaluate(testData)
-	self.Error = err
+	self.Error = wrapError(err)
 	isValid = err == nil
 	return isValid
 }

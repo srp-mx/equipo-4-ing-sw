@@ -30,5 +30,5 @@ type User struct {
 	//SourceUser []Befriends `gorm:"foreignKey:SourceUser"`
 	//ClanName string
 	//Invites []Invites
-	Classes []Class `gorm:"foreignKey:OwnerUsername;references:Username;constraint:OnDelete:CASCADE" json:"classes"`
+	Classes []Class `gorm:"foreignKey:OwnerUsername;references:Username;constraint:OnDelete:CASCADE" json:"classes,omitempty"`
 }
