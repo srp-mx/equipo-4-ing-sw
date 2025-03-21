@@ -28,38 +28,38 @@ import (
 
 // Contains uninterpreted and interpreted data of a formula.
 type Formula struct {
-    Source     string `json:"source"`
-    Expression *govaluate.EvaluableExpression `json:"-"`
-    TagsUsed   []string `json:"tags"`
-    Error      error `json:"error,omitempty"`
+	Source     string                         `json:"source"`
+	Expression *govaluate.EvaluableExpression `json:"-"`
+	TagsUsed   []string                       `json:"tags"`
+	Error      error                          `json:"error,omitempty"`
 }
 
 // A simple struct for custom error marshalling
 type FormulaError struct {
-    Message string `json:"message"`
+	Message string `json:"message"`
 }
 
 // Implements error interface
 func (e FormulaError) Error() string {
-    return e.Message
+	return e.Message
 }
 
 // Utility to wrap errors in custom error type
 func wrapError(e error) FormulaError {
-    return FormulaError{ Message: "[Formula error]: " + e.Error() }
+	return FormulaError{Message: "[Formula error]: " + e.Error()}
 }
 
 // Formula constructor
 func NewFormula(input string) (*Formula, error) {
-    if input == "" || len(input) > models.MAX_FORMULA_LEN {
-        err := fmt.Errorf("La longitud de la fórmula debe estar entre 1 y 400")
+	if input == "" || len(input) > models.MAX_FORMULA_LEN {
+		err := fmt.Errorf("La longitud de la fórmula debe estar entre 1 y 400")
 		return &Formula{
 			Source:     input,
 			Expression: nil,
 			TagsUsed:   []string{},
 			Error:      wrapError(err),
 		}, err
-    }
+	}
 
 	expr, err := govaluate.NewEvaluableExpressionWithFunctions(input, functions)
 	if err != nil {
@@ -105,23 +105,23 @@ func (self *Formula) parseTags() {
 // Utility function that validates if a string can be a tag name.
 // We assume it's already trimmed.
 func ValidTagName(name string) bool {
-    if len(name) == 0 || len(name) > models.MAX_TAG_LEN {
-        return false
-    }
+	if len(name) == 0 || len(name) > models.MAX_TAG_LEN {
+		return false
+	}
 
-    if _,exists := functions[name]; exists {
-        return false
-    }
+	if _, exists := functions[name]; exists {
+		return false
+	}
 
-    expr, err := govaluate.NewEvaluableExpressionWithFunctions(name, functions)
-    if err != nil {
-        return false
-    }
-    tokens := expr.Tokens()
-    if len(tokens) != 1 {
-        return false
-    }
-    return true
+	expr, err := govaluate.NewEvaluableExpressionWithFunctions(name, functions)
+	if err != nil {
+		return false
+	}
+	tokens := expr.Tokens()
+	if len(tokens) != 1 {
+		return false
+	}
+	return true
 }
 
 // Given a tag-grades map, evaluates the formula.

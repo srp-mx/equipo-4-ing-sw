@@ -74,86 +74,86 @@ func (self *ClassController) GetTags(class *models.Class) ([]string, error) {
 func (self *ClassController) Exists(class models.Class) (bool, error) {
 	var count int64
 	result := self.DB.Model(&models.Class{}).
-        Where(&models.Class{
-            Name: class.Name,
-            StartDate: class.StartDate,
-            EndDate: class.EndDate,
-            OwnerUsername: class.OwnerUsername,
-        }).Count(&count)
+		Where(&models.Class{
+			Name:          class.Name,
+			StartDate:     class.StartDate,
+			EndDate:       class.EndDate,
+			OwnerUsername: class.OwnerUsername,
+		}).Count(&count)
 	return count > 0, result.Error
 }
 
 func (self *ClassController) Get(receiver *models.Class) error {
-    err := self.DB.
-        Where(&models.Class{
-            Name: receiver.Name,
-            StartDate: receiver.StartDate,
-            EndDate: receiver.EndDate,
-            OwnerUsername: receiver.OwnerUsername,
-        }).
-        First(receiver).Error
+	err := self.DB.
+		Where(&models.Class{
+			Name:          receiver.Name,
+			StartDate:     receiver.StartDate,
+			EndDate:       receiver.EndDate,
+			OwnerUsername: receiver.OwnerUsername,
+		}).
+		First(receiver).Error
 
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }
 
 func (self *ClassController) GetWithCopy(receiver models.Class) (*models.Class, error) {
-    result := models.Class{}
-    err := self.DB.
-        Where(&models.Class{
-            Name: receiver.Name,
-            StartDate: receiver.StartDate,
-            EndDate: receiver.EndDate,
-            OwnerUsername: receiver.OwnerUsername,
-        }).
-        First(&result).Error
+	result := models.Class{}
+	err := self.DB.
+		Where(&models.Class{
+			Name:          receiver.Name,
+			StartDate:     receiver.StartDate,
+			EndDate:       receiver.EndDate,
+			OwnerUsername: receiver.OwnerUsername,
+		}).
+		First(&result).Error
 
-    if err != nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 
-    return &result, nil
+	return &result, nil
 }
 
 func (self *ClassController) UpdateWithMap(source *models.Class, updates map[string]any) error {
-    foundClass, err := self.GetWithCopy(*source)
-    if err != nil {
-        return err
-    }
-    if value,exists := updates["grade_formula"]; exists {
-        v := strings.TrimSpace(value.(string))
-        foundClass.GradeFormula = v
-        form, err := utils.NewFormula(v)
-        if err != nil {
-            return err
-        }
+	foundClass, err := self.GetWithCopy(*source)
+	if err != nil {
+		return err
+	}
+	if value, exists := updates["grade_formula"]; exists {
+		v := strings.TrimSpace(value.(string))
+		foundClass.GradeFormula = v
+		form, err := utils.NewFormula(v)
+		if err != nil {
+			return err
+		}
 
-        if !form.VerifyPlausibility() {
-            return form.Error
-        }
-    }
-    if value,exists := updates["color"]; exists {
-        v := value.(string)
-        re := regexp.MustCompile(`^[0-9A-Fa-f]{8}$`)
-        if !re.MatchString(v) {
-            return fmt.Errorf("El color de la materia no es válido.")
-        }
-        foundClass.Color = v
-    }
-    if value,exists := updates["name"]; exists {
-        v := value.(string)
-        foundClass.Name = v
-    }
-    if value,exists := updates["start_date"]; exists {
-        v := value.(time.Time)
-        foundClass.StartDate = v
-    }
-    if value,exists := updates["end_date"]; exists {
-        v := value.(time.Time)
-        foundClass.EndDate = v
-    }
-    return self.UpdateClass(foundClass)
+		if !form.VerifyPlausibility() {
+			return form.Error
+		}
+	}
+	if value, exists := updates["color"]; exists {
+		v := value.(string)
+		re := regexp.MustCompile(`^[0-9A-Fa-f]{8}$`)
+		if !re.MatchString(v) {
+			return fmt.Errorf("El color de la materia no es válido.")
+		}
+		foundClass.Color = v
+	}
+	if value, exists := updates["name"]; exists {
+		v := value.(string)
+		foundClass.Name = v
+	}
+	if value, exists := updates["start_date"]; exists {
+		v := value.(time.Time)
+		foundClass.StartDate = v
+	}
+	if value, exists := updates["end_date"]; exists {
+		v := value.(time.Time)
+		foundClass.EndDate = v
+	}
+	return self.UpdateClass(foundClass)
 }
