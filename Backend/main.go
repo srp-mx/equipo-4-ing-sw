@@ -28,13 +28,14 @@ func main() {
 	database.ConnectDb()
 	app := fiber.New()
 
-    app.Use(cors.New(cors.Config {
-        AllowHeaders: "Origin,Content-Type,Connection,Access-Control-Allow-Origin",
-    AllowOrigins: "http://localhost:3001",
-        AllowCredentials: true,
-        AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
-    }))
+	app.Use(cors.New(cors.Config{
+		AllowHeaders:     "Origin,Content-Type,Connection,Access-Control-Allow-Origin",
+		AllowOrigins:     "http://localhost:3001",
+		AllowCredentials: true,
+		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
+	}))
 
-    setupRoutes(app)
-	  log.Fatal(app.Listen(":3000"))
+	setupRoutes(app)
+
+	log.Fatal(app.Listen(":3000"))
 }

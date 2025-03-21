@@ -15,19 +15,35 @@
 
 */
 
-package middlewares
+package handlers
 
 import (
-	"os"
-
 	"github.com/gofiber/fiber/v2"
-	jwt "github.com/gofiber/jwt/v3"
+	"github.com/srp-mx/equipo-4-ing-sw/utils"
 )
 
-var JwtSecret string = os.Getenv("JWT_SECRET")
+func VerifyFormula(c *fiber.Ctx) error {
+	type formula struct {
+		formula string `json:"formula"`
+	}
+	request := new(formula)
+	if err := c.BodyParser(request); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
 
-func NewAuthMiddleware() fiber.Handler {
-	return jwt.New(jwt.Config{
-		SigningKey: []byte(JwtSecret),
+	form, err := utils.NewFormula(request.formula)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(form)
+	}
+
+	if !form.VerifyPlausibility() {
+		return c.Status(fiber.StatusBadRequest).JSON(form)
+	}
+
+	return c.JSON(fiber.Map{
+		"ok":      true,
+		"formula": form,
 	})
 }

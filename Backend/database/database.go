@@ -1,3 +1,20 @@
+/*Copyright (C) 2025
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
 package database
 
 import (
@@ -8,7 +25,6 @@ import (
 	"gorm.io/gorm/logger"
 	"log"
 	"os"
-	"time"
 )
 
 type Dbinstance struct {
@@ -42,55 +58,10 @@ func ConnectDb() {
 	db.AutoMigrate(&models.User{})
 	db.AutoMigrate(&models.Class{})
 
-
 	UsuariosBase(db)
-	ClassPrueba(db)
-	AssigmentsPrueba(db)
 	DB = Dbinstance{
 		Db: db,
 	}
-}
-
-func ClassPrueba(db *gorm.DB) {
-	clases := []models.Class{
-		{ ID: 1, Name: "Informatica", StartDate: time.Now() , EndDate: time.Now() , OwnerUsername: "marinela", GradeFormula: "average(Homework)", Color: "000000"},
-	}
-	for _,clase := range clases {
-		var existing models.Class
-		err := db.Where("id = ? AND  owner_username  = ?", clase.ID, clase.OwnerUsername).First(&existing).Error
-		if err != nil {
-			if err == gorm.ErrRecordNotFound {
-				db.Create(&clase)
-				fmt.Printf("Clase creada: %s\n", clase.Name)
-			} else {
-				log.Fatalf("Error al verificar Clase: %v", err)
-			}
-		} else {
-			fmt.Printf("La clase ya existe: %s\n", clase.Name)
-		}
-	} 
-}
-
-func AssigmentsPrueba(db *gorm.DB) {
-	ass := []models.Assignment{
-		{ ID: 1, ClassID: 1,Name: "Informar", DueDate: time.Now(), Tag: "Homework"},
-		{ ID: 2, ClassID: 1,Name: "Tejer", DueDate: time.Now(), Tag: "Homework"},
-		{ ID: 3, ClassID: 1,Name: "Hackear la Nasa", DueDate: time.Now(), Tag: "Homework"},
-	}
-	for _,a := range ass {
-		var existing models.Assignment
-		err := db.Where("id = ? AND  class_id  = ?", a.ID, a.ClassID).First(&existing).Error
-		if err != nil {
-			if err == gorm.ErrRecordNotFound {
-				db.Create(&a)
-				fmt.Printf("Tarea creada: %s\n", a.Name)
-			} else {
-				log.Fatalf("Error al verificar Tarea: %v", err)
-			}
-		} else {
-			fmt.Printf("La tarea ya existe: %s\n", a.Name)
-		}
-	} 
 }
 
 func UsuariosBase(db *gorm.DB) {

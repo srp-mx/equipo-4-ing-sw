@@ -1,3 +1,20 @@
+/*Copyright (C) 2025
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
 package handlers
 
 import (
@@ -60,6 +77,11 @@ func PostClass(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.ErrInternalServerError)
 	}
 
+	err = classes.Get(&request.class)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.ErrInternalServerError)
+	}
+
 	return c.JSON(fiber.Map{
 		"user":    request.user,
 		"class":   request.class,
@@ -108,12 +130,6 @@ func DeleteClass(c *fiber.Ctx) error {
 				Message: "La clase no se encontró.",
 			},
 		})
-	}
-
-	err = classes.Get(&request.class)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).
-			JSON(fiber.ErrInternalServerError)
 	}
 
 	err = classes.DeleteClass(&request.class)
@@ -228,6 +244,34 @@ func GetClassTags(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(tags)
+}
+
+func GetClassGrade(c *fiber.Ctx) error {
+	request, err := initClassRequest(c)
+	if err != nil {
+		return err
+	}
+
+	classes := controllers.NewClassController(database.DB.Db)
+
+	if exists, err := classes.Exists(request.class); !exists || err != nil {
+		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
+			"error": fiber.Error{
+				Code:    404,
+				Message: "La clase no se encontró.",
+			},
+		})
+	}
+
+	grade, err := classes.GetGrade(&request.class)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.ErrInternalServerError)
+	}
+
+	return c.JSON(fiber.Map{
+		"grade": grade,
+	})
 }
 
 func initClassRequest(c *fiber.Ctx) (*classRequest, error) {

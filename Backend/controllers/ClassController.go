@@ -71,6 +71,51 @@ func (self *ClassController) GetTags(class *models.Class) ([]string, error) {
 	return tags, nil
 }
 
+func (self *ClassController) GetGrade(class *models.Class) (float64, error) {
+	err := self.Get(class)
+	if err != nil {
+		return 0.0, err
+	}
+
+	tagsAvailable, err := self.GetTags(class)
+	if err != nil {
+		return 0.0, err
+	}
+
+	tagsAvailableSet := make(map[string]([]float64))
+	for _, t := range tagsAvailable {
+		tagsAvailableSet[t] = []float64{}
+	}
+
+	form, err := utils.NewFormula(class.GradeFormula)
+	if err != nil {
+		return 0.0, err
+	}
+
+	for _, t := range form.TagsUsed {
+		if _, exists := tagsAvailableSet[t]; !exists {
+			return 0.0, fmt.Errorf("La etiqueta requerida para la calificación no existe")
+		}
+	}
+
+	if !form.VerifyPlausibility() {
+		return 0.0, form.Error
+	}
+
+	for _, assignment := range class.Assignments {
+		if !assignment.Optional || assignment.Progress > 0 {
+			tagsAvailableSet[assignment.Tag] = append(tagsAvailableSet[assignment.Tag], assignment.Grade)
+		}
+	}
+
+	tagMap := make(map[string]any)
+	for key, value := range tagsAvailableSet {
+		tagMap[key] = value
+	}
+
+	return form.Evaluate(tagMap)
+}
+
 func (self *ClassController) Exists(class models.Class) (bool, error) {
 	var count int64
 	result := self.DB.Model(&models.Class{}).
