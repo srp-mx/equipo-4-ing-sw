@@ -1,4 +1,5 @@
-import React, { Children, useState } from "react";
+import { Children, useEffect, useState } from "react";
+import validator from "validator";
 
 const Button = ({ onClick, children, icon }: { onClick?: () => void; children: React.ReactNode; icon?: string }) => (
   <button onClick={onClick} className="pixel-corner-button mb-4 flex bg-[#cbda3d] py-4 px-10 min-w-[300px] transition-all hover:bg-white">
@@ -48,12 +49,24 @@ const PasswordInput = ({ value, onChange }: { value: string; onChange: (e: React
 
 const fetchAuthentication = async (email: string, password: string) => {
   try {
+    if(!validator.isEmail(email)){
+        showNotification("El formato del correo no es valido","warning");
+        return;
+    }
+
+    let regexPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+    if(regexPassword.test(password)){
+      showNotification("El formatio de la contraseña es incorrrecto","warning");
+      return;
+    }
+
     const response = await fetch("http://localhost:3000/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
     if (!response.ok) throw new Error("Credenciales inválidas");
+
     const data = await response.json();
     localStorage.setItem("token", data.token);
     window.location.href = "Inicio";
@@ -104,6 +117,13 @@ export default function Login() {
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      window.location.href = "Inicio"; // Redirige si ya hay un token
+    }
+  }, []); 
   
     return (
       <div className="bg-[url(../../public/assets/img/login_bg.jpg)] h-screen bg-cover bg-center flex justify-center items-center font-[\'Pixelify Sans\']">
