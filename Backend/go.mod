@@ -3,6 +3,7 @@ module github.com/srp-mx/equipo-4-ing-sw
 go 1.24.0
 
 require (
+	github.com/Knetic/govaluate v3.0.0+incompatible
 	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/gofiber/jwt/v3 v3.3.10
 	github.com/golang-jwt/jwt/v4 v4.5.0
@@ -13,7 +14,6 @@ require (
 )
 
 require (
-	github.com/Knetic/govaluate v3.0.0+incompatible // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -40,5 +40,4 @@ require (
 	golang.org/x/sys v0.28.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/driver/sqlite v1.5.7 // indirect
 )

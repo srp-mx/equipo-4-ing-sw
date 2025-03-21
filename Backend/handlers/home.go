@@ -5,5 +5,5 @@ import (
 )
 
 func Home(c *fiber.Ctx) error {
-    return c.SendString("Hello, Estudiantica")
+	return c.SendString("Hello, Estudiantica")
 }
