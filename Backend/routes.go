@@ -11,6 +11,7 @@ func setupRoutes(app *fiber.App) {
 
 	app.Post("/login", handlers.Login)
 	app.Post("/register", handlers.Register)
+	app.Post("/verify_formula", handlers.VerifyFormula)
 
 	app.Post("/class", jwt, handlers.PostClass)
 	app.Get("/class", jwt, handlers.GetClass)
@@ -19,13 +20,10 @@ func setupRoutes(app *fiber.App) {
 
 	app.Post("/class_assignments", jwt, handlers.GetClassAssignments)
 	app.Post("/class_tags", jwt, handlers.GetClassTags)
+	app.Post("/class_grade", jwt, handlers.GetClassGrade)
 
-	//app.Post("/assignment", jwt, )
-	//app.Get("/assignment", jwt, )
-	//app.Delete("/assignment", jwt, )
-	//app.Patch("/assignment", jwt, )
-
-	app.Get("/landing", jwt, handlers.Landing)
-	app.Post("/landing", jwt, handlers.LandingPostData)
-
+	app.Post("/assignment", jwt, handlers.PostAssignment)
+	app.Get("/assignment", jwt, handlers.GetAssignment)
+	app.Delete("/assignment", jwt, handlers.DeleteAssignment)
+	app.Patch("/assignment", jwt, handlers.PatchAssignment)
 }

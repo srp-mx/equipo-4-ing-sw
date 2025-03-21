@@ -60,6 +60,11 @@ func PostClass(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.ErrInternalServerError)
 	}
 
+	err = classes.Get(&request.class)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.ErrInternalServerError)
+	}
+
 	return c.JSON(fiber.Map{
 		"user":    request.user,
 		"class":   request.class,
@@ -108,12 +113,6 @@ func DeleteClass(c *fiber.Ctx) error {
 				Message: "La clase no se encontró.",
 			},
 		})
-	}
-
-	err = classes.Get(&request.class)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).
-			JSON(fiber.ErrInternalServerError)
 	}
 
 	err = classes.DeleteClass(&request.class)
@@ -228,6 +227,34 @@ func GetClassTags(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(tags)
+}
+
+func GetClassGrade(c *fiber.Ctx) error {
+	request, err := initClassRequest(c)
+	if err != nil {
+		return err
+	}
+
+	classes := controllers.NewClassController(database.DB.Db)
+
+	if exists, err := classes.Exists(request.class); !exists || err != nil {
+		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
+			"error": fiber.Error{
+				Code:    404,
+				Message: "La clase no se encontró.",
+			},
+		})
+	}
+
+	grade, err := classes.GetGrade(&request.class)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.ErrInternalServerError)
+	}
+
+	return c.JSON(fiber.Map{
+		"grade": grade,
+	})
 }
 
 func initClassRequest(c *fiber.Ctx) (*classRequest, error) {

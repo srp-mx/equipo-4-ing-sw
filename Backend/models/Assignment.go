@@ -25,13 +25,13 @@ import (
 const MAX_TAG_LEN int = 25
 
 type Assignment struct {
-	ID       uint `gorm:"primaryKey;autoIncrement"`
-	ClassID  uint `gorm:"not null"`
-	DueDate  time.Time
-	Notes    string `gorm:"type:varchar(500)"`
-	Grade    float64
-	Name     string
-	Optional bool
-	Progress int
-	Tag      string `gorm:"type:varchar(25)"`
+	ID       uint      `gorm:"primaryKey;autoIncrement" json:"id"`
+	ClassID  uint      `gorm:"not null" json:"class_id"`
+	DueDate  time.Time `json:"due_date"`
+	Notes    string    `gorm:"type:varchar(500)" json:"notes"`
+	Grade    float64   `json:"grade"`
+	Name     string    `json:"name"`
+	Optional bool      `json:"optional"`
+	Progress int       `json:"progress"`
+	Tag      string    `gorm:"type:varchar(25);not null" json:"tag"`
 }
