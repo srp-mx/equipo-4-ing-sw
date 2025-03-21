@@ -8,6 +8,7 @@ import (
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
 	"github.com/srp-mx/equipo-4-ing-sw/middlewares"
+	"github.com/srp-mx/equipo-4-ing-sw/models"
 )
 
 func Login(c *fiber.Ctx) error {
@@ -18,6 +19,7 @@ func Login(c *fiber.Ctx) error {
 
 	type loginResponse struct {
 		Token string `json:"token"`
+        User models.User `json:"user"`
 	}
 
 	// Get the credentials from the request body
@@ -61,5 +63,6 @@ func Login(c *fiber.Ctx) error {
 
 	return c.JSON(loginResponse{
 		Token: t,
+        User: *user,
 	})
 }
