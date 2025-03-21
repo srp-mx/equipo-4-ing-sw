@@ -18,11 +18,10 @@
 package main
 
 import (
-	"log"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
+	"log"
 )
 
 func main() {
@@ -37,6 +36,5 @@ func main() {
     }))
 
     setupRoutes(app)
-	
-	log.Fatal(app.Listen(":3000"))
+	  log.Fatal(app.Listen(":3000"))
 }
