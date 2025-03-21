@@ -13,17 +13,17 @@ func setupRoutes(app *fiber.App) {
 	app.Post("/register", handlers.Register)
 	app.Post("/verify_formula", handlers.VerifyFormula)
 
-	app.Post("/class", jwt, handlers.PostClass)
-	app.Get("/class", jwt, handlers.GetClass)
-	app.Delete("/class", jwt, handlers.DeleteClass)
-	app.Patch("/class", jwt, handlers.PatchClass)
+	app.Post("/post_class", jwt, handlers.PostClass)
+	app.Post("/get_class", jwt, handlers.GetClass)
+	app.Post("/delete_class", jwt, handlers.DeleteClass)
+	app.Post("/patch_class", jwt, handlers.PatchClass)
 
 	app.Post("/class_assignments", jwt, handlers.GetClassAssignments)
 	app.Post("/class_tags", jwt, handlers.GetClassTags)
 	app.Post("/class_grade", jwt, handlers.GetClassGrade)
 
-	app.Post("/assignment", jwt, handlers.PostAssignment)
-	app.Get("/assignment", jwt, handlers.GetAssignment)
-	app.Delete("/assignment", jwt, handlers.DeleteAssignment)
-	app.Patch("/assignment", jwt, handlers.PatchAssignment)
+	app.Post("/post_assignment", jwt, handlers.PostAssignment)
+	app.Post("/get_assignment", jwt, handlers.GetAssignment)
+	app.Post("/delete_assignment", jwt, handlers.DeleteAssignment)
+	app.Post("/patch_assignment", jwt, handlers.PatchAssignment)
 }
