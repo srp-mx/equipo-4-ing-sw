@@ -50,10 +50,10 @@ const submit = async (email: string, password: string, username: string, name: s
                 username, 
                 email,
                 password
-            })
+            }),
         });
         
-        if(!response.ok) throw Error("Fallo al crear Usuario");
+        if(!response.ok) throw Error("Fallo al crear Usuario 20");
 
         return <Link to="/login" />
 
