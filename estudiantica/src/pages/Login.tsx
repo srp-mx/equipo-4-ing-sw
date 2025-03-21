@@ -1,5 +1,4 @@
 import React, { Children, useState } from "react";
-//import "../../public/assets/css/index.css";
 
 const Button = ({ onClick, children, icon }: { onClick?: () => void; children: React.ReactNode; icon?: string }) => (
   <button onClick={onClick} className="pixel-corner-button mb-4 flex bg-[#cbda3d] py-4 px-10 min-w-[300px] transition-all hover:bg-white">
@@ -57,7 +56,7 @@ const fetchAuthentication = async (email: string, password: string) => {
     if (!response.ok) throw new Error("Credenciales inválidas");
     const data = await response.json();
     localStorage.setItem("token", data.token);
-    window.location.href = "index.html";
+    window.location.href = "Inicio";
   } catch (error) {
     if (error instanceof Error) {
       showNotification("Error al iniciar sesión","error");

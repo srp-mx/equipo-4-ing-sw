@@ -1,4 +1,3 @@
-import { Assigment } from "@/Object/Assigment";
 import { useState } from 'react'
 import CreateAssignmentModal from "../AssigmentView/CreateAssigmentModal";
 

@@ -5,20 +5,19 @@ type ModalProps = {
     onClose: () => void;
 };
 
-export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
+export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
     if (!isOpen) return null;
 
-    const [newAssignment, setNewAssignment] = useState({
+    const [newClass, setNewClass] = useState({
         name: "",
-        dueDate: "",
-        className: "",
-        tag: "",
-        notes: ""
+        startDate : "",
+        endDate : "",
+        gradeFormula : ""
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setNewAssignment((prev) => ({ ...prev, [name]: value }));
+        setNewClass((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleCreate = async () => {
@@ -41,46 +40,41 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
         }*/
     };
 
+    //fixed inset-0 bg-black bg-opacity-30 backdrop-blur-md flex items-center justify-center ${isOpen ? 'visible' : 'invisible'}
     return (
         <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-md flex items-center justify-center ${isOpen ? 'visible' : 'invisible'">
             <div className="p-6 w-1/3 shadow-lg border-gray-400 rounded-lg bg-[#ffffe6] shadow-md">
-                <h2 className="text-2xl font-semibold">Nueva Clase</h2>
+                <h2 className="text-2xl font-semibold">Nueva Tarea</h2>
                 <input
                     type="text"
                     name="name"
                     placeholder="Nombre"
                     className="w-full border rounded p-1 mt-2"
-                    value={newAssignment.name}
+                    value={newClass.name}
                     onChange={handleChange}
                 />
+                Fecha de inicio:
                 <input
                     type="date"
-                    name="dueDate"
+                    name="startDate"
                     className="w-full border rounded p-1 mt-2"
-                    value={newAssignment.dueDate}
+                    value={newClass.startDate}
+                    onChange={handleChange}
+                />
+                Fecha de fin:
+                <input
+                    type="date"
+                    name="endDate"
+                    className="w-full border rounded p-1 mt-2"
+                    value={newClass.endDate}
                     onChange={handleChange}
                 />
                 <input
                     type="text"
                     name="className"
-                    placeholder="Materia"
+                    placeholder="Calificación"
                     className="w-full border rounded p-1 mt-2"
-                    value={newAssignment.className}
-                    onChange={handleChange}
-                />
-                <input
-                    type="text"
-                    name="tag"
-                    placeholder="Tag"
-                    className="w-full border rounded p-1 mt-2"
-                    value={newAssignment.tag}
-                    onChange={handleChange}
-                />
-                <textarea
-                    name="notes"
-                    placeholder="Notas"
-                    className="w-full border rounded p-1 mt-2"
-                    value={newAssignment.notes}
+                    value={newClass.gradeFormula}
                     onChange={handleChange}
                 />
                 <div className="flex justify-end space-x-2 mt-4">

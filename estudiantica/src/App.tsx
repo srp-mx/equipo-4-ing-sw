@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Login from './pages/Login';
 import Inicio from './pages/Inicio';
 import WorkPage from './pages/WorkPage';
+import ClassPage from './pages/ClassPage';
 /*import LandingPage from './pages/LandingPage';
 const url = process.env.url || 'http://localhost:3000'
 
@@ -43,5 +44,5 @@ export default function App() {
 
   return isAuthenticated ? <LandingPage /> : <Login />;
   return <Login/>;*/
-  return <WorkPage/>
+  return <ClassPage/>
 }
