@@ -8,7 +8,6 @@ import (
 
 func setupRoutes(app *fiber.App) {
 	jwt := middlewares.NewAuthMiddleware()
-	app.Get("/", handlers.Home)
 
 	app.Post("/login", handlers.Login)
 	app.Post("/register", handlers.Register)
