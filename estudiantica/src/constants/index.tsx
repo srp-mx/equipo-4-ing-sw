@@ -1,10 +1,14 @@
 import '../index.css';
+import { useSelector } from 'react-redux' 
 import iconoInicio from '@/assets/img/sidebar/icono_inicio.png';
 import iconoClanes from '@/assets/img/sidebar/icono_clanes.png';
 import iconoMazmorras from '@/assets/img/sidebar/icono_mazmorras.png';
 import iconoOtros from '@/assets/img/sidebar/icono_otros.png';
 import iconoConfiguracion from '@/assets/img/sidebar/icono_configuracion.png';
 import characterImage from '@/assets/img/personaje_elfa_1.png';
+import { RootState } from './store';
+
+
 export const navItems = [
     { label: "Features", href: "#" },
     { label: "Workflow", href: "#" },
@@ -27,7 +31,6 @@ export const navItems = [
   ];
 
   export const characterDates = {
-    name: "Erika",
     nivel: "12",
     characterURL: characterImage,
     clanShieldURL: "#",

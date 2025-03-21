@@ -10,7 +10,7 @@ import (
 var JwtSecret string = os.Getenv("JWT_SECRET")
 
 func NewAuthMiddleware() fiber.Handler {
-    return jwt.New(jwt.Config{
-        SigningKey: []byte(JwtSecret),
-    })
+	return jwt.New(jwt.Config{
+		SigningKey: []byte(JwtSecret),
+	})
 }

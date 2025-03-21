@@ -15,16 +15,29 @@
 
 */
 
-package models
+package controllers
 
 import (
+	"github.com/srp-mx/equipo-4-ing-sw/models"
 	"gorm.io/gorm"
-	"time"
 )
 
-type OwnsPet struct {
-	gorm.Model
-	PetID         uint
-	CharacterName string
-	since         time.Time `gorm:"type:datetime"`
+type AssignmentController struct {
+	DB *gorm.DB
+}
+
+func NewAssignmentController(db *gorm.DB) *AssignmentController {
+	return &AssignmentController{DB: db}
+}
+
+func (self *AssignmentController) CreateAssignment(assignment *models.Assignment) error {
+	return self.DB.Create(assignment).Error
+}
+
+func (self *AssignmentController) UpdateAssignment(assignment *models.Assignment) error {
+	return self.DB.Save(assignment).Error
+}
+
+func (self *AssignmentController) DeleteAssignment(assignment *models.Assignment) error {
+	return self.DB.Delete(assignment).Error
 }

@@ -2,15 +2,16 @@ package database
 
 import (
 	"fmt"
-	"log"
-	"os"
+	"github.com/srp-mx/equipo-4-ing-sw/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"github.com/srp-mx/equipo-4-ing-sw/models"
+	"log"
+	"os"
+	"time"
 )
 
-type Dbinstance struct{
+type Dbinstance struct {
 	Db *gorm.DB
 }
 
@@ -22,7 +23,7 @@ func ConnectDb() {
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"),
 	)
-	
+
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
@@ -37,69 +38,74 @@ func ConnectDb() {
 
 	log.Println("running migrations")
 
-	db.AutoMigrate(
-		&models.Clan{},
-		&models.User{},
-		&models.Item{},
-		&models.Pet{},
-		&models.Armor{},
-		&models.Character{},
-		
-		&models.Class{},
-		&models.Assignment{},
-		&models.Befriends{},
-		&models.Weapon{},
-		&models.Accompanies{},
-		&models.Equips{},
-		&models.Invites{},
-		&models.OwnsArmor{},
-		&models.OwnsPet{},
-		&models.OwnsWeapon{},
-		//&models.Tag{},
-		&models.Wears{},
-	)
+	db.AutoMigrate(&models.Assignment{})
+	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Class{})
+
 
 	UsuariosBase(db)
+	ClassPrueba(db)
+	AssigmentsPrueba(db)
 	DB = Dbinstance{
 		Db: db,
 	}
-
-	
 }
 
-func clanesBase(db *gorm.DB){
-	clan := &models.Clan{
-		Name: "clanito",
+func ClassPrueba(db *gorm.DB) {
+	clases := []models.Class{
+		{ ID: 1, Name: "Informatica", StartDate: time.Now() , EndDate: time.Now() , OwnerUsername: "marinela", GradeFormula: "average(Homework)", Color: "000000"},
 	}
-
-	var existing models.Clan
-		err := db.Where("Name = ?", clan.Name).First(&existing).Error
+	for _,clase := range clases {
+		var existing models.Class
+		err := db.Where("id = ? AND  owner_username  = ?", clase.ID, clase.OwnerUsername).First(&existing).Error
 		if err != nil {
-			if err == gorm.ErrRecordNotFound{
-				db.Create(&clan)
-				fmt.Printf("Clan creado: %s\n", clan.Name)
+			if err == gorm.ErrRecordNotFound {
+				db.Create(&clase)
+				fmt.Printf("Clase creada: %s\n", clase.Name)
 			} else {
-				log.Fatalf("Error al verificar usuario: %v", err)
+				log.Fatalf("Error al verificar Clase: %v", err)
 			}
 		} else {
-			fmt.Printf("Clan ya existe: %s\n", clan.Name)
-		}	
+			fmt.Printf("La clase ya existe: %s\n", clase.Name)
+		}
+	} 
 }
 
+func AssigmentsPrueba(db *gorm.DB) {
+	ass := []models.Assignment{
+		{ ID: 1, ClassID: 1,Name: "Informar", DueDate: time.Now(), Tag: "Homework"},
+		{ ID: 2, ClassID: 1,Name: "Tejer", DueDate: time.Now(), Tag: "Homework"},
+		{ ID: 3, ClassID: 1,Name: "Hackear la Nasa", DueDate: time.Now(), Tag: "Homework"},
+	}
+	for _,a := range ass {
+		var existing models.Assignment
+		err := db.Where("id = ? AND  class_id  = ?", a.ID, a.ClassID).First(&existing).Error
+		if err != nil {
+			if err == gorm.ErrRecordNotFound {
+				db.Create(&a)
+				fmt.Printf("Tarea creada: %s\n", a.Name)
+			} else {
+				log.Fatalf("Error al verificar Tarea: %v", err)
+			}
+		} else {
+			fmt.Printf("La tarea ya existe: %s\n", a.Name)
+		}
+	} 
+}
 
-func UsuariosBase(db *gorm.DB){
-	users := []models.User {
-        {Username: "admin", Password: "Admin123*", Email: "root@toor.uk"},
-		{Username: "pepito", Password: "Pepa24*", Email: "pepe.pica.papas@pepe.gov.mx"},
-		{Username: "pedrito", Password: "Piedras1#", Email: "pp@pemex.gov.mx"},
-        {Username: "marinela", Password: "Gansitos$02", Email: "bonais@ciencias.unam.mx"},
+func UsuariosBase(db *gorm.DB) {
+	users := []models.User{
+		{Username: "admin", Name: "Adminio", Password: "Admin123*", Email: "root@toor.uk"},
+		{Username: "pepito", Name: "Pepe", Password: "Pepa24*", Email: "pepe.pica.papas@pepe.gov.mx"},
+		{Username: "pedrito", Name: "Pedro", Password: "Piedras1#", Email: "pp@pemex.gov.mx"},
+		{Username: "marinela", Name: "Marcelo", Password: "Gansitos$02", Email: "bonais@ciencias.unam.mx"},
 	}
 
 	for _, user := range users {
 		var existing models.User
 		err := db.Where("username = ?", user.Username).First(&existing).Error
 		if err != nil {
-			if err == gorm.ErrRecordNotFound{
+			if err == gorm.ErrRecordNotFound {
 				db.Create(&user)
 				fmt.Printf("Usuario creado: %s\n", user.Username)
 			} else {
@@ -110,4 +116,3 @@ func UsuariosBase(db *gorm.DB){
 		}
 	}
 }
-

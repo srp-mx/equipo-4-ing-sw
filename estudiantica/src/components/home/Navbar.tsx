@@ -4,9 +4,12 @@ import logo from "@/assets/Logo.png";
 import '@/index.css'
 import { navItems } from "@/constants";
 import { characterDates } from "@/constants";
+import { useSelector } from "react-redux";
+import { RootState } from "@/constants/store";
+
 const NavBar = () => {
     const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
-    
+    const user = useSelector((state: RootState) => state.user);
     const toggleNavBar = () => {
         setMobileDrawerOpen(!mobileDrawerOpen);
     };
@@ -25,7 +28,7 @@ const NavBar = () => {
                             <div className="mr-3">
                                 <img src="assets/img/icono_user.svg"/>
                             </div>
-                            {characterDates.name}
+                            {user.name}
                         </a>
                         <a href="#" className=" -top-3 left-8 flex items-center text-[#cbda3d] hover:text-white transition-all focus:text-[#ffffff]">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" fill="currentColor" id="Interface-Essential-Signout-Logout--Streamline-Pixel" height="24" width="24">
@@ -63,7 +66,7 @@ const NavBar = () => {
                         </ul>
                         <div className="flex space-x-6">
                             <a href="#" className="py-2 px-3 border rounded-md">
-                                {characterDates.name}
+                                {user.name}
                             </a>
                         </div>
                     </div>

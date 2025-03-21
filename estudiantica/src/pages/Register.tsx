@@ -1,7 +1,5 @@
 import React, { SyntheticEvent, useState } from "react";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup"
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Button = ({ onClick, children, icon }: { onClick?: () => void; children: React.ReactNode; icon?: string }) => (
   <button onClick={onClick} className="pixel-corner-button mb-4 flex bg-[#cbda3d] py-4 px-10 min-w-[300px] transition-all hover:bg-white">
@@ -40,7 +38,7 @@ const PasswordInput = ({ value, onChange }: { value: string; onChange: (e: React
   );
 };
 
-const submit = async (email: string, password: string, username: string, name: string) => {
+const submit = async (email: string, password: string, username: string, name: string, navigate : (path:string) => void) => {
     try {
         const response = await fetch("http://localhost:3000/register", {
             method: 'POST',
@@ -50,12 +48,12 @@ const submit = async (email: string, password: string, username: string, name: s
                 username, 
                 email,
                 password
-            })
+            }),
         });
         
-        if(!response.ok) throw Error("Fallo al crear Usuario");
+        if(!response.ok) throw Error("Fallo al crear Usuario 20");
 
-        return <Link to="/login" />
+        navigate("/login");       
 
     } catch (error) {
         if( error instanceof Error) {
@@ -104,7 +102,8 @@ export default function Register() {
     const[password, setPassword] = useState("");
     const[userName, setUserName] = useState("");
     const[name, setName] = useState("");
-    
+    const navigate = useNavigate();
+
     return (
         <div className="bg-[url(../../public/assets/img/login_bg.jpg)] h-screen  bg-cover bg-center flex justify-center items-center ">
             <div className="relative w-full max-w-lg p-8 rounded-lg">
@@ -114,7 +113,7 @@ export default function Register() {
                 <div className="flex flex-col justify-center items-center mt-6">
                     <div className="relative mb-2">
                     <form className="max-w-lg mx-auto mt-4 p-4 bg-[#2d314f] rounded-lg"
-                    onSubmit={(e) => {e.preventDefault(); submit(email, password, userName, name)}}>
+                    onSubmit={(e) => {e.preventDefault(); submit(email, password, userName, name, navigate)}}>
                         <div className="relative flex flex-col mb-4">
                             <input 
                                 type="email"
