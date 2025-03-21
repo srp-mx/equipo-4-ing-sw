@@ -4,8 +4,17 @@ import logo from "@/assets/Logo.png";
 import '@/index.css'
 import { navItems } from "@/constants";
 import { characterDates } from "@/constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/constants/store";
+import { useNavigate } from "react-router-dom";
+import { clearUser } from "@/constants/userSlice";
+
+const handleLogout = (dispatch : any, navigate : any) => {
+    dispatch(clearUser());
+    localStorage.removeItem("token");
+
+    navigate("/");
+} 
 
 const NavBar = () => {
     const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
@@ -13,6 +22,8 @@ const NavBar = () => {
     const toggleNavBar = () => {
         setMobileDrawerOpen(!mobileDrawerOpen);
     };
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     return (
         <nav className="sticky top-0 z-50 py-3 backdrop-blur-lg border-b
         border-neutral-700 opacity-80">
@@ -30,7 +41,11 @@ const NavBar = () => {
                             </div>
                             {user.name}
                         </a>
-                        <a href="#" className=" -top-3 left-8 flex items-center text-[#cbda3d] hover:text-white transition-all focus:text-[#ffffff]">
+                        <a href="#" className=" -top-3 left-8 flex items-center text-[#cbda3d] hover:text-white transition-all focus:text-[#ffffff]"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleLogout(dispatch, navigate);
+                        }}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" fill="currentColor" id="Interface-Essential-Signout-Logout--Streamline-Pixel" height="24" width="24">
                             <g><path d="m18.85875 6.855 0 3.4275 -4.574999999999999 0 0 2.2874999999999996 4.574999999999999 0 0 3.4275 1.1400000000000001 0 0 -1.1400000000000001 1.1475 0 0 -1.1400000000000001 1.1400000000000001 0 0 -1.1475 1.1400000000000001 0 0 -2.2874999999999996 -1.1400000000000001 0 0 -1.1400000000000001 -1.1400000000000001 0 0 -1.1400000000000001 -1.1475 0 0 -1.1475 -1.1400000000000001 0z" fill="currentColor" stroke-width="0.75"></path>
                                 <path d="M15.431249999999999 15.997499999999999h1.1400000000000001v4.574999999999999h-1.1400000000000001Z" fill="currentColor" stroke-width="0.75"></path>
@@ -47,6 +62,7 @@ const NavBar = () => {
                             </g>
                         </svg>
                         <span className="ml-2 text-sm">Log out</span>
+
                         </a>
                     </div>
                     <div className="lg:hidden md:flex flex-col justify-end">

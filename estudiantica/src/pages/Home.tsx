@@ -26,7 +26,7 @@ export default function Home(){
 
                 <div className="text-3xl items-center justify-center text-center flex mt-6 flex-col
                 mb-6 ml-10 mr-10 w-5/6 col-start-10 col-end-13 row-start-2 row-end-9 py-1 space-x-1 space-y-4">
-                    <Link to="/home" className="flex rounded-xl items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-red-500 to-red-600 hover:bg-red-800 transition hover:-translate-y-1 hover:scale-100 group" >
+                    <Link to="/work" className="flex rounded-xl items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-red-500 to-red-600 hover:bg-red-800 transition hover:-translate-y-1 hover:scale-100 group" >
                     <img src={TareasImg} alt="" className="w-10 h-10 mr-4" />
                     Tareas
                     </Link>
@@ -35,13 +35,13 @@ export default function Home(){
                     Horario
                     </Link>
 
-                    <Link to="\home" className="flex rounded-xl items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-green-500 to-green-600 hover:bg-green-800 transition hover:-translate-y-1 hover:scale-100 group" >
+                    <Link to="/class" className="flex rounded-xl items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-green-500 to-green-600 hover:bg-green-800 transition hover:-translate-y-1 hover:scale-100 group" >
                     <img src={MateriaImg} alt="" className="w-10 h-10 mr-4" />
                     
                     Materias
                     </Link>
                     
-                    <Link to="\home" className="flex rounded-xl items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-amber-500 to-amber-600 hover:bg-amber-800 transition hover:-translate-y-1 hover:scale-100 group" >
+                    <Link to="/home" className="flex rounded-xl items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-amber-500 to-amber-600 hover:bg-amber-800 transition hover:-translate-y-1 hover:scale-100 group" >
                     <img src={CalendarioImg} alt="" className="w-10 h-10 mr-4" />      
                     Calendario
                     </Link>

@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux';
 import React, { Children, use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setUser } from '@/constants/userSlice'
+import validator from 'validator';
 
 //import "../../public/assets/css/index.css";
 
@@ -71,6 +72,7 @@ const fetchAuthentication = async (email: string, password: string, navigate: (p
     });
     if (!response.ok) throw new Error("Credenciales inválidas");
     const data = await response.json();
+    localStorage.setItem("token",data.token);
     dispatch(setUser({
       name: data.user.name,
       email: data.user.email, 
