@@ -100,3 +100,26 @@ func TestFindByCredentials(t *testing.T) {
 	assert.NotNil(t, foundUser)
 	assert.Equal(t, "testuser", foundUser.Username)
 }
+
+func TestExists(t *testing.T) {
+	resetDb()
+	data := newUserTestData()
+
+	exists, err := data.controller.ExistsUsername(data.user.Username)
+	assert.NoError(t, err)
+	assert.False(t, exists)
+
+	exists, err = data.controller.ExistsEmail(data.user.Email)
+	assert.NoError(t, err)
+	assert.False(t, exists)
+
+	data.controller.CreateUser(data.user)
+
+	exists, err = data.controller.ExistsUsername(data.user.Username)
+	assert.NoError(t, err)
+	assert.True(t, exists)
+
+	exists, err = data.controller.ExistsEmail(data.user.Email)
+	assert.NoError(t, err)
+	assert.True(t, exists)
+}
