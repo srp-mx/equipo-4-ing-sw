@@ -5,12 +5,27 @@ import AssigmentModal from "../AssigmentView/AssigmentModal";
 import { Assigment } from "@/Object/Assigment";
 
 export default function Resultbar({ assigment }: { assigment: Array<Assigment> }): React.ReactNode {
-    const [isChecked, setIsChecked] = useState<boolean>(false);
+    const [selectedTasks, setSelectedTasks] = useState<Set<number>>(new Set());
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Maneja el cambio del checkbox
-    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setIsChecked(event.target.checked);
+    const handleCheckboxChange = (taskId: number) => {
+        setSelectedTasks((prev) => {
+            const newSet = new Set(prev);
+            if (newSet.has(taskId)) {
+                newSet.delete(taskId);
+            } else {
+                newSet.add(taskId);
+            }
+            return newSet;
+        });
+    };
+
+    const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.checked) {
+            setSelectedTasks(new Set(assigment.map(task => task.id)));
+        } else {
+            setSelectedTasks(new Set());
+        }
     };
 
     return (
@@ -20,13 +35,13 @@ export default function Resultbar({ assigment }: { assigment: Array<Assigment> }
                     <input 
                         type="checkbox" 
                         className="w-5 h-5 text-blue-500 bg-gray-800 border-gray-500 rounded focus:ring-0"
-                        onChange={handleCheckboxChange}
-                        checked={isChecked}
+                        onChange={handleSelectAll}
+                        checked={selectedTasks.size === assigment.length}
                     />
                     <span className="text-white text-lg font-semibold">Resultado</span>
                 </div>
 
-                <BottonResultBar selection={isChecked}/>
+                <BottonResultBar selection={Array.from(selectedTasks)}/>
             </div>
 
             <div className="mt-2 mb-3 h-[calc(100vh-450px)] overflow-y-auto">
@@ -34,7 +49,12 @@ export default function Resultbar({ assigment }: { assigment: Array<Assigment> }
                     <ul id="results-list" className="space-y-4">
                         {assigment.map((task) => (
                             <li key={task.id} className="p-3 rounded flex items-center transition space-x-5 cursor-pointer">
-                                <input type="checkbox" className=" w-5 h-5 text-blue-500 bg-gray-800 border-gray-500 rounded focus:ring-0"/>                        
+                                <input 
+                                    type="checkbox" 
+                                    className=" w-5 h-5 text-blue-500 bg-gray-800 border-gray-500 rounded focus:ring-0"
+                                    checked={selectedTasks.has(task.id)}
+                                    onChange={() => handleCheckboxChange(task.id)}
+                                />                        
                                 <AssigmentCard assigment={task} onOpen={() => setIsModalOpen(true)} />
                                 <AssigmentModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} assigment={task} />
                             </li>

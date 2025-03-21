@@ -23,8 +23,25 @@ const getProgressStatus = (progress: number) => {
 
 export default function AssigmentModal({ isOpen, onClose, assigment } : ModalProps) : React.ReactNode{
     if (!isOpen) return null;
-    const progressStatus = getProgressStatus(assigment.progress)
+    const progressStatus = getProgressStatus(assigment.progress);
+
     const [isEdit,setIsEdit] = useState(false);
+    const [editedAssigment, setEditedAssigment] = useState({ ... assigment});
+    
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setEditedAssigment((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSave = () => {
+        // Aquí podrías agregar una función para actualizar la tarea en el backend
+        setIsEdit(false);
+    };
+
+    const handleCancel = () => {
+        setEditedAssigment({ ...assigment });
+        setIsEdit(false);
+    };
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-10">
@@ -42,9 +59,30 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                     </div>
                     
                 </div>
-                <p className="text-gray-900 text-2xl font-semibold w-2/3">{assigment.name}</p>
+                {isEdit ? (
+                    <input
+                        type="text"
+                        name="name"
+                        className="text-gray-900 text-2xl font-semibold w-full border rounded p-1"
+                        value={editedAssigment.name}
+                        onChange={handleChange}
+                    />
+                ) : (
+                    <p className="text-gray-900 text-2xl font-semibold w-2/3">{assigment.name}</p>
+                )}
+
                 <div className="text-gray-600 text-right text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>{assigment.dueDate.toLocaleDateString()}</span>
+                    {isEdit ? (
+                        <input
+                            type="date"
+                            name="dueDate"
+                            className="border rounded p-1"
+                            value={new Date(editedAssigment.dueDate).toISOString().split('T')[0]}
+                            onChange={handleChange}
+                        />
+                    ) : (
+                        <span>{assigment.dueDate.toLocaleDateString()}</span>
+                    )}
                 </div>
 
                 <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
@@ -52,18 +90,56 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                 </div>
 
                 <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>Tag: {assigment.tag}</span>
+                    <span>Tag: </span>
+                    {isEdit ? (
+                        <input
+                            type="text"
+                            name="tag"
+                            className="border rounded p-1"
+                            value={editedAssigment.tag}
+                            onChange={handleChange}
+                        />
+                    ) : (
+                        <span>{assigment.tag}</span>
+                    )}
                 </div>
                 <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>Notas: {assigment.notes}</span>
+                    <span>Notas: </span>
+                    {isEdit ? (
+                        <textarea
+                            name="notes"
+                            className="border rounded p-1 w-full"
+                            value={editedAssigment.notes}
+                            onChange={handleChange}
+                        />
+                    ) : (
+                        <span>{assigment.notes}</span>
+                    )}
                 </div> 
                 <div className="flex mb-2 mr-4 space-x-2 justify-end">
-                    <button
-                        className="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500"
-                        onClick={onClose}
-                    >
-                        Editar
-                    </button>
+                    {isEdit ? (
+                        <>
+                            <button
+                                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500"
+                                onClick={handleSave}
+                            >
+                                Guardar
+                            </button>
+                            <button
+                                className="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500"
+                                onClick={handleCancel}
+                            >
+                                Cancelar
+                            </button>
+                        </>
+                    ) : (
+                        <button
+                            className="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500"
+                            onClick={() => setIsEdit(true)}
+                        >
+                            Editar
+                        </button>
+                    )}
                     <button
                         className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
                         onClick={onClose}
