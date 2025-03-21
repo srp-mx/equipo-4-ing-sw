@@ -22,13 +22,13 @@ import (
 )
 
 type User struct {
-	Username string `gorm:"primaryKey"`
-	Name     string `gorm:"not null"`
-	Email    string `gorm:"unique;not null"`
-	Password string `gorm:"not null"`
+	Username string `gorm:"primaryKey" json:"username"`
+	Name     string `gorm:"not null" json:"name"`
+	Email    string `gorm:"unique;not null" json:"email"`
+	Password string `gorm:"not null" json:"-"`
 	//DestinationUser []Befriends `gorm:"foreignKey:DestinationUser"`
 	//SourceUser []Befriends `gorm:"foreignKey:SourceUser"`
 	//ClanName string
 	//Invites []Invites
-	Classes []Class `gorm:"foreignKey:OwnerUsername;references:Username;constraint:OnDelete:CASCADE"`
+	Classes []Class `gorm:"foreignKey:OwnerUsername;references:Username;constraint:OnDelete:CASCADE" json:"classes"`
 }
