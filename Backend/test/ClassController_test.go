@@ -25,15 +25,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type controllerTestData struct {
+type classTestData struct {
 	userController *controllers.UserController
 	controller     *controllers.ClassController
 	user           *models.User
 	class          *models.Class
 }
 
-func newControllerTestData() (result controllerTestData) {
-	result = controllerTestData{}
+func newClassTestData() (result classTestData) {
+	result = classTestData{}
 	result.userController = controllers.NewUserController(db)
 	result.controller = controllers.NewClassController(db)
 
@@ -58,7 +58,7 @@ func newControllerTestData() (result controllerTestData) {
 
 func TestCreateClass(t *testing.T) {
 	resetDb()
-	data := newControllerTestData()
+	data := newClassTestData()
 
 	err := data.userController.CreateUser(data.user)
 	assert.NoError(t, err)
@@ -67,14 +67,14 @@ func TestCreateClass(t *testing.T) {
 	assert.NoError(t, err)
 
 	var foundClass models.Class
-	db.First(&foundClass, "id = ?", 1)
+	db.First(&foundClass)
 
 	assert.Equal(t, data.class.ID, foundClass.ID)
 }
 
 func TestUpdateClass(t *testing.T) {
 	resetDb()
-	data := newControllerTestData()
+	data := newClassTestData()
 
 	db.Create(data.user)
 	db.Create(data.class)
@@ -91,7 +91,7 @@ func TestUpdateClass(t *testing.T) {
 
 func TestDeleteClass(t *testing.T) {
 	resetDb()
-	data := newControllerTestData()
+	data := newClassTestData()
 
 	db.Create(data.user)
 	db.Create(data.class)

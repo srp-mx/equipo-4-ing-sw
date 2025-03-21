@@ -31,6 +31,7 @@ var db *gorm.DB
 func resetDb() {
 	db.Exec("DELETE from users")
 	db.Exec("DELETE from classes")
+	db.Exec("DELETE from assignments")
 }
 
 func TestMain(m *testing.M) {
@@ -42,11 +43,9 @@ func TestMain(m *testing.M) {
 		panic("failed to connect database")
 	}
 
-	db.AutoMigrate(
-		&models.User{},
-		&models.Class{},
-		&models.Assignment{},
-	)
+	db.AutoMigrate(&models.Assignment{})
+	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Class{})
 
 	code := m.Run()
 
