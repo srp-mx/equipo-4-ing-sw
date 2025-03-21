@@ -17,6 +17,9 @@ func setupRoutes(app *fiber.App) {
 	app.Delete("/class", jwt, handlers.DeleteClass)
 	app.Patch("/class", jwt, handlers.PatchClass)
 
+	app.Post("/class_assignments", jwt, handlers.GetClassAssignments)
+	app.Post("/class_tags", jwt, handlers.GetClassTags)
+
 	//app.Post("/assignment", jwt, )
 	//app.Get("/assignment", jwt, )
 	//app.Delete("/assignment", jwt, )

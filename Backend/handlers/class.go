@@ -172,6 +172,64 @@ func PatchClass(c *fiber.Ctx) error {
 	})
 }
 
+func GetClassAssignments(c *fiber.Ctx) error {
+	request, err := initClassRequest(c)
+	if err != nil {
+		return err
+	}
+
+	classes := controllers.NewClassController(database.DB.Db)
+
+	if exists, err := classes.Exists(request.class); !exists || err != nil {
+		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
+			"error": fiber.Error{
+				Code:    404,
+				Message: "La clase no se encontró.",
+			},
+		})
+	}
+
+	err = classes.Get(&request.class)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.ErrInternalServerError)
+	}
+
+	err = classes.LoadAssignments(&request.class)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.ErrInternalServerError)
+	}
+
+	return c.JSON(request.class)
+}
+
+func GetClassTags(c *fiber.Ctx) error {
+	request, err := initClassRequest(c)
+	if err != nil {
+		return err
+	}
+
+	classes := controllers.NewClassController(database.DB.Db)
+
+	if exists, err := classes.Exists(request.class); !exists || err != nil {
+		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
+			"error": fiber.Error{
+				Code:    404,
+				Message: "La clase no se encontró.",
+			},
+		})
+	}
+
+	tags, err := classes.GetTags(&request.class)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.ErrInternalServerError)
+	}
+
+	return c.JSON(tags)
+}
+
 func initClassRequest(c *fiber.Ctx) (*classRequest, error) {
 	var request *classRequest
 	request, err := parseRequest[classRequest](c)
