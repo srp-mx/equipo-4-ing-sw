@@ -1,45 +1,54 @@
 import NavBar from "../components/Navbar";
 import Character from "../components/Character";
+import SideBar from "../components/SideBar";
+import ItemsEquiped from "../components/ItemsEquiped";
+import CalendarioImg from "@/assets/img/home/icono_calendario.png"
+import TareasImg from "@/assets/img/home/icono_tareas.png";
+import HorarioImg from "@/assets/img/home/icono_horario.png";
+import MateriaImg from "@/assets/img/home/icono_materias.png";
 
 export default function Home(){
     return (
         <>
             <NavBar />
-            <div className="flex mt-10 justify-center max-w-7xl mx-auto pt-20 px-6">
-                <div className="w-4/5 rounded-lg space-x-6 px-4 py-4">
+            <div className="fixed inset-0 grid grid-cols-12 grid-rows-8 h-screen ">
+                <div className="mt-5 ml-5 col-start-1 col-end-3 row-start-2 row-end-4">
+                    <SideBar />
+                </div>
+                <div className="ml-4 mt-5 mb-6 col-start-3 col-end-10 row-start-2 row-end-9 w-full bg-gradient-to-r from-gray-800 to-blue-950 rounded-2xl">
                     <Character />
                 </div>
-                <div className=" w-1/5 items-center text-center text-4xl text-gray-100 rounded-lg space-y-3">
-                    
-                    <a href="#" className="flex items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-red-500 to-red-600 hover:bg-red-800 " >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-10">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-</svg>
+                <div className="justify-center items-center text-center flex flex-row mt-6 
+                mb-6 ml-4 w-full rounded-l-2xl col-start-1 col-end-4 row-start-6 row-end-9 py-1 space-x-1 space-y-2 bg-gray-800">
+                    <ItemsEquiped />
+                </div>
+
+                <div className="text-3xl items-center justify-center text-center flex mt-6 flex-col
+                mb-6 ml-10 mr-10 w-5/6 col-start-10 col-end-13 row-start-2 row-end-9 py-1 space-x-1 space-y-4">
+                    <a href="#" className="flex rounded-xl items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-red-500 to-red-600 hover:bg-red-800 " >
+                    <img src={TareasImg} alt="" className="w-10 h-10 mr-4" />
                     Tareas
                     </a>
-                    <a href="button" className="flex items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-blue-500 to-blue-600 hover:bg-blue-800 " >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-10">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-</svg>
+                    <a href="button" className="flex rounded-xl items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-blue-500 to-blue-600 hover:bg-blue-800 " >
+                    <img src={HorarioImg} alt="" className="w-10 h-10 mr-4" />
                     Horario
                     </a>
 
-                    <a href="button" className="flex items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-green-500 to-green-600 hover:bg-green-800 " >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-10">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
-</svg>                    
+                    <a href="button" className="flex rounded-xl items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-green-500 to-green-600 hover:bg-green-800 " >
+                    <img src={MateriaImg} alt="" className="w-10 h-10 mr-4" />
                     
                     Materias
                     </a>
                     
-                    <a href="button" className="flex items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-amber-500 to-amber-600 hover:bg-amber-800 " >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-10">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-</svg>                    
+                    <a href="button" className="flex rounded-xl items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-amber-500 to-amber-600 hover:bg-amber-800 " >
+                    <img src={CalendarioImg} alt="" className="w-10 h-10 mr-4" />      
                     Calendario
                     </a>
                 </div>
+
+
             </div>
+                   
         </>
     );    
 }
