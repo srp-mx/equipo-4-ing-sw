@@ -18,8 +18,8 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	type loginResponse struct {
-		Token string `json:"token"`
-        User models.User `json:"user"`
+		Token string      `json:"token"`
+		User  models.User `json:"user"`
 	}
 
 	// Get the credentials from the request body
@@ -64,6 +64,6 @@ func Login(c *fiber.Ctx) error {
 
 	return c.JSON(loginResponse{
 		Token: t,
-        User: *user,
+		User:  *user,
 	})
 }

@@ -13,187 +13,186 @@ import (
 )
 
 type classRequest struct {
-    user models.User `json:"user"`
-    class models.Class `json:"class"`
+	user  models.User  `json:"user"`
+	class models.Class `json:"class"`
 }
 
-
 func PostClass(c *fiber.Ctx) error {
-    request, err := initClassRequest(c)
-    if err != nil {
-        return err
-    }
+	request, err := initClassRequest(c)
+	if err != nil {
+		return err
+	}
 
-    classes := controllers.NewClassController(database.DB.Db)
-    if exists, err := classes.Exists(request.class); exists || err != nil {
+	classes := controllers.NewClassController(database.DB.Db)
+	if exists, err := classes.Exists(request.class); exists || err != nil {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
 			"error": fiber.Error{
 				Code:    409,
 				Message: "Una materia con esa especificación ya existe.",
 			},
 		})
-    }
+	}
 
-    request.class.GradeFormula = strings.TrimSpace(request.class.GradeFormula)
-    form, err := utils.NewFormula(request.class.GradeFormula)
+	request.class.GradeFormula = strings.TrimSpace(request.class.GradeFormula)
+	form, err := utils.NewFormula(request.class.GradeFormula)
 
-    if err != nil {
-        return c.Status(fiber.StatusBadRequest).JSON(form)
-    }
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(form)
+	}
 
-    if !form.VerifyPlausibility() {
-        return c.Status(fiber.StatusBadRequest).JSON(*form)
-    }
+	if !form.VerifyPlausibility() {
+		return c.Status(fiber.StatusBadRequest).JSON(*form)
+	}
 
-    re := regexp.MustCompile(`^[0-9A-Fa-f]{8}$`)
-    if !re.MatchString(request.class.Color) {
-        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-            "error": fiber.Error{
-                Code: 400,
-                Message: "El color de la materia no es válido.",
-            },
-        })
-    }
+	re := regexp.MustCompile(`^[0-9A-Fa-f]{8}$`)
+	if !re.MatchString(request.class.Color) {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": fiber.Error{
+				Code:    400,
+				Message: "El color de la materia no es válido.",
+			},
+		})
+	}
 
-    err = classes.CreateClass(&request.class)
+	err = classes.CreateClass(&request.class)
 
-    if err != nil {
+	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.ErrInternalServerError)
-    }
+	}
 
 	return c.JSON(fiber.Map{
-        "user": request.user,
-        "class": request.class,
-        "formula": form,
-    })
+		"user":    request.user,
+		"class":   request.class,
+		"formula": form,
+	})
 }
 
 func GetClass(c *fiber.Ctx) error {
-    request, err := initClassRequest(c)
-    if err != nil {
-        return err
-    }
+	request, err := initClassRequest(c)
+	if err != nil {
+		return err
+	}
 
-    classes := controllers.NewClassController(database.DB.Db)
+	classes := controllers.NewClassController(database.DB.Db)
 
-    if exists, err := classes.Exists(request.class); !exists || err != nil {
+	if exists, err := classes.Exists(request.class); !exists || err != nil {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
 			"error": fiber.Error{
 				Code:    404,
 				Message: "La clase no se encontró.",
 			},
 		})
-    }
+	}
 
-    err = classes.Get(&request.class)
-    if err != nil {
-        return c.Status(fiber.StatusInternalServerError).
-            JSON(fiber.ErrInternalServerError)
-    }
+	err = classes.Get(&request.class)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.ErrInternalServerError)
+	}
 
-    return c.JSON(request.class)
+	return c.JSON(request.class)
 }
 
 func DeleteClass(c *fiber.Ctx) error {
-    request, err := initClassRequest(c)
-    if err != nil {
-        return err
-    }
+	request, err := initClassRequest(c)
+	if err != nil {
+		return err
+	}
 
-    classes := controllers.NewClassController(database.DB.Db)
+	classes := controllers.NewClassController(database.DB.Db)
 
-    if exists, err := classes.Exists(request.class); !exists || err != nil {
+	if exists, err := classes.Exists(request.class); !exists || err != nil {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
 			"error": fiber.Error{
 				Code:    404,
 				Message: "La clase no se encontró.",
 			},
 		})
-    }
+	}
 
-    err = classes.Get(&request.class)
-    if err != nil {
-        return c.Status(fiber.StatusInternalServerError).
-            JSON(fiber.ErrInternalServerError)
-    }
+	err = classes.Get(&request.class)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.ErrInternalServerError)
+	}
 
-    err = classes.DeleteClass(&request.class)
-    if err != nil {
-        return c.Status(fiber.StatusInternalServerError).
-            JSON(fiber.ErrInternalServerError)
-    }
+	err = classes.DeleteClass(&request.class)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.ErrInternalServerError)
+	}
 
-    return c.JSON(fiber.Map{
-        "ok": true,
-    })
+	return c.JSON(fiber.Map{
+		"ok": true,
+	})
 }
 
 func PatchClass(c *fiber.Ctx) error {
-    request, err := initClassRequest(c)
-    if err != nil {
-        return err
-    }
+	request, err := initClassRequest(c)
+	if err != nil {
+		return err
+	}
 
-    classes := controllers.NewClassController(database.DB.Db)
+	classes := controllers.NewClassController(database.DB.Db)
 
-    if exists, err := classes.Exists(request.class); !exists || err != nil {
+	if exists, err := classes.Exists(request.class); !exists || err != nil {
 		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
 			"error": fiber.Error{
 				Code:    404,
 				Message: "La clase no se encontró.",
 			},
 		})
-    }
+	}
 
-    var updates map[string]any
-    if err := json.Unmarshal(c.Body(), &updates); err != nil {
-        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-            "error": "Invalid JSON",
-        })
-    }
+	var updates map[string]any
+	if err := json.Unmarshal(c.Body(), &updates); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid JSON",
+		})
+	}
 
-    err = classes.UpdateWithMap(&request.class, updates)
-    if err != nil {
-        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-            "error": fiber.Error{
-                Code: 400,
-                Message: "No se pudo actualizar.\n" + err.Error(),
-            },
-        })
-    }
+	err = classes.UpdateWithMap(&request.class, updates)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": fiber.Error{
+				Code:    400,
+				Message: "No se pudo actualizar.\n" + err.Error(),
+			},
+		})
+	}
 
-    err = classes.Get(&request.class)
-    if err != nil {
-        return c.Status(fiber.StatusInternalServerError).
-            JSON(fiber.ErrInternalServerError)
-    }
+	err = classes.Get(&request.class)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(fiber.ErrInternalServerError)
+	}
 
-    return c.JSON(fiber.Map{
-        "class": request.class,
-    })
+	return c.JSON(fiber.Map{
+		"class": request.class,
+	})
 }
 
 func initClassRequest(c *fiber.Ctx) (*classRequest, error) {
-    var request *classRequest
-    request, err := parseRequest[classRequest](c)
+	var request *classRequest
+	request, err := parseRequest[classRequest](c)
 
-    if err != nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 
-    err = checkJwt(c, &request.user)
-    if err != nil {
-        return nil, err
-    }
+	err = checkJwt(c, &request.user)
+	if err != nil {
+		return nil, err
+	}
 
-    if request.class.OwnerUsername != request.user.Username {
+	if request.class.OwnerUsername != request.user.Username {
 		return nil, c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": fiber.Error{
 				Code:    400,
 				Message: "El usuario dueño de la clase debe ser quien la accede.",
 			},
 		})
-    }
+	}
 
-    return request, nil
+	return request, nil
 }
