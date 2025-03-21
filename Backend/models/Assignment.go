@@ -22,6 +22,8 @@ import (
 	"time"
 )
 
+const MAX_TAG_LEN int = 25
+
 type Assignment struct {
 	ID       uint `gorm:"primaryKey;autoIncrement"`
 	ClassID  uint `gorm:"not null"`

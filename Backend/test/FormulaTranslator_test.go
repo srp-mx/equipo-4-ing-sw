@@ -20,7 +20,7 @@ package test
 import (
 	"testing"
 
-	"github.com/srp-mx/equipo-4-ing-sw/controllers"
+	"github.com/srp-mx/equipo-4-ing-sw/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -86,21 +86,21 @@ func TestVerifyPlausibilityFormula(t *testing.T) {
 }
 
 // Asserts creation of a Formula should be successful.
-func assertCreate(t *testing.T, expr string) *controllers.Formula {
-	formula, err := controllers.NewFormula(expr)
+func assertCreate(t *testing.T, expr string) *utils.Formula {
+	formula, err := utils.NewFormula(expr)
 	assert.NoError(t, err)
 	return formula
 }
 
 // Asserts creation of a Formula should fail.
 func assertCreateFail(t *testing.T, expr string) {
-	_, err := controllers.NewFormula(expr)
+	_, err := utils.NewFormula(expr)
 	assert.Error(t, err)
 }
 
 // Asserts that the result of a formula should be a certain expected value.
 func assertEval(t *testing.T, expr string, data map[string]any, expected float64) {
-	formula, err := controllers.NewFormula(expr)
+	formula, err := utils.NewFormula(expr)
 	assert.NoError(t, err)
 	result, err := formula.Evaluate(data)
 	assert.NoError(t, err)
@@ -109,7 +109,7 @@ func assertEval(t *testing.T, expr string, data map[string]any, expected float64
 
 // Asserts that the evaluation of a formula should fail given the data.
 func assertEvalFail(t *testing.T, expr string, data map[string]any) {
-	formula, err := controllers.NewFormula(expr)
+	formula, err := utils.NewFormula(expr)
 	assert.NoError(t, err)
 	_, err = formula.Evaluate(data)
 	assert.Error(t, err)
@@ -117,7 +117,7 @@ func assertEvalFail(t *testing.T, expr string, data map[string]any) {
 
 // Asserts that the result of verifying a formula should be the expected value.
 func assertVerify(t *testing.T, expr string, expected bool) {
-	formula, err := controllers.NewFormula(expr)
+	formula, err := utils.NewFormula(expr)
 	assert.NoError(t, err)
 	plausible := formula.VerifyPlausibility()
 	assert.Equal(t, expected, plausible)

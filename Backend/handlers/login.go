@@ -48,6 +48,7 @@ func Login(c *fiber.Ctx) error {
 		"name":     user.Name,
 		"email":    user.Email,
 		"exp":      time.Now().Add(time.Hour * 24).Unix(),
+		"emitted":  time.Now().Unix(),
 	}
 
 	// Create the token
