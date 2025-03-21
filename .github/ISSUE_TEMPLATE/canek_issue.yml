@@ -1,0 +1,17 @@
+name: Canek Issue
+description: Un issue de Canek.
+title: "[Canek]: "
+labels: 
+  - canek
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Describe el issue
+        La descripción del issue.
+  - type: textarea
+    id: contenido
+    attributes:
+      label: Contenido
+      description: El contenido del issue de Canek.
+      placeholder: "Hola mundo."
