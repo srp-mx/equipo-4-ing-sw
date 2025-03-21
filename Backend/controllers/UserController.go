@@ -56,6 +56,18 @@ func (self *UserController) FindByCredentials(email string, password string) (*m
 	return &user, nil
 }
 
+func (self *UserController) ExistsUsername(username string) (bool, error) {
+	var count int64
+	result := self.DB.Model(&models.User{}).Where("username = ?", username).Count(&count)
+	return count > 0, result.Error
+}
+
+func (self *UserController) ExistsEmail(email string) (bool, error) {
+	var count int64
+	result := self.DB.Model(&models.User{}).Where("email = ?", email).Count(&count)
+	return count > 0, result.Error
+}
+
 func (self *UserController) LoadClasses(user *models.User) {
 	self.DB.Model(user).Association("Classes").Find(user.Classes)
 }
