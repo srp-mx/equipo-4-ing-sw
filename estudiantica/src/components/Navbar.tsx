@@ -3,6 +3,7 @@ import { useState } from "react";
 import logo from "@/assets/Logo.png";
 import '../index.css'
 import { navItems } from "../constants";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
     const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
@@ -17,22 +18,15 @@ const NavBar = () => {
                 <div className="flex justify-between items-center">
                     <div className="flex items-center flex-shrink-0 left-0">
                         <img className="h-10 w-10 mr-2" src={logo} alt="logo" />
-                        <span className="text-3xl tracking-tight">Estudiantica</span>
+                        <span className="text-2xl tracking-tight">Estudiantica</span>
                     </div>
-                    <ul className="hidden lg:flex ml-14 space-x-12 text-xl mr-10">
-                        {navItems.map((item, index) => (
-                            <li key={index}>
-                                <a href={item.href}>{item.label}</a>
-                            </li>
-                        ))}
-                    </ul>
                     <div className="hidden lg:flex justify-center space-x-12 items-center">
-                        <a href="#" className="py-2 px-3 border rounded-md">
+                        <Link to="/register" className="py-2 px-3 border rounded-md">
                             Sign up
-                        </a>
-                        <a href="#" className="bg-gradient-to-r from-blue-500 to-blue-800 py-2 px-3 rounded-md">
+                        </Link>
+                        <Link to="/login"  className="bg-gradient-to-r from-blue-500 to-blue-800 py-2 px-3 rounded-md">
                             Log in
-                        </a>
+                        </Link>
                     </div>
                     <div className="lg:hidden md:flex flex-col justify-end">
                         <button onClick={toggleNavBar}> 
@@ -50,12 +44,12 @@ const NavBar = () => {
                         ))}
                         </ul>
                         <div className="flex space-x-6">
-                            <a href="#" className="py-2 px-3 border rounded-md">
+                            <Link to="/" className="py-2 px-3 border rounded-md">
                                 Sign up
-                            </a>
-                            <a href="#" className="py-2 px-3 rounded-md bg-gradient-to-r from-blue-500 to-blue-800">
+                            </Link>
+                            <Link to="/login" className="py-2 px-3 rounded-md bg-gradient-to-r from-blue-500 to-blue-800">
                                 Log in
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 )}
@@ -65,4 +59,3 @@ const NavBar = () => {
 }
 
 export default NavBar;
->>>>>>> cde82e1 (Landing Page creation html and css in a simple form, without links to others pages and register or login)
