@@ -1,40 +1,35 @@
 /*Copyright (C) 2025
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    any later version.
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
 package models
 
 import (
+	_ "gorm.io/gorm"
 	"time"
-	"gorm.io/gorm"
 )
 
 type Assignment struct {
-	gorm.Model `gorm:"primaryKey"`
-	ClassName string `gorm:"primaryKey"`
-	ClassStartDate time.Time `gorm:"primaryKey"`
-	ClassEndDate time.Time `gorm:"primaryKey"`
-	UserUsername string `gorm:"primaryKey"`
-	DueDate time.Time
-	Notes string `gorm:"type:varchar(500)"`
-	Grade float64
-	AssignmentName string
-	Type int
+	ID       uint `gorm:"primaryKey;autoIncrement"`
+	ClassID  uint `gorm:"not null"`
+	DueDate  time.Time
+	Notes    string `gorm:"type:varchar(500)"`
+	Grade    float64
+	Name     string
 	Optional bool
-	Done bool
-    Tag string
+	Progress int
+	Tag      string `gorm:"type:varchar(25)"`
 }
-
