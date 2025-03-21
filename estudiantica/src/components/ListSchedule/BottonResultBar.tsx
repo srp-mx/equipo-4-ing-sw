@@ -1,12 +1,30 @@
 import { useState } from 'react'
 import CreateClassModal from '../ClassView/CreateClassModal'
 
-const selectedfetch = (option : string , selection : Array<number>) => {
-    // Petición a la api para cambiar el progreso de una tarea o borrarlo
-    // en delete si es necesario, cambiar el cuerpo de fetch
-
-    // selection se vuelve un arreglpo vacio
-}
+const selectedfetch = async (option: string, selection: number[]) => {
+    try {
+      const endpoint = '/classes';
+      const method = 'DELETE';
+      
+      const response = await fetch(endpoint, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: selection }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      console.log('Eliminación exitosa:', data);
+      
+    } catch (error) {
+      console.error('Error durante la eliminación:', error);
+    }
+  };
 
 export default function BottonResultBar({selection} : {selection : Array<number>}) : React.ReactNode{
     const [isModalOpen, setIsModalOpen] = useState(false);

@@ -30,9 +30,35 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
         setEditedClass((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSave = () => {
-        // Aquí podrías agregar una función para actualizar la tarea en el backend
-        setIsEdit(false);
+    const handleSave = async () => {
+        try {
+            if (!editedClass.name) {
+                alert("por favor completa al menos el nombre de la clase");
+                return;
+            }
+            
+            const response = await fetch('/classes', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(editedClass),
+            });
+            
+            if (!response.ok) {
+                throw new Error('error al actualizar la clase');
+            }
+            
+            const updatedAssignment = await response.json();
+            
+            console.log('clase actualizada con exito:', updatedAssignment);
+            
+            setIsEdit(false);
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Hubo un problema al actualizar la clase');
+        }
     };
 
     const handleCancel = () => {
