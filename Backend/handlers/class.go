@@ -97,8 +97,16 @@ func GetClass(c *fiber.Ctx) error {
 
 	classes := controllers.NewClassController(database.DB.Db)
 
-	if exists, err := classes.Exists(request.class); !exists || err != nil {
-		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
+    exists, err := classes.Exists(request.class)
+
+    if err != nil {
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "error" : fiber.ErrInternalServerError,
+        })
+    }
+
+	if !exists {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"error": fiber.Error{
 				Code:    404,
 				Message: "La clase no se encontró.",

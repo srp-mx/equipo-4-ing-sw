@@ -79,8 +79,16 @@ func GetAssignment(c *fiber.Ctx) error {
 
 	assignments := controllers.NewAssignmentController(database.DB.Db)
 
-	if exists, err := assignments.Exists(request.assignment); !exists || err != nil {
-		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
+    exists, err := assignments.Exists(request.assignment)
+
+    if err != nil {
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "error" : fiber.ErrInternalServerError,
+        })
+    }
+
+	if !exists {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"error": fiber.Error{
 				Code:    404,
 				Message: "La asignación no se encontró.",
