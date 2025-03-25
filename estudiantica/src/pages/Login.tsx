@@ -59,11 +59,11 @@ const fetchAuthentication = async (email: string, password: string, navigate: (p
         return;
     }
 
-    let regexPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-    if(regexPassword.test(password)){
-      showNotification("El formatio de la contraseña es incorrrecto","warning");
-      return;
-    }
+    //let regexPassword = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+    //if(regexPassword.test(password)){
+      //showNotification("El formatio de la contraseña es incorrrecto","warning");
+      //return;
+    //}
 
     const response = await fetch("http://localhost:3000/login", {
       method: "POST",
