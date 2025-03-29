@@ -17,7 +17,7 @@ export const navItems = [
   ];
 
   export const navItemsCharacter = [
-    {label: "Inicio", href: "#", imagen: iconoInicio },
+    {label: "Inicio", href: "/home", imagen: iconoInicio },
     {label: "Clanes", href: "#", imagen: iconoClanes },
     {label: "Mazmorras", href: "#", imagen: iconoMazmorras},
     {label: "Otros", href: "#", imagen: iconoOtros},
