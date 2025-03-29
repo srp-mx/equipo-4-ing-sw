@@ -1,0 +1,67 @@
+DESCRIPTION: Gets classes a user is enrolled in.
+
+
+
+Type: POST
+
+
+
+INPUT:
+{
+    "username": ...
+}
+
+
+
+RETURNS:
+{
+    "username": ... ,
+    "name": ... ,
+    "email": ... ,
+    "classes": [
+        {
+            "id": ... ,
+            "name": ... ,
+            "start_date": ... ,
+            "end_date": ... ,
+            "owner_username": ... ,
+            "grade_formula": ... ,
+            "color": ...
+        },
+        ...
+    ]
+}
+
+
+
+ERRORS:
+400 (Bad request)
+    Body:
+    {
+        "error": ...
+    }
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Body:
+    {
+        "error": ...
+    }
+    Cause: Bad credentials
+
+404 (Not found)
+    Body:
+    {
+        "error": {
+            "code": 404,
+            "message": ...
+        }
+    }
+    Cause: The user was not found
+
+500 (Internal server error)
+    Body:
+    {
+        "error": ...
+    }
+    Cause: Internal error

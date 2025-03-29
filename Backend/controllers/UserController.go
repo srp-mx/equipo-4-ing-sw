@@ -80,6 +80,6 @@ func (self *UserController) ExistsEmail(email string) (bool, error) {
 	return count > 0, result.Error
 }
 
-func (self *UserController) LoadClasses(user *models.User) {
-	self.DB.Model(user).Association("Classes").Find(user.Classes)
+func (self *UserController) LoadClasses(user *models.User) error {
+	return self.DB.Model(user).Association("Classes").Find(user.Classes)
 }
