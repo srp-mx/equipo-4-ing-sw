@@ -16,8 +16,7 @@ export default function Resultbar({ assigment }: { assigment: Array<Assigment> }
             } else {
                 newSet.add(taskId);
             }
-            return newSet;
-        });
+            return newSet;});
     };
 
     const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {

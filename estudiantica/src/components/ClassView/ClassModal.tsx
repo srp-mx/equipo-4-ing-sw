@@ -69,7 +69,7 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-10">
-            <div className="p-6 w-1/3 shadow-lg items-center border-gray-400 rounded-lg bg-[#ffffe6] shadow-md">
+            <div className="p-6 w-1/3 shadow-lg items-center border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
                 <div className="flex mb-2 mr-4 space-x-2 justify-end">
                     <div className="flex space-x-2">
                         <label className={`flex items-center space-x-1 px-2 py-1 text-white ${activateClass.bgColor} rounded-full`}>
