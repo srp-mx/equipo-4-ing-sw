@@ -113,6 +113,12 @@ export default function Register() {
                 <div className="flex flex-col justify-center items-center mt-6">
                     <div className="relative mb-2">
                     <form className="max-w-lg mx-auto mt-4 p-4 bg-[#2d314f] rounded-lg"
+                    onKeyDown={(e) => {
+                      if(e.key === 'Enter'){
+                        e.preventDefault();
+                        submit(email, password, userName, name, navigate);
+                      }
+                    }}
                     onSubmit={(e) => {e.preventDefault(); submit(email, password, userName, name, navigate)}}>
                         <div className="relative flex flex-col mb-4">
                             <input 
