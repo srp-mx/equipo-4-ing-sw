@@ -152,7 +152,14 @@ export default function Login() {
           ) : (
             <div className="flex flex-col justify-center items-center mt-6">
             <div className="relative mb-2">
-              <form className="max-w-lg mx-auto mt-4 p-4 bg-[#2d314f] rounded-lg" onSubmit={(e) => { e.preventDefault(); fetchAuthentication(email, password, navigate, dispatch); }}>
+              <form className="max-w-lg mx-auto mt-4 p-4 bg-[#2d314f] rounded-lg"
+                onKeyDown={(e) => {
+                    if(e.key === 'Enter'){
+                      e.preventDefault();
+                      fetchAuthentication(email, password, navigate, dispatch);
+                    }
+                  }}
+                onSubmit={(e) => { e.preventDefault(); fetchAuthentication(email, password, navigate, dispatch); }}>
                 <ButtonReturn onClick={() => { setShowEmailForm(false); setEmail(""); setPassword("");}} />
                 <div className="relative flex mb-4">
                   <input
