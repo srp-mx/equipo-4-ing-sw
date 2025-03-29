@@ -43,10 +43,8 @@ func Register(c *fiber.Ctx) error {
 
 	request := new(registerRequest)
 	if err := c.BodyParser(request); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
-	}
+		return badReq(err.Error())
+    }
 
 	if request.Username == "" {
 		return badReq("Falta el campo: username")

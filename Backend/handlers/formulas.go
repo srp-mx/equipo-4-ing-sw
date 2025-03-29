@@ -29,17 +29,24 @@ func VerifyFormula(c *fiber.Ctx) error {
 	request := new(formula)
 	if err := c.BodyParser(request); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "code": 400,
 			"error": err.Error(),
 		})
 	}
 
 	form, err := utils.NewFormula(request.formula)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(form)
+        return c.JSON(fiber.Map{
+            "ok":      false,
+            "formula": form,
+        })
 	}
 
 	if !form.VerifyPlausibility() {
-		return c.Status(fiber.StatusBadRequest).JSON(form)
+        return c.JSON(fiber.Map{
+            "ok":      false,
+            "formula": form,
+        })
 	}
 
 	return c.JSON(fiber.Map{

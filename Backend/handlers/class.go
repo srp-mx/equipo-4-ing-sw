@@ -296,9 +296,9 @@ func initClassRequest(c *fiber.Ctx) (*classRequest, error) {
 	}
 
 	if request.class.OwnerUsername != request.user.Username {
-		return nil, c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		return nil, c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": fiber.Error{
-				Code:    400,
+				Code:    401,
 				Message: "El usuario dueño de la clase debe ser quien la accede.",
 			},
 		})
