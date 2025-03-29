@@ -304,5 +304,16 @@ func initClassRequest(c *fiber.Ctx) (*classRequest, error) {
 		})
 	}
 
+    userController := controllers.NewUserController(database.DB.Db)
+    err = userController.Get(&request.user)
+    if err != nil {
+		return nil, c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": fiber.Error{
+				Code:    401,
+				Message: "El usuario no existe.",
+			},
+		})
+    }
+
 	return request, nil
 }

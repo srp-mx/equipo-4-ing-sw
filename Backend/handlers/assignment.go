@@ -29,9 +29,9 @@ import (
 )
 
 type assignmentRequest struct {
-	user       models.User
-	class      models.Class
-	assignment models.Assignment
+    user       models.User `json:"user"`
+    class      models.Class `json:"class"`
+    assignment models.Assignment `json:"assignment"`
 }
 
 func PostAssignment(c *fiber.Ctx) error {
@@ -39,6 +39,8 @@ func PostAssignment(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+
+    request.assignment.ClassID = request.class.ID
 
 	assignments := controllers.NewAssignmentController(database.DB.Db)
 
@@ -192,22 +194,35 @@ func initAssignmentRequest(c *fiber.Ctx) (*assignmentRequest, error) {
 	}
 
 	if request.class.OwnerUsername != request.user.Username {
-		return nil, c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		return nil, c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": fiber.Error{
-				Code:    400,
+				Code:    401,
 				Message: "El usuario dueño de la clase debe ser quien la accede.",
 			},
 		})
 	}
 
-	if request.class.ID != request.assignment.ClassID {
+    userController := controllers.NewUserController(database.DB.Db)
+    err = userController.Get(&request.user)
+    if err != nil {
+		return nil, c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": fiber.Error{
+				Code:    401,
+				Message: "El usuario no existe.",
+			},
+		})
+    }
+
+    classController := controllers.NewClassController(database.DB.Db)
+    err = classController.Get(&request.class)
+    if err != nil {
 		return nil, c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": fiber.Error{
 				Code:    400,
-				Message: "La asignación debe ser de la clase adecuada.",
+				Message: "La clase no existe.",
 			},
 		})
-	}
+    }
 
 	return request, nil
 }
