@@ -1,0 +1,71 @@
+DESCRIPTION: Calculated a class' grade.
+
+
+
+Type: POST
+
+
+
+INPUT:
+{
+    "user": {
+        "username": ...
+    },
+    "class": {
+        "name": ... ,
+        "start_date": ... ,
+        "end_date": ... ,
+        "owner_username": ...
+    }
+}
+
+"user" // May contain other User fields, but they will be ignored
+"user.username" -> string
+"class" // May contain other Class fields, but they will be ignored
+"class.name" -> string
+"class.start_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"class.end_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"class.owner_username" -> string
+
+
+
+RETURNS:
+{
+    "grade": ...
+}
+
+"grade" -> double
+
+
+
+ERRORS:
+400 (Bad request)
+    Body:
+    {
+        "error": ...
+    }
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Body:
+    {
+        "error": ...
+    }
+    Cause: Bad credentials
+
+404 (Not found)
+    Body:
+    {
+        "error": {
+            "code": 404,
+            "message": ...
+        }
+    }
+    Cause: The class was not found
+
+500 (Internal server error)
+    Body:
+    {
+        "error": ...
+    }
+    Cause: Internal error

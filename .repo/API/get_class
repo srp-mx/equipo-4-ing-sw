@@ -15,7 +15,7 @@ INPUT:
         "name": ... ,
         "start_date": ... ,
         "end_date": ... ,
-        "owner_username": ... ,
+        "owner_username": ...
     }
 }
 
