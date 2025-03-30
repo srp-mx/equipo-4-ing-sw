@@ -28,12 +28,14 @@ import (
 	"github.com/srp-mx/equipo-4-ing-sw/utils"
 )
 
+// Generic assignment request structure
 type assignmentRequest struct {
     user       models.User `json:"user"`
     class      models.Class `json:"class"`
     assignment models.Assignment `json:"assignment"`
 }
 
+// Handles /post_assignment
 func PostAssignment(c *fiber.Ctx) error {
 	request, err := initAssignmentRequest(c)
 	if err != nil {
@@ -73,6 +75,7 @@ func PostAssignment(c *fiber.Ctx) error {
 	})
 }
 
+// Handles /get_assignment
 func GetAssignment(c *fiber.Ctx) error {
 	request, err := initAssignmentRequest(c)
 	if err != nil {
@@ -107,6 +110,7 @@ func GetAssignment(c *fiber.Ctx) error {
 	return c.JSON(request.assignment)
 }
 
+// Handles /delete_assignment
 func DeleteAssignment(c *fiber.Ctx) error {
 	request, err := initAssignmentRequest(c)
 	if err != nil {
@@ -135,6 +139,7 @@ func DeleteAssignment(c *fiber.Ctx) error {
 	})
 }
 
+// Handles /patch_assignment
 func PatchAssignment(c *fiber.Ctx) error {
 
     type assignmentPatchRequest struct {
@@ -244,6 +249,7 @@ func PatchAssignment(c *fiber.Ctx) error {
 	})
 }
 
+// Utility function to initialize and verify the incoming assignment request
 func initAssignmentRequest(c *fiber.Ctx) (*assignmentRequest, error) {
 	var request *assignmentRequest
 	request, err := parseRequest[assignmentRequest](c)

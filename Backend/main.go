@@ -27,6 +27,7 @@ import (
 	"github.com/srp-mx/equipo-4-ing-sw/database"
 )
 
+// Entry-point
 func main() {
 	database.ConnectDb()
 	app := fiber.New()

@@ -22,26 +22,32 @@ import (
 	"gorm.io/gorm"
 )
 
+// User controller type
 type UserController struct {
 	DB *gorm.DB
 }
 
+// UserController constructor
 func NewUserController(db *gorm.DB) *UserController {
 	return &UserController{DB: db}
 }
 
+// Creates a new user on the database
 func (self *UserController) CreateUser(user *models.User) error {
 	return self.DB.Create(user).Error
 }
 
+// Updates an existing user on the database
 func (self *UserController) UpdateUser(user *models.User) error {
 	return self.DB.Save(user).Error
 }
 
+// Deletes an existing user on the database
 func (self *UserController) DeleteUser(user *models.User) error {
 	return self.DB.Delete(user).Error
 }
 
+// Returns the user matching the email if the email and password are correct
 func (self *UserController) FindByCredentials(email string, password string) (*models.User, error) {
 	var user models.User
 
@@ -56,6 +62,7 @@ func (self *UserController) FindByCredentials(email string, password string) (*m
 	return &user, nil
 }
 
+// Fills in the receiver with an existing user's data that matches its username
 func (self *UserController) Get(receiver *models.User) error {
 	err := self.DB.
 		Where("username = ?", receiver.Username).
@@ -68,18 +75,21 @@ func (self *UserController) Get(receiver *models.User) error {
 	return nil
 }
 
+// Checks whether or not a user with the username given exists 
 func (self *UserController) ExistsUsername(username string) (bool, error) {
 	var count int64
 	result := self.DB.Model(&models.User{}).Where("username = ?", username).Count(&count)
 	return count > 0, result.Error
 }
 
+// Checks whether or not a user with the email given exists 
 func (self *UserController) ExistsEmail(email string) (bool, error) {
 	var count int64
 	result := self.DB.Model(&models.User{}).Where("email = ?", email).Count(&count)
 	return count > 0, result.Error
 }
 
+// Loads the related classes to the user passed in
 func (self *UserController) LoadClasses(user *models.User) error {
 	return self.DB.Model(user).Association("Classes").Find(user.Classes)
 }

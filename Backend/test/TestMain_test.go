@@ -26,14 +26,17 @@ import (
 	"gorm.io/gorm"
 )
 
+// Database instance
 var db *gorm.DB
 
+// Resets database data, to be run between tests
 func resetDb() {
 	db.Exec("DELETE from users")
 	db.Exec("DELETE from classes")
 	db.Exec("DELETE from assignments")
 }
 
+// Entry-point of all tests
 func TestMain(m *testing.M) {
 	log.Println("Starting tests...")
 

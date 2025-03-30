@@ -28,30 +28,37 @@ import (
 	"gorm.io/gorm"
 )
 
+// Class controller type
 type ClassController struct {
 	DB *gorm.DB
 }
 
+// ClassController constructor
 func NewClassController(db *gorm.DB) *ClassController {
 	return &ClassController{DB: db}
 }
 
+// Creates a new class on the database
 func (self *ClassController) CreateClass(class *models.Class) error {
 	return self.DB.Create(class).Error
 }
 
+// Updates an existing class on the database
 func (self *ClassController) UpdateClass(class *models.Class) error {
 	return self.DB.Save(class).Error
 }
 
+// Deletes an existing class on the database
 func (self *ClassController) DeleteClass(class *models.Class) error {
 	return self.DB.Delete(class).Error
 }
 
+// Loads the related assignments to the class passed in
 func (self *ClassController) LoadAssignments(class *models.Class) error {
 	return self.DB.Model(class).Association("Assignments").Find(class.Assignments)
 }
 
+// Returns an array of unique tags used in all assignments for this class
 func (self *ClassController) GetTags(class *models.Class) ([]string, error) {
 	err := self.LoadAssignments(class)
 	if err != nil {
@@ -71,6 +78,8 @@ func (self *ClassController) GetTags(class *models.Class) ([]string, error) {
 	return tags, nil
 }
 
+// Computes the class' grade so far given the grading formula, tags, progress,
+// and optional assignments.
 func (self *ClassController) GetGrade(class *models.Class) (float64, error) {
 	err := self.Get(class)
 	if err != nil {
@@ -116,6 +125,8 @@ func (self *ClassController) GetGrade(class *models.Class) (float64, error) {
 	return form.Evaluate(tagMap)
 }
 
+// Checks whether or not a class with matching candidate key exists
+// (name, start date, end date, owner username)
 func (self *ClassController) Exists(class models.Class) (bool, error) {
 	var count int64
 	result := self.DB.Model(&models.Class{}).
@@ -128,6 +139,7 @@ func (self *ClassController) Exists(class models.Class) (bool, error) {
 	return count > 0, result.Error
 }
 
+// Fills in the receiver with an existing class' data that matches its ID
 func (self *ClassController) Get(receiver *models.Class) error {
 	err := self.DB.
 		Where(&models.Class{
@@ -145,14 +157,15 @@ func (self *ClassController) Get(receiver *models.Class) error {
 	return nil
 }
 
-func (self *ClassController) GetWithCopy(receiver models.Class) (*models.Class, error) {
+// Returns a class that matches the query's ID on the database
+func (self *ClassController) GetWithCopy(query models.Class) (*models.Class, error) {
 	result := models.Class{}
 	err := self.DB.
 		Where(&models.Class{
-			Name:          receiver.Name,
-			StartDate:     receiver.StartDate,
-			EndDate:       receiver.EndDate,
-			OwnerUsername: receiver.OwnerUsername,
+			Name:          query.Name,
+			StartDate:     query.StartDate,
+			EndDate:       query.EndDate,
+			OwnerUsername: query.OwnerUsername,
 		}).
 		First(&result).Error
 
@@ -163,6 +176,8 @@ func (self *ClassController) GetWithCopy(receiver models.Class) (*models.Class, 
 	return &result, nil
 }
 
+// Updates the class which matches the source's ID with the valid entries on
+// the updates map in the database
 func (self *ClassController) UpdateWithMap(source *models.Class, updates map[string]any) error {
 	foundClass, err := self.GetWithCopy(*source)
 	if err != nil {

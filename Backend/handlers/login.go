@@ -28,6 +28,7 @@ import (
 	"github.com/srp-mx/equipo-4-ing-sw/models"
 )
 
+// Handles /login
 func Login(c *fiber.Ctx) error {
 	type loginRequest struct {
 		Email    string `json:"email"`

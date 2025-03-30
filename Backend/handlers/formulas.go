@@ -22,6 +22,7 @@ import (
 	"github.com/srp-mx/equipo-4-ing-sw/utils"
 )
 
+// Handles /verify_formula
 func VerifyFormula(c *fiber.Ctx) error {
 	type formula struct {
 		formula string `json:"formula"`
