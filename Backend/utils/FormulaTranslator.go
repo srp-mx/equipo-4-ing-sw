@@ -175,9 +175,9 @@ func (self *Formula) VerifyPlausibility() (isValid bool) {
 		testData[tag] = []float64{float64(i + 1)}
 	}
 	_, err := self.Evaluate(testData)
-    if err != nil {
-        self.Error = wrapError(err)
-    }
+	if err != nil {
+		self.Error = wrapError(err)
+	}
 	isValid = err == nil
 	return isValid
 }
