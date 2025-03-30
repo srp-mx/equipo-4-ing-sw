@@ -1,4 +1,6 @@
+import { RootState } from "@/constants/store";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 type ModalProps = {
     isOpen: boolean;
@@ -15,13 +17,39 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
         gradeFormula : ""
     });
 
+    const user = useSelector((state: RootState) => state.user);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setNewClass((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleCreate = async () => {
-        onClose();        
+        try{
+            const dataSend =  {
+                name: {
+                    username: user.name 
+                }, 
+                Class: {
+                    name: newClass.name,
+                    start_date: newClass.startDate, 
+                    end_date: newClass.endDate, 
+                    owner_username: user.name,
+                    grade_formula: newClass.gradeFormula,
+                    color: "ffffff"  
+                }
+            }
+            const response = await fetch("http://localhost:3000/post_class",{
+                method: "POST", 
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(useSelector((state: RootState) => state.user).username)
+            });
+            if(!response.ok) throw new Error("Algo fallo en la consulta"); 
+            const data = await response.json();
+            onClose();        
+        }catch( error ){
+            throw new Error("Algo fallo en la creacion");
+        }
         /* Manejo de la petición
         
         try {

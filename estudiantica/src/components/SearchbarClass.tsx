@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import Resultbar from "./ListSchedule/Resultbar";
 import { Class } from "@/Object/Class";
+import { useSelector } from "react-redux";
+import { RootState } from "@/constants/store";
 
 function DropdownMenu({ options, onSelect }: { options: { label: string, value: number | null }[], onSelect: (option: number | null) => void }){
     return (
@@ -21,48 +23,21 @@ function DropdownMenu({ options, onSelect }: { options: { label: string, value: 
 }
 
 async function getClass(username : string) : Promise<Class[]> {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(
-                [
-                    new Class({
-                        id: 101,
-                        name: "Matemáticas",
-                        startDate: new Date("2025-01-15"),
-                        endDate: new Date("2025-06-15"),
-                        gradeFormula: "examen + tarea"
-                    }),
-                    new Class({
-                        id: 102,
-                        name: "Física",
-                        startDate: new Date("2025-02-01"),
-                        endDate: new Date("2025-06-01"),
-                        gradeFormula: "examen final + práctica"
-                    }),
-                    new Class({
-                        id: 103,
-                        name: "Historia",
-                        startDate: new Date("2025-03-01"),
-                        endDate: new Date("2025-07-01"),
-                        gradeFormula: "participación + proyecto"
-                    }),
-                    new Class({
-                        id: 104,
-                        name: "Química",
-                        startDate: new Date("2025-04-10"),
-                        endDate: new Date("2025-08-10"),
-                        gradeFormula: "examen + laboratorio"
-                    }),
-                    new Class({
-                        id: 105,
-                        name: "Biología",
-                        startDate: new Date("2025-05-20"),
-                        endDate: new Date("2025-09-20"),
-                        gradeFormula: "clase + ensayo"
-                    })
-            ]);
-        }, 1000);
-    });
+    try{
+        const response = await fetch("http://localhost:3000/user_classes",{
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(username),
+        });
+        if(!response.ok) throw new Error("Algo fallo en la consulta");
+        const data = await response.json();
+        const clases : Class[] = data.classes; // Tengo la duda si esto es necesario
+        return clases;
+    }catch(error){
+        return [];
+        console.error(error);
+    }
+
 }
 
 export default function SearchbarClass(){
@@ -79,10 +54,11 @@ export default function SearchbarClass(){
     const [schedules, setSchedules] = useState<Class[]>([]);
     const [loading, setLoading] = useState(true);
 
+
     useEffect(() => {
         async function fetchTasks() {
             setLoading(true);
-            const data = await getClass("usuarioEjemplo"); // Cambia por el usuario real
+            const data = await getClass(useSelector((state: RootState) => state.user).username); // Cambia por el usuario real
             setSchedules(data);
             setLoading(false);
         }
