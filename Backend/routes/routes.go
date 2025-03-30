@@ -15,7 +15,7 @@
 
 */
 
-package main
+package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
@@ -24,7 +24,7 @@ import (
 )
 
 // Sets up the API
-func setupRoutes(app *fiber.App) {
+func SetupRoutes(app *fiber.App) {
 	jwt := middlewares.NewAuthMiddleware()
 
 	app.Post("/login", handlers.Login)

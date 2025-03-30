@@ -18,13 +18,15 @@
 package main
 
 import (
+<<<<<<< HEAD
 	"fmt"
 	"log"
 	"strings"
-
+	"log"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
+	"github.com/srp-mx/equipo-4-ing-sw/routes"
 )
 
 // Entry-point
@@ -67,7 +69,7 @@ func main() {
 		}, ","),
 	}))
 
-	setupRoutes(app)
+	routes.SetupRoutes(app)
 
 	log.Fatal(app.Listen(":3000"))
 }

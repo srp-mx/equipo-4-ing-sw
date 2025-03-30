@@ -21,13 +21,17 @@ import (
 	"os"
 	"testing"
 
+	"github.com/gofiber/fiber/v2"
+	"github.com/srp-mx/equipo-4-ing-sw/database"
 	"github.com/srp-mx/equipo-4-ing-sw/models"
+	"github.com/srp-mx/equipo-4-ing-sw/routes"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 // Database instance
 var db *gorm.DB
+var app *fiber.App
 
 // Resets database data, to be run between tests
 func resetDb() {
@@ -49,6 +53,11 @@ func TestMain(m *testing.M) {
 	db.AutoMigrate(&models.Assignment{})
 	db.AutoMigrate(&models.User{})
 	db.AutoMigrate(&models.Class{})
+
+	database.DB.Db = db
+
+	app = fiber.New()
+	routes.SetupRoutes(app)
 
 	code := m.Run()
 
