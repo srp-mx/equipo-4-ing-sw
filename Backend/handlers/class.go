@@ -53,6 +53,7 @@ func PostClass(c *fiber.Ctx) error {
 	}
 
 	request.class.GradeFormula = strings.TrimSpace(request.class.GradeFormula)
+
 	form, err := utils.NewFormula(request.class.GradeFormula)
 
 	if err != nil {
