@@ -41,7 +41,11 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
             };
             const response = await fetch("http://localhost:3000/post_class",{
                 method: "POST", 
-                headers: {"Content-Type": "application/json"},
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                    "Content-Type": "application/json"
+
+                },
                 body: JSON.stringify(dataSend)
             });
 //            if(!response.ok) throw new Error("1Algo fallo en la consulta"); 
