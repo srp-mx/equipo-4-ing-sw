@@ -23,6 +23,7 @@ import (
 	"github.com/srp-mx/equipo-4-ing-sw/middlewares"
 )
 
+// Sets up the API
 func setupRoutes(app *fiber.App) {
 	jwt := middlewares.NewAuthMiddleware()
 

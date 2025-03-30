@@ -24,6 +24,7 @@ import (
 	"log"
 )
 
+// Entry-point
 func main() {
 	database.ConnectDb()
 	app := fiber.New()

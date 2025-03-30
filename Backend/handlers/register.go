@@ -24,6 +24,7 @@ import (
 	"github.com/srp-mx/equipo-4-ing-sw/models"
 )
 
+// Handles /register
 func Register(c *fiber.Ctx) error {
 	type registerRequest struct {
 		Username string `json:"username"`

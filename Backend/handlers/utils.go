@@ -27,6 +27,7 @@ import (
 	"github.com/srp-mx/equipo-4-ing-sw/models"
 )
 
+// Converts an incoming request into the generic class type
 func parseRequest[T any](c *fiber.Ctx) (*T, error) {
 	request := new(T)
 	if err := c.BodyParser(request); err != nil {
@@ -37,6 +38,7 @@ func parseRequest[T any](c *fiber.Ctx) (*T, error) {
 	return request, nil
 }
 
+// Verifies that credentials are valid and correspond to the request body user
 func checkJwt(c *fiber.Ctx, user *models.User) error {
 	bearer := c.Locals("user").(*jwt.Token)
 	claims := bearer.Claims.(jwt.MapClaims)

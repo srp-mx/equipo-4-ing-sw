@@ -29,11 +29,13 @@ import (
 	"github.com/srp-mx/equipo-4-ing-sw/utils"
 )
 
+// Generic class request structure
 type classRequest struct {
 	user  models.User  `json:"user"`
 	class models.Class `json:"class"`
 }
 
+// Handles /post_class
 func PostClass(c *fiber.Ctx) error {
 	request, err := initClassRequest(c)
 	if err != nil {
@@ -89,6 +91,7 @@ func PostClass(c *fiber.Ctx) error {
 	})
 }
 
+// Handles /get_class
 func GetClass(c *fiber.Ctx) error {
 	request, err := initClassRequest(c)
 	if err != nil {
@@ -123,6 +126,7 @@ func GetClass(c *fiber.Ctx) error {
 	return c.JSON(request.class)
 }
 
+// Handles /delete_class
 func DeleteClass(c *fiber.Ctx) error {
 	request, err := initClassRequest(c)
 	if err != nil {
@@ -151,6 +155,7 @@ func DeleteClass(c *fiber.Ctx) error {
 	})
 }
 
+// Handles /patch_class
 func PatchClass(c *fiber.Ctx) error {
 
     type classPatchRequest struct {
@@ -262,6 +267,7 @@ func PatchClass(c *fiber.Ctx) error {
 	})
 }
 
+// Handles /class_assignments
 func GetClassAssignments(c *fiber.Ctx) error {
 	request, err := initClassRequest(c)
 	if err != nil {
@@ -294,6 +300,7 @@ func GetClassAssignments(c *fiber.Ctx) error {
 	return c.JSON(request.class)
 }
 
+// Handles /class_tags
 func GetClassTags(c *fiber.Ctx) error {
 	request, err := initClassRequest(c)
 	if err != nil {
@@ -320,6 +327,7 @@ func GetClassTags(c *fiber.Ctx) error {
 	return c.JSON(tags)
 }
 
+// Handles /class_grade
 func GetClassGrade(c *fiber.Ctx) error {
 	request, err := initClassRequest(c)
 	if err != nil {
@@ -348,6 +356,7 @@ func GetClassGrade(c *fiber.Ctx) error {
 	})
 }
 
+// Utility function to initialize and verify the incoming class request
 func initClassRequest(c *fiber.Ctx) (*classRequest, error) {
 	var request *classRequest
 	request, err := parseRequest[classRequest](c)

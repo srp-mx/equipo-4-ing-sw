@@ -24,8 +24,10 @@ import (
 	jwt "github.com/gofiber/jwt/v3"
 )
 
+// The JWT secret
 var JwtSecret string = os.Getenv("JWT_SECRET")
 
+// Creates the authentication middleware
 func NewAuthMiddleware() fiber.Handler {
 	return jwt.New(jwt.Config{
 		SigningKey: []byte(JwtSecret),

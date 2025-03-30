@@ -24,6 +24,7 @@ import (
 	"github.com/srp-mx/equipo-4-ing-sw/models"
 )
 
+// Handles /user_classes
 func GetUserClasses(c *fiber.Ctx) error {
     // Get the user from the request body
     request, err := initUserRequest(c)
@@ -56,6 +57,7 @@ func GetUserClasses(c *fiber.Ctx) error {
     return c.JSON(request);
 }
 
+// Utility function to initialize and verify the incoming user request
 func initUserRequest(c *fiber.Ctx) (*models.User, error) {
 	var request *models.User
 	request, err := parseRequest[models.User](c)
