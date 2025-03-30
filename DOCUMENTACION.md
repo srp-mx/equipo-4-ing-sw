@@ -8,6 +8,7 @@
     * [Base de datos](#base-de-datos)
     * [Diagrama de clases](#diagrama-de-clases)
     * [Interfaz de usuario](#interfaz-de-usuario)
+* [API](#api)
 
 ## Argumento
 Convertirse en el mejor estudiante que uno puede ser es difícil. A pesar de
@@ -321,3 +322,22 @@ respectivo maquetado:
 ![Wireframe 3](.repo/Wireframe/desk_3.jpg)
 
 ![Wireframe 4](.repo/Wireframe/desk_4.jpg)
+
+
+## API
+
+* [/class_assignments](.repo/API/class_assignments)
+* [/class_grade](.repo/API/class_grade)
+* [/class_tags](.repo/API/class_tags)
+* [/delete_assignment](.repo/API/delete_assignment)
+* [/delete_class](.repo/API/delete_class)
+* [/get_assignment](.repo/API/get_assignment)
+* [/get_class](.repo/API/get_class)
+* [/login](.repo/API/login)
+* [/patch_assignment](.repo/API/patch_assignment)
+* [/patch_class](.repo/API/patch_class)
+* [/post_assignment](.repo/API/post_assignment)
+* [/post_class](.repo/API/post_class)
+* [/register](.repo/API/register)
+* [/user_classes](.repo/API/user_classes)
+* [/verify_formula](.repo/API/verify_formula)
