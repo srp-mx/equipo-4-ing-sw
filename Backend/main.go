@@ -18,21 +18,39 @@
 package main
 
 import (
+	"log"
+	"strings"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
-	"log"
 )
 
 func main() {
 	database.ConnectDb()
 	app := fiber.New()
-
 	app.Use(cors.New(cors.Config{
-		AllowHeaders:     "Origin,Content-Type,Connection,Access-Control-Allow-Origin",
+		AllowHeaders: strings.Join([]string{
+			fiber.HeaderOrigin,
+			fiber.HeaderContentType,
+			fiber.HeaderConnection,
+			fiber.HeaderAccessControlAllowOrigin,
+			fiber.HeaderAccessControlAllowCredentials,
+			fiber.HeaderAccessControlAllowHeaders,
+			fiber.HeaderAccessControlAllowMethods,
+			fiber.HeaderAuthorization,
+		}, ","),
 		AllowOrigins:     "http://localhost:3001",
 		AllowCredentials: true,
-		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
+		AllowMethods: strings.Join([]string{
+			fiber.MethodGet,
+			fiber.MethodPost,
+			fiber.MethodHead,
+			fiber.MethodPut,
+			fiber.MethodDelete,
+			fiber.MethodPatch,
+			fiber.MethodOptions,
+		}, ","),
 	}))
 
 	setupRoutes(app)
