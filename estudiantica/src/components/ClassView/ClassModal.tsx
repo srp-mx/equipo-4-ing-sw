@@ -37,8 +37,8 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
                 return;
             }
             
-            const response = await fetch('/classes', {
-                method: 'PUT',
+            const response = await fetch('http://localhost:3000/patch_class', {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },

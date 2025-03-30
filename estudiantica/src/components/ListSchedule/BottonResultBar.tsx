@@ -2,7 +2,10 @@ import { useState } from 'react'
 import CreateClassModal from '../ClassView/CreateClassModal'
 
 const selectedfetch = async (option: string, selection: number[]) => {
-    try {
+    const response = await fetch("http://localhost:3000/delete_classes",{
+      // No debe de recibir un numero,
+    })
+    /*try { Este es un elimina a las clases seleccionadas y no funciona
       const endpoint = '/classes';
       const method = 'DELETE';
       
@@ -23,7 +26,7 @@ const selectedfetch = async (option: string, selection: number[]) => {
       
     } catch (error) {
       console.error('Error durante la eliminación:', error);
-    }
+    }*/
   };
 
 export default function BottonResultBar({selection} : {selection : Array<number>}) : React.ReactNode{

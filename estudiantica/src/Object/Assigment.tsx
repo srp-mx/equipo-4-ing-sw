@@ -1,10 +1,6 @@
 export class Assigment {
     id: number;
-    class : {
-        classId : number,
-        className : string,
-        classColor : string
-    };
+    className : string  
     dueDate : Date = new Date();
     notes : string;
     grade : number;
@@ -13,11 +9,11 @@ export class Assigment {
     progress : number;
     tag : string;
 
-    constructor(AssigmentObj : {id: number, classObj: { classId: number; className: string; classColor: string },
+    constructor(AssigmentObj : {id: number, className: string,
         dueDate : Date, notes : string, grade : number, name : string, optional : boolean, progress : number, tag : string}
     ) {
         this.id = AssigmentObj.id;
-        this.class = AssigmentObj.classObj;
+        this.className = AssigmentObj.className;
         this.dueDate = AssigmentObj.dueDate;
         this.notes = AssigmentObj.notes;
         this.grade = AssigmentObj.grade;

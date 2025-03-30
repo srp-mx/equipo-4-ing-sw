@@ -29,67 +29,21 @@ function DropdownMenu({ options, onSelect }: { options: { label: string, value: 
  */
 async function getWorks(username : string) : Promise<Assigment[]>{
     // Ejemplo de salida
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve([
-                {
-                    id: 1,
-                    class: { classId: 101, className: "Matemáticas", classColor: "#FF5733" },
-                    dueDate: new Date("2025-04-10"),
-                    notes: "Resolver ejercicios del libro",
-                    grade: 85,
-                    name: "Tarea Álgebra",
-                    optional: false,
-                    progress: 1,
-                    tag: "Álgebra"
-                },
-                {
-                    id: 2,
-                    class: { classId: 102, className: "Historia", classColor: "#33FF57" },
-                    dueDate: new Date("2025-04-12"),
-                    notes: "Ensayo sobre la Revolución Francesa",
-                    grade: 90,
-                    name: "Ensayo Revolución",
-                    optional: true,
-                    progress: 0,
-                    tag: "Historia"
-                },
-                {
-                    id: 3,
-                    class: { classId: 103, className: "Física", classColor: "#3357FF" },
-                    dueDate: new Date("2025-04-15"),
-                    notes: "Simulación de caída libre",
-                    grade: 78,
-                    name: "Simulación Física",
-                    optional: false,
-                    progress: -1,
-                    tag: "Física"
-                },
-                {
-                    id: 4,
-                    class: { classId: 104, className: "Programación", classColor: "#FF33A1" },
-                    dueDate: new Date("2025-04-20"),
-                    notes: "Desarrollar una API REST",
-                    grade: 95,
-                    name: "API REST",
-                    optional: true,
-                    progress: 1, // Completado
-                    tag: "Backend"
-                },
-                {
-                    id: 5,
-                    class: { classId: 105, className: "Literatura", classColor: "#F39C12" },
-                    dueDate: new Date("2025-04-18"),
-                    notes: "Análisis del Quijote",
-                    grade: 88,
-                    name: "Análisis Don Quijote",
-                    optional: false,
-                    progress: 0, // En progreso
-                    tag: "Lectura"
-                }
-            ]);
-        }, 1000);
-    });
+    try{
+        const response = await fetch("http://localhost:3000/"{
+            method: "POST", 
+            headers: {"Content-Type": "application/json"}, 
+            body: JSON.stringify(username),
+        });
+
+        if(!response.ok) throw new Error("Algo fallo en la consulta");
+        const data = await response.json();
+        const assignments : Assigment[] = data.assignments; 
+        return assignments; 
+    }catch(error){
+        console.error("Error", error); 
+        return [];
+    }
 }
 
 export default function SearchbarWorks(){

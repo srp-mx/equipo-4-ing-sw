@@ -34,8 +34,8 @@ async function getClass(username : string) : Promise<Class[]> {
         const clases : Class[] = data.classes; // Tengo la duda si esto es necesario
         return clases;
     }catch(error){
+        console.error("Error", error);
         return [];
-        console.error(error);
     }
 
 }
@@ -54,11 +54,11 @@ export default function SearchbarClass(){
     const [schedules, setSchedules] = useState<Class[]>([]);
     const [loading, setLoading] = useState(true);
 
-
+    const user = useSelector((state: RootState) => state.user);
     useEffect(() => {
         async function fetchTasks() {
             setLoading(true);
-            const data = await getClass(useSelector((state: RootState) => state.user).username); // Cambia por el usuario real
+            const data = await getClass(user.username); // Cambia por el usuario real
             setSchedules(data);
             setLoading(false);
         }

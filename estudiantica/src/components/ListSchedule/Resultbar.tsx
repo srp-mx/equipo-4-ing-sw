@@ -30,7 +30,7 @@ export default function Resultbar({ classes } : { classes : Array<Class>}) : Rea
 
     return (
         <div className="rounded-lg p-4 mx-auto w-full h-full">
-            <div className={`${classes.length > 0 ? "" : "hidden"} w-full rounded-lg bg-gray-700 rounded flex justify-between items-center p-3 border border-gray-600`}>
+            <div className={`${classes.length >= 0 ? "" : "hidden"} w-full rounded-lg bg-gray-700 rounded flex justify-between items-center p-3 border border-gray-600`}>
                 <div className="flex items-center space-x-2">
                     <input 
                         type="checkbox" 

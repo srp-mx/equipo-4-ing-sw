@@ -38,14 +38,13 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
                     grade_formula: newClass.gradeFormula,
                     color: "ffffff"  
                 }
-            }
+            };
             const response = await fetch("http://localhost:3000/post_class",{
                 method: "POST", 
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(useSelector((state: RootState) => state.user).username)
+                body: JSON.stringify(dataSend)
             });
-            if(!response.ok) throw new Error("Algo fallo en la consulta"); 
-            const data = await response.json();
+//            if(!response.ok) throw new Error("1Algo fallo en la consulta"); 
             onClose();        
         }catch( error ){
             throw new Error("Algo fallo en la creacion");
@@ -99,7 +98,7 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
                 />
                 <input
                     type="text"
-                    name="className"
+                    name="gradeFormula"
                     placeholder="Calificación"
                     className="w-full border rounded p-1 mt-2"
                     value={newClass.gradeFormula}
