@@ -101,13 +101,13 @@ func GetClass(c *fiber.Ctx) error {
 
 	classes := controllers.NewClassController(database.DB.Db)
 
-    exists, err := classes.Exists(request.class)
+	exists, err := classes.Exists(request.class)
 
-    if err != nil {
-        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-            "error" : fiber.ErrInternalServerError,
-        })
-    }
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": fiber.ErrInternalServerError,
+		})
+	}
 
 	if !exists {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
@@ -159,42 +159,42 @@ func DeleteClass(c *fiber.Ctx) error {
 // Handles /patch_class
 func PatchClass(c *fiber.Ctx) error {
 
-    type classPatchRequest struct {
-        classRequest
-        newClass models.Class `json:"new_class"`
-    }
+	type classPatchRequest struct {
+		classRequest
+		newClass models.Class `json:"new_class"`
+	}
 
-    var request *classPatchRequest
-    request, err := parseRequest[classPatchRequest](c)
+	var request *classPatchRequest
+	request, err := parseRequest[classPatchRequest](c)
 
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 
-    err = checkJwt(c, &request.user)
-    if err != nil {
-        return err
-    }
+	err = checkJwt(c, &request.user)
+	if err != nil {
+		return err
+	}
 
-    if request.class.OwnerUsername != request.user.Username {
-        return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-            "error": fiber.Error{
-                Code: 401,
-                Message: "El usuario dueño de la clase debe ser quien la accede.",
-            },
-        })
-    }
+	if request.class.OwnerUsername != request.user.Username {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": fiber.Error{
+				Code:    401,
+				Message: "El usuario dueño de la clase debe ser quien la accede.",
+			},
+		})
+	}
 
-    users := controllers.NewUserController(database.DB.Db)
-    err = users.Get(&request.user)
-    if err != nil {
-        return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-            "error": fiber.Error{
-                Code: 401,
-                Message: "El usuario no existe.",
-            },
-        })
-    }
+	users := controllers.NewUserController(database.DB.Db)
+	err = users.Get(&request.user)
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": fiber.Error{
+				Code:    401,
+				Message: "El usuario no existe.",
+			},
+		})
+	}
 
 	classes := controllers.NewClassController(database.DB.Db)
 
@@ -207,45 +207,45 @@ func PatchClass(c *fiber.Ctx) error {
 		})
 	}
 
-    err = classes.Get(&request.class)
-    if err != nil {
-        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-            "error": fiber.Error{
-                Code: 500,
-                Message: err.Error(),
-            },
-        })
-    }
+	err = classes.Get(&request.class)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": fiber.Error{
+				Code:    500,
+				Message: err.Error(),
+			},
+		})
+	}
 
 	var requestJson map[string]any
 	if err := json.Unmarshal(c.Body(), &requestJson); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": fiber.Error{
-                Code: 400,
-                Message: "Invalid JSON",
-            },
+				Code:    400,
+				Message: "Invalid JSON",
+			},
 		})
 	}
 
-    newClass, exists := requestJson["new_class"]
-    if !exists {
+	newClass, exists := requestJson["new_class"]
+	if !exists {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": fiber.Error{
-                Code: 400,
-                Message: "Invalid JSON",
-            },
+				Code:    400,
+				Message: "Invalid JSON",
+			},
 		})
-    }
+	}
 
-    updates, ok := newClass.(map[string]any)
-    if !ok {
+	updates, ok := newClass.(map[string]any)
+	if !ok {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": fiber.Error{
-                Code: 400,
-                Message: "Invalid JSON",
-            },
+				Code:    400,
+				Message: "Invalid JSON",
+			},
 		})
-    }
+	}
 
 	err = classes.UpdateWithMap(&request.class, updates)
 	if err != nil {
@@ -380,16 +380,16 @@ func initClassRequest(c *fiber.Ctx) (*classRequest, error) {
 		})
 	}
 
-    userController := controllers.NewUserController(database.DB.Db)
-    err = userController.Get(&request.user)
-    if err != nil {
+	userController := controllers.NewUserController(database.DB.Db)
+	err = userController.Get(&request.user)
+	if err != nil {
 		return nil, c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": fiber.Error{
 				Code:    401,
 				Message: "El usuario no existe.",
 			},
 		})
-    }
+	}
 
 	return request, nil
 }

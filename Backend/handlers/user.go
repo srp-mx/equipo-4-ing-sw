@@ -26,35 +26,35 @@ import (
 
 // Handles /user_classes
 func GetUserClasses(c *fiber.Ctx) error {
-    // Get the user from the request body
-    request, err := initUserRequest(c)
-    if err != nil {
-        return err
-    }
+	// Get the user from the request body
+	request, err := initUserRequest(c)
+	if err != nil {
+		return err
+	}
 
-    users := controllers.NewUserController(database.DB.Db)
-    if exists, err := users.ExistsUsername(request.Username); !exists || err != nil {
-        return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-            "error": fiber.Error{
-                Code: 404,
-                Message: "Usuario no encontrado.",
-            },
-        })
-    }
+	users := controllers.NewUserController(database.DB.Db)
+	if exists, err := users.ExistsUsername(request.Username); !exists || err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"error": fiber.Error{
+				Code:    404,
+				Message: "Usuario no encontrado.",
+			},
+		})
+	}
 
-    err = users.Get(request)
+	err = users.Get(request)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(fiber.ErrInternalServerError)
 	}
 
-    err = users.LoadClasses(request)
+	err = users.LoadClasses(request)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(fiber.ErrInternalServerError)
 	}
 
-    return c.JSON(request);
+	return c.JSON(request)
 }
 
 // Utility function to initialize and verify the incoming user request
@@ -71,16 +71,16 @@ func initUserRequest(c *fiber.Ctx) (*models.User, error) {
 		return nil, err
 	}
 
-    userController := controllers.NewUserController(database.DB.Db)
-    err = userController.Get(request)
-    if err != nil {
+	userController := controllers.NewUserController(database.DB.Db)
+	err = userController.Get(request)
+	if err != nil {
 		return nil, c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": fiber.Error{
 				Code:    401,
 				Message: "El usuario no existe.",
 			},
 		})
-    }
+	}
 
 	return request, nil
 }

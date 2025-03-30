@@ -69,9 +69,9 @@ func (self *ClassController) GetTags(class *models.Class) ([]string, error) {
 	tags := []string{}
 
 	for _, assignment := range class.Assignments {
-        if assignment.Tag == "" {
-            continue
-        }
+		if assignment.Tag == "" {
+			continue
+		}
 		if !tagsSeen[assignment.Tag] {
 			tagsSeen[assignment.Tag] = true
 			tags = append(tags, assignment.Tag)
@@ -107,7 +107,7 @@ func (self *ClassController) GetGrade(class *models.Class) (float64, error) {
 	for _, t := range form.TagsUsed {
 		if _, exists := tagsAvailableSet[t]; !exists {
 			return 0.0, fmt.Errorf("La etiqueta '" + t + "' requerida para" +
-                " calcular la calificación no existe")
+				" calcular la calificación no existe")
 		}
 	}
 

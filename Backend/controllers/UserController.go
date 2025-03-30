@@ -75,14 +75,14 @@ func (self *UserController) Get(receiver *models.User) error {
 	return nil
 }
 
-// Checks whether or not a user with the username given exists 
+// Checks whether or not a user with the username given exists
 func (self *UserController) ExistsUsername(username string) (bool, error) {
 	var count int64
 	result := self.DB.Model(&models.User{}).Where("username = ?", username).Count(&count)
 	return count > 0, result.Error
 }
 
-// Checks whether or not a user with the email given exists 
+// Checks whether or not a user with the email given exists
 func (self *UserController) ExistsEmail(email string) (bool, error) {
 	var count int64
 	result := self.DB.Model(&models.User{}).Where("email = ?", email).Count(&count)
