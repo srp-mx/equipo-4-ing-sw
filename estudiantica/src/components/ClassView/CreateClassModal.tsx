@@ -10,14 +10,16 @@ type ModalProps = {
 export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
     if (!isOpen) return null;
 
+    const user = useSelector((state: RootState) => state.user);
+
     const [newClass, setNewClass] = useState({
         name: "",
         startDate : "",
         endDate : "",
-        gradeFormula : ""
+        gradeFormula : "",
+        color: "ffffff", 
+        owner_username: user.name
     });
-
-    const user = useSelector((state: RootState) => state.user);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -26,19 +28,6 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
 
     const handleCreate = async () => {
         try{
-            const dataSend =  {
-                name: {
-                    username: user.name 
-                }, 
-                Class: {
-                    name: newClass.name,
-                    start_date: newClass.startDate, 
-                    end_date: newClass.endDate, 
-                    owner_username: user.name,
-                    grade_formula: newClass.gradeFormula,
-                    color: "ffffff"  
-                }
-            };
             const response = await fetch("http://localhost:3000/post_class",{
                 method: "POST", 
                 headers: {
@@ -46,12 +35,12 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
                     "Content-Type": "application/json"
 
                 },
-                body: JSON.stringify(dataSend)
+                body: JSON.stringify(newClass)
             });
-//            if(!response.ok) throw new Error("1Algo fallo en la consulta"); 
+            if(!response.ok) throw new Error("Error: ${response.status} ${response.statusText}");
             onClose();        
         }catch( error ){
-            throw new Error("Algo fallo en la creacion");
+            console.error("Error: ", error);
         }
         /* Manejo de la petición
         

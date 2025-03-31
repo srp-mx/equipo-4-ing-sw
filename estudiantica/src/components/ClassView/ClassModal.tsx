@@ -36,13 +36,20 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
                 alert("por favor completa al menos el nombre de la clase");
                 return;
             }
+
+            const dataSend = {
+                "class": {
+                    "id": editedClass.id
+                },
+                "new_class": editedClass
+            }
             
             const response = await fetch('http://localhost:3000/patch_class', {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(editedClass),
+                body: JSON.stringify(dataSend),
             });
             
             if (!response.ok) {

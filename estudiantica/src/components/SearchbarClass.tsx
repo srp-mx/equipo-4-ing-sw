@@ -22,14 +22,16 @@ function DropdownMenu({ options, onSelect }: { options: { label: string, value: 
     );
 }
 
-async function getClass(username : string) : Promise<Class[]> {
+async function getClass() : Promise<Class[]> {
     try{
         const response = await fetch("http://localhost:3000/user_classes",{
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(username),
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token"),
+                "Content-Type": "application/json",
+            },
         });
-        if(!response.ok) throw new Error("Algo fallo en la consulta");
+        if(!response.ok) throw new Error("Error: ${response.status} ${response.statusText}");
         const data = await response.json();
         const clases : Class[] = data.classes; // Tengo la duda si esto es necesario
         return clases;
@@ -58,7 +60,7 @@ export default function SearchbarClass(){
     useEffect(() => {
         async function fetchTasks() {
             setLoading(true);
-            const data = await getClass(user.username); // Cambia por el usuario real
+            const data = await getClass(); // Cambia por el usuario real
             setSchedules(data);
             setLoading(false);
         }

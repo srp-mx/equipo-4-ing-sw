@@ -27,23 +27,10 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
 
     const handleCreate = async () => {
         try{
-            const dataSend = {
-                name : {
-                    username: user.name
-                }, 
-                Assignment: {
-                    name: newAssignment.name, 
-                    dueDate: newAssignment.dueDate, 
-                    className: newAssignment.className, 
-                    tag: newAssignment.tag, 
-                    notes: newAssignment.notes
-                }
-            };
-
             const response = await fetch("http://localhost:3000/post_assignment", {
                 method: "POST", 
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(dataSend)
+                body: JSON.stringify(newAssignment)
             });
 
             if(!response.ok) throw new Error("Fallo al crear Tarea");
