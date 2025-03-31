@@ -1,20 +1,13 @@
-DESCRIPTION: Receives tentative credentials and returns a login token valid for
-an hour if it succeeds.
+DESCRIPTION: Given a valid token, it generates a new one.
 
 
 
-Type: POST
+Type: GET
 
 
 
 INPUT:
-{
-    "email": ... ,
-    "password": ...
-}
-
-"email" -> string
-"password" -> string
+None, only the bearer token is required.
 
 
 

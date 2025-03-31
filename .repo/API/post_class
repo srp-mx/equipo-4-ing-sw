@@ -8,70 +8,48 @@ Type: POST
 
 INPUT:
 {
-    "user": {
-        "username": ...
-    },
-    "class": {
-        "name": ... ,
-        "start_date": ... ,
-        "end_date": ... ,
-        "owner_username": ... ,
-        "grade_formula": ... ,
-        "color": ...
-    }
+    "name": ... ,
+    "start_date": ... ,
+    "end_date": ... ,
+    "grade_formula": ... ,
+    "color": ...
 }
 
-"user" // May contain other User fields, but they will be ignored
-"user.username" -> string
-"class.name" -> string
-"class.start_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
-"class.end_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
-"class.owner_username" -> string
-"class.grade_formula" -> string
-"class.color" -> string // 8 chars representing RGBA
+"name" -> string
+"start_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"end_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"grade_formula" -> string
+"color" -> string // 8 chars representing RGBA
 
 
 
 RETURNS:
 {
-    "user": {
-        ...
-    },
-    "class": {
-        ...
-    },
-    "formula": {
-        "source": ... ,
-        "tags": ...
-    }
+    "class_id": ...
 }
 
-"user" // The input user
-"class" // The input class, as fetched from the database
-"formula" // Information about the grade_formula parsing
-"formula.source" -> string // Source text that makes up the formula
-"formula.tags" -> string[] // List of tags required to evaluate the formula
+"class_id" -> uint // The class' ID, as fetched from the database
 
 
 
 ERRORS:
 400 (Bad request)
-    Body(1):
-    {
-        "error": ...
-    }
-    Body(2):
+    Body:
     {
         "error": {
+            "code": 400,
             "message": ...
         }
     }
-    Cause: Malformed JSON (1), or invalid grade_formula or color (2).
+    Cause: Malformed JSON, invalid grade_formula, or invalid color.
 
 401 (Unauthorized)
     Body:
     {
-        "error": ...
+        "error": {
+            "code": 401,
+            "message": ...
+        }
     }
     Cause: Bad credentials
 
@@ -88,6 +66,9 @@ ERRORS:
 500 (Internal server error)
     Body:
     {
-        "error": ...
+        "error": {
+            "code": 500,
+            "message": ...
+        }
     }
     Cause: Internal error

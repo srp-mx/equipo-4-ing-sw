@@ -18,6 +18,8 @@
 package controllers
 
 import (
+	"errors"
+
 	"github.com/srp-mx/equipo-4-ing-sw/models"
 	"gorm.io/gorm"
 )
@@ -92,4 +94,27 @@ func (self *UserController) ExistsEmail(email string) (bool, error) {
 // Loads the related classes to the user passed in
 func (self *UserController) LoadClasses(user *models.User) error {
 	return self.DB.Model(user).Association("Classes").Find(user.Classes)
+}
+
+// Determines whether a user is enrolled in a class or not
+func (self *UserController) EnrolledIn(user *models.User, classID uint) (bool, error) {
+	// Gets any class with the given ID belonging to the user
+	class := models.Class{}
+	err := self.DB.
+		Where("id=? AND owner_username=?", classID, user.Username).
+		First(&class).
+		Error
+
+	// No problems, but not enrolled
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return false, nil
+	}
+
+	// Problems
+	if err != nil {
+		return false, err
+	}
+
+	// They are enrolled
+	return true, nil
 }
