@@ -20,7 +20,6 @@ package handlers
 import (
 	"regexp"
 	"strings"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
 	"github.com/srp-mx/equipo-4-ing-sw/database"

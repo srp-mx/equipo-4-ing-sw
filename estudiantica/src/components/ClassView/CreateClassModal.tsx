@@ -14,10 +14,10 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
 
     const [newClass, setNewClass] = useState({
         name: "",
-        startDate : "",
-        endDate : "",
-        gradeFormula : "",
-        color: "ffffff", 
+        start_date : "",
+        end_date : "",
+        grade_formula : "",
+        color: "ffffffff", 
         owner_username: user.name
     });
 
@@ -28,6 +28,11 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
 
     const handleCreate = async () => {
         try{
+            const dataSend = {
+                ...newClass,
+                start_date: new Date(newClass.start_date).toISOString(), 
+                end_date: new Date(newClass.end_date).toISOString(),
+            }
             const response = await fetch("http://localhost:3000/post_class",{
                 method: "POST", 
                 headers: {
@@ -35,9 +40,13 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
                     "Content-Type": "application/json"
 
                 },
-                body: JSON.stringify(newClass)
+                body: JSON.stringify(dataSend)
             });
-            if(!response.ok) throw new Error("Error: ${response.status} ${response.statusText}");
+            if(!response.ok) {
+                const error = await response.json();
+                console.error("EL error es ", error);
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
             onClose();        
         }catch( error ){
             console.error("Error: ", error);
@@ -76,25 +85,25 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
                 Fecha de inicio:
                 <input
                     type="date"
-                    name="startDate"
+                    name="start_date"
                     className="w-full border rounded p-1 mt-2"
-                    value={newClass.startDate}
+                    value={newClass.start_date}
                     onChange={handleChange}
                 />
                 Fecha de fin:
                 <input
                     type="date"
-                    name="endDate"
+                    name="end_date"
                     className="w-full border rounded p-1 mt-2"
-                    value={newClass.endDate}
+                    value={newClass.end_date}
                     onChange={handleChange}
                 />
                 <input
                     type="text"
-                    name="gradeFormula"
+                    name="grade_formula"
                     placeholder="Calificación"
                     className="w-full border rounded p-1 mt-2"
-                    value={newClass.gradeFormula}
+                    value={newClass.grade_formula}
                     onChange={handleChange}
                 />
                 <div className="flex justify-end space-x-2 mt-4">

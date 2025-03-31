@@ -18,10 +18,7 @@
 package main
 
 import (
-<<<<<<< HEAD
 	"fmt"
-	"log"
-	"strings"
 	"log"
 	"strings"
 	"github.com/gofiber/fiber/v2"

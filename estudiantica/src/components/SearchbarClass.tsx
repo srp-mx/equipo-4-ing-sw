@@ -31,7 +31,7 @@ async function getClass() : Promise<Class[]> {
                 "Content-Type": "application/json",
             },
         });
-        if(!response.ok) throw new Error("Error: ${response.status} ${response.statusText}");
+        if(!response.ok) throw new Error(`Error: ${response.status} ${response.statusText}`);
         const data = await response.json();
         const clases : Class[] = data.classes; // Tengo la duda si esto es necesario
         return clases;
