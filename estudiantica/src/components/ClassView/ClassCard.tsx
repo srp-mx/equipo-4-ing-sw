@@ -18,9 +18,9 @@ type ClassCardProps = {
 }
 
 export default function ClassCard({ classData, onOpen } : ClassCardProps) : React.ReactNode {
-    const activateClass = getEndDateStatus(classData.endDate)
+    const activateClass = getEndDateStatus(new Date (classData.end_date))
 
-    if(classData.startDate == null) console.log("Fecha Inicio null");
+    if(classData.start_date == null) console.log("Fecha Inicio null");
 
     return (
         <div 
@@ -42,10 +42,10 @@ export default function ClassCard({ classData, onOpen } : ClassCardProps) : Reac
                 </div>
                 <p className="text-gray-900 font-semibold w-2/3">{classData.name}</p>
                 <div className="text-gray-600 text-right text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>Fecha de Inicio: {classData.startDate.toLocaleDateString()}</span>
+                    <span>Fecha de Inicio: {new Date (classData.start_date).toLocaleDateString()}</span>
                 </div>
                 <div className="text-gray-600 text-right text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>Fecha de Fin: {classData.endDate.toLocaleDateString()}</span>
+                    <span>Fecha de Fin: {new Date (classData.end_date).toLocaleDateString()}</span>
                 </div>
             </div>
         </div>

@@ -86,8 +86,8 @@ export default function SearchbarClass(){
     const filteredClasses = schedules.filter((classItem) => 
         ( // Por fecha
             (selectedStatus === null) || 
-            (selectedStatus === 0 && classItem.endDate < new Date()) || 
-            (selectedStatus === -1 && classItem.endDate > new Date())
+            (selectedStatus === 0 && new Date(classItem.end_date) < new Date()) || 
+            (selectedStatus === -1 && new Date(classItem.end_date) > new Date())
         ) &&
         classItem.name.toLowerCase().includes(searchTerm.toLowerCase())
     )

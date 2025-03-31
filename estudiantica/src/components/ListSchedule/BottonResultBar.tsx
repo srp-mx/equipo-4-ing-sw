@@ -4,7 +4,7 @@ import CreateClassModal from '../ClassView/CreateClassModal'
 const selectedfetch = async (option: string, selection: number[]) => {
     for( const ids of selection) {
       try{
-      const response = await fetch("http://localhost:3000/delete_classes", {
+      const response = await fetch("http://localhost:3000/delete_class", {
         method: "POST",
         headers: {
           "Authorization": "Bearer " +  localStorage.getItem("token"), 
