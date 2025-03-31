@@ -3,6 +3,7 @@ import Resultbar from "./ListSchedule/Resultbar";
 import { Class } from "@/Object/Class";
 import { useSelector } from "react-redux";
 import { RootState } from "@/constants/store";
+import CreateClassModal from "./ClassView/CreateClassModal";
 
 function DropdownMenu({ options, onSelect }: { options: { label: string, value: number | null }[], onSelect: (option: number | null) => void }){
     return (
@@ -33,7 +34,7 @@ async function getClass() : Promise<Class[]> {
         });
         if(!response.ok) throw new Error(`Error: ${response.status} ${response.statusText}`);
         const data = await response.json();
-        const clases : Class[] = data.classes; // Tengo la duda si esto es necesario
+        const clases : Class[] = data; // Tengo la duda si esto es necesario
         return clases;
     }catch(error){
         console.error("Error", error);
@@ -67,6 +68,7 @@ export default function SearchbarClass(){
 
         fetchTasks();
     }, []);
+    
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -88,7 +90,7 @@ export default function SearchbarClass(){
             (selectedStatus === -1 && classItem.endDate > new Date())
         ) &&
         classItem.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    )
 
     return (
         <div className="space-y-4">
@@ -170,5 +172,6 @@ export default function SearchbarClass(){
             </div>
         </div>
     );
+    
 
 }

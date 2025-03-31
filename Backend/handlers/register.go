@@ -74,6 +74,7 @@ func Register(c *fiber.Ctx) error {
 		Email:    request.Email,
 		Name:     request.Name,
 		Password: request.Password,
+		Classes: []models.Class{},
 	})
 
 	// If creation failed, internal server error

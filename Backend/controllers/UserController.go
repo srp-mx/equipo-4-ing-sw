@@ -93,7 +93,8 @@ func (self *UserController) ExistsEmail(email string) (bool, error) {
 
 // Loads the related classes to the user passed in
 func (self *UserController) LoadClasses(user *models.User) error {
-	return self.DB.Model(user).Association("Classes").Find(user.Classes)
+	//return self.DB.Model(user).Association("Classes").Find(user.Classes)
+	return self.DB.Preload("Classes").First(user, "username=?", user.Username).Error
 }
 
 // Determines whether a user is enrolled in a class or not

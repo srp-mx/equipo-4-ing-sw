@@ -20,6 +20,8 @@ type ClassCardProps = {
 export default function ClassCard({ classData, onOpen } : ClassCardProps) : React.ReactNode {
     const activateClass = getEndDateStatus(classData.endDate)
 
+    if(classData.startDate == null) console.log("Fecha Inicio null");
+
     return (
         <div 
             key={classData.id}
