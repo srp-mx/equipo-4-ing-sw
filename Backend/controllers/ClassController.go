@@ -147,10 +147,7 @@ func (self *ClassController) Exists(class models.Class) (bool, error) {
 func (self *ClassController) Get(receiver *models.Class) error {
 	err := self.DB.
 		Where(&models.Class{
-			Name:          receiver.Name,
-			StartDate:     receiver.StartDate,
-			EndDate:       receiver.EndDate,
-			OwnerUsername: receiver.OwnerUsername,
+			ID: receiver.ID,
 		}).
 		First(receiver).Error
 
@@ -163,13 +160,10 @@ func (self *ClassController) Get(receiver *models.Class) error {
 
 // Returns a class that matches the query's ID on the database
 func (self *ClassController) GetWithCopy(query models.Class) (*models.Class, error) {
-	result := models.Class{}
+	result := models.Class{ID: query.ID}
 	err := self.DB.
 		Where(&models.Class{
-			Name:          query.Name,
-			StartDate:     query.StartDate,
-			EndDate:       query.EndDate,
-			OwnerUsername: query.OwnerUsername,
+			ID: query.ID,
 		}).
 		First(&result).Error
 

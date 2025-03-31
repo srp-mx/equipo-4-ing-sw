@@ -26,72 +26,59 @@ import (
 
 // Handles /register
 func Register(c *fiber.Ctx) error {
-	type registerRequest struct {
+	type RegisterRequest struct {
 		Username string `json:"username"`
 		Email    string `json:"email"`
 		Password string `json:"password"`
 		Name     string `json:"name"`
 	}
 
-	badReq := func(msg string) error {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": fiber.Error{
-				Code:    400,
-				Message: msg,
-			},
-		})
+	// Parse request
+	request, err := parseRequestBody[RegisterRequest](c)
+	if err != nil {
+		return err
 	}
 
-	request := new(registerRequest)
-	if err := c.BodyParser(request); err != nil {
-		return badReq(err.Error())
-	}
-
+	// Verify fields
 	if request.Username == "" {
-		return badReq("Falta el campo: username")
+		return getBadReq(c, "Falta el campo: username")
 	}
 
 	if request.Email == "" {
-		return badReq("Falta el campo: email")
+		return getBadReq(c, "Falta el campo: email")
 	}
 
 	if request.Password == "" {
-		return badReq("Falta el campo: password")
+		return getBadReq(c, "Falta el campo: password")
 	}
 
 	if request.Name == "" {
-		return badReq("Falta el campo: name")
+		return getBadReq(c, "Falta el campo: name")
 	}
 
 	users := controllers.NewUserController(database.DB.Db)
 
+	// Verify new username
 	if yes, err := users.ExistsUsername(request.Username); yes || err != nil {
-		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
-			"error": fiber.Error{
-				Code:    409,
-				Message: "El nombre de usuario ya está en uso.",
-			},
-		})
+		return getConflict(c, "El nombre de usuario ya está en uso.")
 	}
 
+	// Verify new email
 	if yes, err := users.ExistsEmail(request.Email); yes || err != nil {
-		return c.Status(fiber.StatusConflict).JSON(fiber.Map{
-			"error": fiber.Error{
-				Code:    409,
-				Message: "El correo ya está en uso.",
-			},
-		})
+		return getConflict(c, "El correo ya está en uso.")
 	}
 
-	err := users.CreateUser(&models.User{
+	// Create the user
+	err = users.CreateUser(&models.User{
 		Username: request.Username,
 		Email:    request.Email,
 		Name:     request.Name,
 		Password: request.Password,
 	})
 
+	// If creation failed, internal server error
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.ErrInternalServerError)
+		return getServerErr(c)
 	}
 
 	return c.JSON(fiber.Map{

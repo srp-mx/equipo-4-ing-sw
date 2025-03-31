@@ -2,105 +2,53 @@ DESCRIPTION: Gets all assignments from a class.
 
 
 
-Type: POST
+Type: GET
 
 
 
 INPUT:
-{
-    "user": {
-        "username": ...
-    },
-    "class": {
-        "name": ... ,
-        "start_date": ... ,
-        "end_date": ... ,
-        "owner_username": ...
-    }
-}
-
-
-
-"user" // May contain other User fields, but they will be ignored
-"user.username" -> string
-"class" // May contain other Class fields, but they will be ignored
-"class.name" -> string
-"class.start_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
-"class.end_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
-"class.owner_username" -> string
+Query parameter "id" with the class ID.
+For example: ".../class_assignments?id=${classID}"
 
 
 
 RETURNS:
-{
-    "name": ... ,
-    "start_date": ... ,
-    "end_date": ... ,
-    "owner_username": ... ,
-    "grade_formula": ... ,
-    "assignments": [
-        {
-            "id": ... ,
-            "class_id": ... ,
-            "due_date": ... ,
-            "notes": ... ,
-            "grade": ... ,
-            "name": ... ,
-            "optional": ... ,
-            "progress": ... ,
-            "tag": ...
-        },
-        ...
-    ],
-    "color": ...
-}
+[
+    {
+        "id": ... ,
+        "class_id": ... ,
+        "due_date": ... ,
+        "notes": ... ,
+        "grade": ... ,
+        "name": ... ,
+        "optional": ... ,
+        "progress": ... ,
+        "tag": ...
+    },
+    ...
+]
 
-"name" -> string
-"start_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
-"end_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
-"owner_username" -> string
-"grade_formula" -> string
-"assignments[n].id" -> uint
-"assignments[n].class_id" -> uint
-"assignments[n].due_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
-"assignments[n].notes" -> string
-"assignments[n].grade" -> double
-"assignments[n].name" -> string
-"assignments[n].optional" -> bool
-"assignments[n].progress" -> int // <0 is not doing, 0 in progress, >0 finished
-"assignments[n].tag" -> string
-"color" -> string // 8 chars representing RGBA
+"[n].id" -> uint
+"[n].class_id" -> uint
+"[n].due_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"[n].notes" -> string
+"[n].grade" -> double
+"[n].name" -> string
+"[n].optional" -> bool
+"[n].progress" -> int // <0 is not doing, 0 in progress, >0 finished
+"[n].tag" -> string
 
 
 
 ERRORS:
 400 (Bad request)
-    Body:
-    {
-        "error": ...
-    }
     Cause: Malformed JSON
 
 401 (Unauthorized)
-    Body:
-    {
-        "error": ...
-    }
     Cause: Bad credentials
 
 404 (Not found)
-    Body:
-    {
-        "error": {
-            "code": 404,
-            "message": ...
-        }
-    }
     Cause: The class was not found
 
 500 (Internal server error)
-    Body:
-    {
-        "error": ...
-    }
     Cause: Internal error

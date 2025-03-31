@@ -21,66 +21,24 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
-	"github.com/srp-mx/equipo-4-ing-sw/models"
 )
 
 // Handles /user_classes
 func GetUserClasses(c *fiber.Ctx) error {
-	// Get the user from the request body
-	request, err := initUserRequest(c)
+	// Gets the user
+	user, err := getCredentials(c)
 	if err != nil {
 		return err
 	}
 
 	users := controllers.NewUserController(database.DB.Db)
-	if exists, err := users.ExistsUsername(request.Username); !exists || err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": fiber.Error{
-				Code:    404,
-				Message: "Usuario no encontrado.",
-			},
-		})
-	}
 
-	err = users.Get(request)
+	// Loads class data into the user
+	err = users.LoadClasses(user)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).
-			JSON(fiber.ErrInternalServerError)
+		return getServerErr(c)
 	}
 
-	err = users.LoadClasses(request)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).
-			JSON(fiber.ErrInternalServerError)
-	}
-
-	return c.JSON(request)
-}
-
-// Utility function to initialize and verify the incoming user request
-func initUserRequest(c *fiber.Ctx) (*models.User, error) {
-	var request *models.User
-	request, err := parseRequest[models.User](c)
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = checkJwt(c, request)
-	if err != nil {
-		return nil, err
-	}
-
-	userController := controllers.NewUserController(database.DB.Db)
-	err = userController.Get(request)
-	if err != nil {
-		return nil, c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": fiber.Error{
-				Code:    401,
-				Message: "El usuario no existe.",
-			},
-		})
-	}
-
-	return request, nil
+	// Returns the classes
+	return c.JSON(user.Classes)
 }

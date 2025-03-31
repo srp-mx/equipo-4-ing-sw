@@ -33,29 +33,11 @@ RETURNS:
 
 ERRORS:
 400 (Bad request)
-    Body:
-    {
-        "error": {
-            "code": 400,
-            "message": ...
-        }
-    }
     Cause: Malformed JSON
 
 409 (Conflict)
-    Body:
-    {
-        "error": {
-            "code": 409,
-            "message": ...
-        }
-    }
     Cause: The user or email already exists
 
 500 (Internal server error)
-    Body:
-    {
-        "error": ...
-    }
     Cause: Internal error
 
