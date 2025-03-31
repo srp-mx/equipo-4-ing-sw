@@ -18,6 +18,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
@@ -29,6 +30,18 @@ import (
 func main() {
 	database.ConnectDb()
 	app := fiber.New()
+
+	// Added to debug requests
+	app.Use(func(c *fiber.Ctx) error {
+		fmt.Println(">>> RECEIVED NEW REQUEST <<<")
+		fmt.Println("Request Origin:", c.Get("Origin"))
+		fmt.Println("Method:", c.Method())
+		fmt.Println("URL:", c.OriginalURL())
+		fmt.Println("Headers:", c.GetReqHeaders())
+		fmt.Println("Body:", string(c.Body()))
+		return c.Next()
+	})
+
 	app.Use(cors.New(cors.Config{
 		AllowHeaders: strings.Join([]string{
 			fiber.HeaderOrigin,
