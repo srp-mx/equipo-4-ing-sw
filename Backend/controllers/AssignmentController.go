@@ -134,3 +134,14 @@ func (self *AssignmentController) UpdateWithMap(source *models.Assignment, updat
 	}
 	return self.UpdateAssignment(foundAssignment)
 }
+
+// Determines if the assignment was assigned to the user
+func (self *AssignmentController) AssignedTo(assignment *models.Assignment, user *models.User) bool {
+	classes := NewClassController(self.DB)
+	class := models.Class{}
+	err := classes.Get(&class)
+	if err != nil {
+		return false
+	}
+	return class.OwnerUsername == user.Username
+}

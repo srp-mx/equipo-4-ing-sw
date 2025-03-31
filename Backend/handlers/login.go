@@ -30,58 +30,80 @@ import (
 
 // Handles /login
 func Login(c *fiber.Ctx) error {
-	type loginRequest struct {
+	type LoginRequest struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
 
-	type loginResponse struct {
+	type TokenResponse struct {
 		Token string      `json:"token"`
 		User  models.User `json:"user"`
 	}
 
 	// Get the credentials from the request body
-	request := new(loginRequest)
+	request := new(LoginRequest)
 	if err := c.BodyParser(request); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return getBadReq(c, err.Error())
 	}
 
 	// Get the user by credentials
-	userController := controllers.NewUserController(database.DB.Db)
-	user, err := userController.FindByCredentials(request.Email, request.Password)
+	users := controllers.NewUserController(database.DB.Db)
+	user, err := users.FindByCredentials(request.Email, request.Password)
 	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": fiber.Error{
-				Code:    401,
-				Message: "El usuario o contraseña no es correcto.",
-			},
-		})
+		return getUnauth(c, "El usuario o contraseña no es correcto.")
 	}
 
-	// Create JWT claims with user ID and expiry time
+	// Generate the token
+	token, ok := tokenFromUser(user)
+	if !ok {
+		return getServerErr(c)
+	}
+
+	return c.JSON(TokenResponse{
+		Token: token,
+		User:  *user,
+	})
+}
+
+// Gives a new token given the old one
+func RefreshToken(c *fiber.Ctx) error {
+	type TokenResponse struct {
+		Token string      `json:"token"`
+		User  models.User `json:"user"`
+	}
+
+	// Get user credentials
+	user, err := getCredentials(c)
+	if err != nil {
+		return err
+	}
+
+	// Generate new token
+	token, ok := tokenFromUser(user)
+	if !ok {
+		return getServerErr(c)
+	}
+
+	return c.JSON(TokenResponse{
+		Token: token,
+		User:  *user,
+	})
+}
+
+// Generates a new token for a user
+func tokenFromUser(user *models.User) (string, bool) {
 	claims := jwt.MapClaims{
 		"username": user.Username,
-		"name":     user.Name,
-		"email":    user.Email,
 		"exp":      time.Now().Add(time.Hour * 24).Unix(),
 		"emitted":  time.Now().Unix(),
 	}
 
-	// Create the token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	// Generate and send token
-	t, err := token.SignedString([]byte(middlewares.JwtSecret))
+	signedToken, err := token.SignedString([]byte(middlewares.JwtSecret))
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return "", false
 	}
 
-	return c.JSON(loginResponse{
-		Token: t,
-		User:  *user,
-	})
+	return signedToken, true
 }

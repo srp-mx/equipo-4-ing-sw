@@ -24,18 +24,16 @@ import (
 
 // Handles /verify_formula
 func VerifyFormula(c *fiber.Ctx) error {
-	type formula struct {
-		formula string `json:"formula"`
-	}
-	request := new(formula)
-	if err := c.BodyParser(request); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"code":  400,
-			"error": err.Error(),
-		})
+	type Formula struct {
+		Formula string `json:"formula"`
 	}
 
-	form, err := utils.NewFormula(request.formula)
+	request := new(Formula)
+	if err := c.BodyParser(request); err != nil {
+		return getBadReq(c, err.Error())
+	}
+
+	form, err := utils.NewFormula(request.Formula)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"ok":      false,

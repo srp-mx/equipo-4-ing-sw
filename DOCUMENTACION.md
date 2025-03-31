@@ -326,6 +326,8 @@ respectivo maquetado:
 
 ## API
 
+Las documentación de cada ruta son las siguientes.
+
 * [/class_assignments](.repo/API/class_assignments)
 * [/class_grade](.repo/API/class_grade)
 * [/class_tags](.repo/API/class_tags)
@@ -338,6 +340,17 @@ respectivo maquetado:
 * [/patch_class](.repo/API/patch_class)
 * [/post_assignment](.repo/API/post_assignment)
 * [/post_class](.repo/API/post_class)
+* [/refresh_token](.repo/API/refresh_token)
 * [/register](.repo/API/register)
 * [/user_classes](.repo/API/user_classes)
 * [/verify_formula](.repo/API/verify_formula)
+
+Los errores son todos de la forma siguiente.
+```json
+{
+    "error": {
+        "code": 123,
+        "message": "..."
+    }
+}
+```

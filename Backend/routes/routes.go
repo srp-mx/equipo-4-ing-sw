@@ -31,19 +31,20 @@ func SetupRoutes(app *fiber.App) {
 	app.Post("/register", handlers.Register)
 	app.Post("/verify_formula", handlers.VerifyFormula)
 
-	app.Post("/user_classes", jwt, handlers.GetUserClasses)
+	app.Get("/refresh_token", jwt, handlers.RefreshToken)
+	app.Get("/user_classes", jwt, handlers.GetUserClasses)
 
 	app.Post("/post_class", jwt, handlers.PostClass)
-	app.Post("/get_class", jwt, handlers.GetClass)
+	app.Get("/get_class", jwt, handlers.GetClass)
 	app.Post("/delete_class", jwt, handlers.DeleteClass)
 	app.Post("/patch_class", jwt, handlers.PatchClass)
 
-	app.Post("/class_assignments", jwt, handlers.GetClassAssignments)
-	app.Post("/class_tags", jwt, handlers.GetClassTags)
-	app.Post("/class_grade", jwt, handlers.GetClassGrade)
+	app.Get("/class_assignments", jwt, handlers.GetClassAssignments)
+	app.Get("/class_tags", jwt, handlers.GetClassTags)
+	app.Get("/class_grade", jwt, handlers.GetClassGrade)
 
 	app.Post("/post_assignment", jwt, handlers.PostAssignment)
-	app.Post("/get_assignment", jwt, handlers.GetAssignment)
+	app.Get("/get_assignment", jwt, handlers.GetAssignment)
 	app.Post("/delete_assignment", jwt, handlers.DeleteAssignment)
 	app.Post("/patch_assignment", jwt, handlers.PatchAssignment)
 }
