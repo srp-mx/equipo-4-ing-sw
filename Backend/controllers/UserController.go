@@ -119,26 +119,3 @@ func (self *UserController) EnrolledIn(user *models.User, classID uint) (bool, e
 	// They are enrolled
 	return true, nil
 }
-
-// Determines whether a user is enrolled in a class or not
-func (self *UserController) EnrolledIn(user *models.User, classID uint) (bool, error) {
-	// Gets any class with the given ID belonging to the user
-	class := models.Class{}
-	err := self.DB.
-		Where("id=? AND owner_username=?", classID, user.Username).
-		First(&class).
-		Error
-
-	// No problems, but not enrolled
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return false, nil
-	}
-
-	// Problems
-	if err != nil {
-		return false, err
-	}
-
-	// They are enrolled
-	return true, nil
-}
