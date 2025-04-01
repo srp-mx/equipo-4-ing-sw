@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
