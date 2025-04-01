@@ -206,11 +206,17 @@ func (self *ClassController) UpdateWithMap(source *models.Class, updates map[str
 		foundClass.Name = v
 	}
 	if value, exists := updates["start_date"]; exists {
-		v := value.(time.Time)
+		v, err := time.Parse(DATETIME_FMT, value.(string))
+		if err != nil {
+			return fmt.Errorf("La fecha de inicio no es válida")
+		}
 		foundClass.StartDate = v
 	}
 	if value, exists := updates["end_date"]; exists {
-		v := value.(time.Time)
+		v, err := time.Parse(DATETIME_FMT, value.(string))
+		if err != nil {
+			return fmt.Errorf("La fecha de fin no es válida")
+		}
 		foundClass.EndDate = v
 	}
 	return self.UpdateClass(foundClass)

@@ -102,7 +102,10 @@ func (self *AssignmentController) UpdateWithMap(source *models.Assignment, updat
 	}
 
 	if value, exists := updates["due_date"]; exists {
-		v := value.(time.Time)
+		v, err := time.Parse(DATETIME_FMT, value.(string))
+		if err != nil {
+			return fmt.Errorf("La fecha de entrega no es válida")
+		}
 		foundAssignment.DueDate = v
 	}
 	if value, exists := updates["notes"]; exists {
