@@ -115,7 +115,7 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
                             onChange={handleChange}
                         />
                     ) : (
-                        <span>{editedClass.start_date}</span>
+                        <span>{new Date(editedClass.start_date).toLocaleDateString()}</span>
                     )}     
                 </div>
                 <div className="text-gray-600 text-right text-lg mr-4 px-2 py-1 rounded-full">

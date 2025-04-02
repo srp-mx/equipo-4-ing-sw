@@ -13,6 +13,7 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
     const user = useSelector((state: RootState) => state.user);
 
     const [newClass, setNewClass] = useState({
+        id : 0,
         name: "",
         start_date : "",
         end_date : "",
@@ -47,6 +48,8 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
                 console.error("EL error es ", error);
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
+            const data = await response.json();
+            newClass.id = data.id;
             onClose();        
         }catch( error ){
             console.error("Error: ", error);

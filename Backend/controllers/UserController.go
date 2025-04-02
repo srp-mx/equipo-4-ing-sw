@@ -97,6 +97,23 @@ func (self *UserController) LoadClasses(user *models.User) error {
 	return self.DB.Preload("Classes").First(user, "username=?", user.Username).Error
 }
 
+func (self *UserController) LoadAssignments(user *models.User) ([]models.Assignment, error) {
+	err := self.LoadClasses(user)
+	if err != nil{
+		return nil, err
+	}
+	var assignment = []models.Assignment{}
+	c := NewClassController(self.DB)
+	for _, class := range user.Classes {
+		nerr := c.LoadAssignments(&class)
+		if nerr != nil{
+			return nil, nerr
+		}
+		assignment = append(assignment, class.Assignments...)
+	}
+	return assignment, nil 
+}
+
 // Determines whether a user is enrolled in a class or not
 func (self *UserController) EnrolledIn(user *models.User, classID uint) (bool, error) {
 	// Gets any class with the given ID belonging to the user

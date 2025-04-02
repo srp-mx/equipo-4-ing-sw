@@ -12,10 +12,13 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
 
     const [newAssignment, setNewAssignment] = useState({
         name: "",
-        dueDate: "",
-        className: "",
+        due_date: "",
+        class_name: "",
         tag: "",
-        notes: ""
+        notes: "",
+        optional: "",
+        grade: 0, 
+        progress: ""
     });
 
     const user = useSelector((state: RootState) => state.user);
@@ -27,15 +30,26 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
 
     const handleCreate = async () => {
         try{
+            const dataSend = {
+                ...newAssignment, 
+                due_date: new Date(newAssignment.due_date).toISOString()
+            }
+
             const response = await fetch("http://localhost:3000/post_assignment", {
                 method: "POST", 
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(newAssignment)
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                    "Content-Type": "application/json"},
+                body: JSON.stringify(dataSend)
             });
 
-            if(!response.ok) throw new Error("Fallo al crear Tarea");
+            if(!response.ok) {
+                const error = await response.json();
+                console.error("El error es ",error);
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
             const data = await response.json();
-            console.log("Clase creada con exito", data); 
+            console.log("Tarea creada con exito", data); 
             onClose();
 
         }catch(error){
@@ -74,17 +88,17 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
                 />
                 <input
                     type="date"
-                    name="dueDate"
+                    name="due_date"
                     className="w-full border rounded p-1 mt-2"
-                    value={newAssignment.dueDate}
+                    value={newAssignment.due_date}
                     onChange={handleChange}
                 />
                 <input
                     type="text"
-                    name="className"
+                    name="class_name"
                     placeholder="Materia"
                     className="w-full border rounded p-1 mt-2"
-                    value={newAssignment.className}
+                    value={newAssignment.class_name}
                     onChange={handleChange}
                 />
                 <input
