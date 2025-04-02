@@ -42,6 +42,7 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/class_assignments", jwt, handlers.GetClassAssignments)
 	app.Get("/class_tags", jwt, handlers.GetClassTags)
 	app.Get("/class_grade", jwt, handlers.GetClassGrade)
+	app.Get("/all_assignment", jwt, handlers.GetAllAssignments)
 
 	app.Post("/post_assignment", jwt, handlers.PostAssignment)
 	app.Get("/get_assignment", jwt, handlers.GetAssignment)

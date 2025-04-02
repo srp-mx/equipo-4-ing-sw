@@ -55,7 +55,8 @@ func (self *ClassController) DeleteClass(class *models.Class) error {
 
 // Loads the related assignments to the class passed in
 func (self *ClassController) LoadAssignments(class *models.Class) error {
-	return self.DB.Model(class).Association("Assignments").Find(class.Assignments)
+	//	return self.DB.Model(class).Association("Assignments").Find(class.Assignments)
+	return self.DB.Preload("Assignments").First(class, "id=?", class.ID).Error
 }
 
 // Returns an array of unique tags used in all assignments for this class

@@ -18,6 +18,7 @@
 package handlers
 
 import (
+	"github.com/srp-mx/equipo-4-ing-sw/models"
 	"github.com/gofiber/fiber/v2"
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
@@ -41,4 +42,19 @@ func GetUserClasses(c *fiber.Ctx) error {
 
 	// Returns the classes
 	return c.JSON(user.Classes)
+}
+// Handles /all_assignments 
+func GetAllAssignments(c *fiber.Ctx) error {
+	user, err := getCredentials(c)
+	if err != nil {
+		return err
+	}
+	users := controllers.NewUserController(database.DB.Db)
+	var ass []models.Assignment
+	ass, err =  users.LoadAssignments(user)
+	if err != nil {
+		return getServerErr(c)
+	}
+
+	return c.JSON(ass)
 }

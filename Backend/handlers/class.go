@@ -43,7 +43,7 @@ func PostClass(c *fiber.Ctx) error {
 
 	// Assigns the user as the class' owner
 	newClass.OwnerUsername = user.Username
-
+	newClass.Assignments = []models.Assignment{} 
 	// Checks if there already is a class with the same candidate key
 	classes := controllers.NewClassController(database.DB.Db)
 	yes, err := classes.Exists(*newClass)

@@ -30,18 +30,24 @@ function DropdownMenu({ options, onSelect }: { options: { label: string, value: 
 async function getWorks(username : string) : Promise<Assigment[]>{
     // Ejemplo de salida
     try{
-        const response = await fetch("http://localhost:3000/",{
-            method: "POST", 
-            headers: {"Content-Type": "application/json"}, 
-            body: JSON.stringify(username),
+        const response = await fetch("http://localhost:3000/all_assignment",{
+            method: "GET", 
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token"),
+                "Content-Type": "application/json"
+            }
         });
 
-        if(!response.ok) throw new Error("Algo fallo en la consulta");
+        if(!response.ok){
+            const error = await response.json();
+            console.error("El error es ", error);
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+        } 
         const data = await response.json();
-        const assignments : Assigment[] = data.assignments; 
+        const assignments : Assigment[] = data; 
         return assignments; 
     }catch(error){
-        console.error("Error", error); 
+        console.error("Error ", error); 
         return [];
     }
 }

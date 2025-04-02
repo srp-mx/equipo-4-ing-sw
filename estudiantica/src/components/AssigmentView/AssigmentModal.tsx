@@ -1,5 +1,6 @@
 import { Assigment } from "@/Object/Assigment";
 import { useState } from "react";
+import { data } from "react-router-dom";
 
 type ModalProps = {
     isOpen: boolean;
@@ -33,9 +34,43 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
         setEditedAssigment((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSave = () => {
-        // Aquí podrías agregar una función para actualizar la tarea en el backend
-        setIsEdit(false);
+    const handleSave = async () => {
+        try{
+            if(!editedAssigment.name){
+                alert("Por favor, completa al menos el nombre de la tarea");
+                return;
+            }
+            const dataSend = {
+                "assignment": {
+                    "id": editedAssigment.id
+                },
+                "new_assignment": {
+                    ...editedAssigment,
+                    due_date: new Date (editedAssigment.due_date).toISOString(),
+                }
+            }
+            const response = await fetch("http://localhost:3000/patch_assignment",{
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataSend),
+            });
+
+            if(!response.ok){
+                const error = await response.json();
+                console.error("El error es ", error);
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log("Tarea actualizada con exito: ", data);
+            setIsEdit(false);
+        }catch(error){
+            console.error('Error: ', error);
+            alert('Hubo un problema al actualizar la tarea')
+        }
     };
 
     const handleCancel = () => {
@@ -75,18 +110,18 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                     {isEdit ? (
                         <input
                             type="date"
-                            name="dueDate"
+                            name="due_date"
                             className="border rounded p-1"
-                            value={new Date(editedAssigment.dueDate).toISOString().split('T')[0]}
+                            value={editedAssigment.due_date}
                             onChange={handleChange}
                         />
                     ) : (
-                        <span>{assigment.dueDate.toLocaleDateString()}</span>
+                        <span>{new Date(assigment.due_date).toLocaleDateString()}</span>
                     )}
                 </div>
 
                 <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>Materia: {assigment.class.className}</span>
+                    <span>Materia: {assigment.class_name}</span>
                 </div>
 
                 <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">

@@ -29,7 +29,7 @@ export default function Resultbar({ assigment }: { assigment: Array<Assigment> }
 
     return (
         <div className="rounded-lg p-4 mx-auto w-full h-full">
-            <div className={`${assigment.length > 0 ? "" : "hidden"} w-full rounded-lg bg-gray-700 rounded flex justify-between items-center p-3 border border-gray-600`}>
+            <div className={`${assigment.length >= 0 ? "" : "hidden"} w-full rounded-lg bg-gray-700 rounded flex justify-between items-center p-3 border border-gray-600`}>
                 <div className="flex items-center space-x-2">
                     <input 
                         type="checkbox" 
