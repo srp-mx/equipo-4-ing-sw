@@ -18,11 +18,17 @@
 package test
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"io"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/utils"
+	"github.com/srp-mx/equipo-4-ing-sw/controllers"
+	"github.com/srp-mx/equipo-4-ing-sw/models"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -95,7 +101,16 @@ func testUserClasses(t *testing.T) {
 // Test for the /post_class route
 func testPostClass(t *testing.T) {
 	// TODO
-	assert.True(t, true)
+	payload := map[string]string{
+		"name":          "mate",
+		"start_date":    "2025-03-29T15:47:00Z",
+		"end_date":      "2025-03-30T15:47:00Z",
+		"grade_formula": "0.3*tareas + 0.7*examenes",
+		"color":         "FFFFFFFF",
+	}
+	resp := postWithAuth(t, "/post_class", payload)
+	_, ok := resp["class_id"]
+	assert.True(t, ok)
 }
 
 // Test for the /get_class route
@@ -161,7 +176,56 @@ func testPatchAssignment(t *testing.T) {
 // Fills up the database with dummy values
 func fillDummyDb() {
 	// TODO
-	//var users = controllers.NewUserController(db)
-	//var classes = controllers.NewClassController(db)
-	//var assignments = controllers.NewAssignmentController(db)
+	var users = controllers.NewUserController(db)
+
+	users.CreateUser(&models.User{
+		Username: "test",
+		Name:     "Test",
+		Email:    "test@test.com",
+		Password: "test",
+	})
+}
+
+// Sends a POST payload with credentials
+func postWithAuth(t *testing.T, route string, payload map[string]string) map[string]string {
+	jsonContent, _ := json.Marshal(payload)
+	req := httptest.NewRequest("POST", route, bytes.NewBuffer(jsonContent))
+	tok := getToken(t)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+tok)
+	fmt.Println(tok)
+
+	resp, err := app.Test(req)
+	assert.NoError(t, err)
+	bytes, err := io.ReadAll(resp.Body)
+	assert.NoError(t, err)
+	body := utils.CopyBytes(bytes)
+	var resultMap map[string]string
+	err = json.Unmarshal(body, &resultMap)
+
+	fmt.Println(string(bytes))
+
+	assert.Equal(t, fiber.StatusOK, resp.StatusCode)
+	return resultMap
+}
+
+// Gets the token for the testing user
+func getToken(t *testing.T) string {
+	jsonContent, _ := json.Marshal(map[string]string{
+		"email":    "test@test.com",
+		"password": "test",
+	})
+	req := httptest.NewRequest("POST", "/login", bytes.NewBuffer(jsonContent))
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := app.Test(req)
+	assert.NoError(t, err)
+	assert.Equal(t, resp.StatusCode, fiber.StatusOK)
+
+	bytes, err := io.ReadAll(resp.Body)
+	assert.NoError(t, err)
+	body := utils.CopyBytes(bytes)
+	var resultMap map[string]string
+	err = json.Unmarshal(body, &resultMap)
+	return resultMap["token"]
 }
