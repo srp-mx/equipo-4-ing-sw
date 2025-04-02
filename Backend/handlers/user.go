@@ -15,16 +15,30 @@
 
 */
 
-package models
+package handlers
 
 import (
-	_ "gorm.io/gorm"
+	"github.com/gofiber/fiber/v2"
+	"github.com/srp-mx/equipo-4-ing-sw/controllers"
+	"github.com/srp-mx/equipo-4-ing-sw/database"
 )
 
-type User struct {
-	Username string  `gorm:"primaryKey" json:"username"`
-	Name     string  `gorm:"not null" json:"name"`
-	Email    string  `gorm:"unique;not null" json:"email"`
-	Password string  `gorm:"not null" json:"-"`
-	Classes  []Class `gorm:"foreignKey:OwnerUsername;references:Username;constraint:OnDelete:CASCADE" json:"classes,omitempty"`
+// Handles /user_classes
+func GetUserClasses(c *fiber.Ctx) error {
+	// Gets the user
+	user, err := getCredentials(c)
+	if err != nil {
+		return err
+	}
+
+	users := controllers.NewUserController(database.DB.Db)
+
+	// Loads class data into the user
+	err = users.LoadClasses(user)
+	if err != nil {
+		return getServerErr(c)
+	}
+
+	// Returns the classes
+	return c.JSON(user.Classes)
 }

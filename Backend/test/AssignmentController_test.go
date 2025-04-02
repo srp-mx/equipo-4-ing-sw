@@ -25,6 +25,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// Test data struct
 type assignmentTestData struct {
 	userController  *controllers.UserController
 	classController *controllers.ClassController
@@ -34,6 +35,7 @@ type assignmentTestData struct {
 	assignment      *models.Assignment
 }
 
+// Creates test data
 func newAssignmentTestData() (result assignmentTestData) {
 	result = assignmentTestData{}
 	result.userController = controllers.NewUserController(db)
@@ -71,6 +73,7 @@ func newAssignmentTestData() (result assignmentTestData) {
 	return result
 }
 
+// Tests assignment creation
 func TestCreateAssignment(t *testing.T) {
 	resetDb()
 	data := newAssignmentTestData()
@@ -90,6 +93,7 @@ func TestCreateAssignment(t *testing.T) {
 	assert.Equal(t, data.assignment.ID, foundAssignment.ID)
 }
 
+// Tests assignment updates
 func TestUpdateAssignment(t *testing.T) {
 	resetDb()
 	data := newAssignmentTestData()
@@ -108,6 +112,7 @@ func TestUpdateAssignment(t *testing.T) {
 	assert.Equal(t, 9.9, updatedAssignment.Grade)
 }
 
+// Tests assignment removal
 func TestDeleteAssignment(t *testing.T) {
 	resetDb()
 	data := newAssignmentTestData()

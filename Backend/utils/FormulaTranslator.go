@@ -174,14 +174,10 @@ func (self *Formula) VerifyPlausibility() (isValid bool) {
 	for i, tag := range self.TagsUsed {
 		testData[tag] = []float64{float64(i + 1)}
 	}
-	defer func() {
-		if catch := recover(); catch != nil {
-			isValid = false
-			self.Error = wrapError(fmt.Errorf("La fórmula no es válida."))
-		}
-	}()
 	_, err := self.Evaluate(testData)
-	self.Error = wrapError(err)
+	if err != nil {
+		self.Error = wrapError(err)
+	}
 	isValid = err == nil
 	return isValid
 }

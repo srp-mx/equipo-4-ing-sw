@@ -1,4 +1,6 @@
+import { RootState } from "@/constants/store";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 type ModalProps = {
     isOpen: boolean;
@@ -16,13 +18,30 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
         notes: ""
     });
 
+    const user = useSelector((state: RootState) => state.user);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setNewAssignment((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleCreate = async () => {
-        onClose();        
+        try{
+            const response = await fetch("http://localhost:3000/post_assignment", {
+                method: "POST", 
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(newAssignment)
+            });
+
+            if(!response.ok) throw new Error("Fallo al crear Tarea");
+            const data = await response.json();
+            console.log("Clase creada con exito", data); 
+            onClose();
+
+        }catch(error){
+            console.error("Error", error);
+            alert("Hubo un problema al crear la clase");
+        }
         /* Manejo de la petición
         
         try {

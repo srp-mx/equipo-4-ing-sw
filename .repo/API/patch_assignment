@@ -1,0 +1,54 @@
+DESCRIPTION: Updates the fields of the assignment passed into it.
+
+
+
+Type: POST
+
+
+
+INPUT:
+{
+    "assignment": {
+        "id": ...
+    },
+    "new_assignment": {
+        "due_date": ... ,
+        "notes": ... ,
+        "grade": ... ,
+        "name": ... ,
+        "optional": ... ,
+        "progress": ... ,
+        "tag": ...
+    }
+}
+
+"assignment" // May contain other Assignment fields, but they will be ignored
+"assignment.id" -> uint
+"new_assignment" // Anything here is optional and anything omitted is unchanged
+"new_assignment.due_date" -> // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"new_assignment.notes" -> string
+"new_assignment.grade" -> double
+"new_assignment.name" -> string
+"new_assignment.optional" -> bool
+"new_assignment.progress" -> int // <0 is not doing, 0 in progress, >0 finished
+"new_assignment.tag" -> string
+
+
+
+RETURNS:
+The complete modified assignment as it is left in the database as a JSON object
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON or nonexistent class
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: Assignment not found
+
+500 (Internal server error)
+    Cause: Internal error

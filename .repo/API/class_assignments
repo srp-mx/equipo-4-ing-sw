@@ -1,0 +1,54 @@
+DESCRIPTION: Gets all assignments from a class.
+
+
+
+Type: GET
+
+
+
+INPUT:
+Query parameter "id" with the class ID.
+For example: ".../class_assignments?id=${classID}"
+
+
+
+RETURNS:
+[
+    {
+        "id": ... ,
+        "class_id": ... ,
+        "due_date": ... ,
+        "notes": ... ,
+        "grade": ... ,
+        "name": ... ,
+        "optional": ... ,
+        "progress": ... ,
+        "tag": ...
+    },
+    ...
+]
+
+"[n].id" -> uint
+"[n].class_id" -> uint
+"[n].due_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"[n].notes" -> string
+"[n].grade" -> double
+"[n].name" -> string
+"[n].optional" -> bool
+"[n].progress" -> int // <0 is not doing, 0 in progress, >0 finished
+"[n].tag" -> string
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: The class was not found
+
+500 (Internal server error)
+    Cause: Internal error

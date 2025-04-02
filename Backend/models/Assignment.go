@@ -33,5 +33,5 @@ type Assignment struct {
 	Name     string    `json:"name"`
 	Optional bool      `json:"optional"`
 	Progress int       `json:"progress"`
-	Tag      string    `gorm:"type:varchar(25);not null" json:"tag"`
+	Tag      string    `gorm:"type:varchar(25)" json:"tag,omitempty"`
 }
