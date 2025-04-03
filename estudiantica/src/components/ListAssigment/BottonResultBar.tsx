@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import CreateAssignmentModal from "../AssigmentView/CreateAssigmentModal";
+import { Assigment } from '@/Object/Assigment';
 
-const selectedfetch = async (option : string , selection : Array<number>) => {
-    for (const ids of selection){
+const selectedfetch = async (option : string , selection : Array<Assigment>) => {
+    for (const task of selection){
         switch(option){
             case "delete":
                 try{
@@ -12,7 +13,7 @@ const selectedfetch = async (option : string , selection : Array<number>) => {
                             "Authorization": "Bearer " + localStorage.getItem("token"),
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify({id: ids})
+                        body: JSON.stringify({id: task.id})
                     });
                     if(!response.ok){
                         const error = await response.json();
@@ -24,8 +25,64 @@ const selectedfetch = async (option : string , selection : Array<number>) => {
                 }
                 break;
             case "complete":   
+                try{
+                    const dataSend = {
+                        "assignment":  {
+                            "id": task.id
+                        },
+                        "new_assignment": {
+                            ...task, 
+                            progress: 1,
+                        }
+                    }
+
+                    const response = await fetch("http://localhost:3000/patch_assignment",{
+                        method: "POST",
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem("token"),
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(dataSend)
+                    });
+                    if(!response.ok){
+                        const error = await response.json();
+                        console.error("El error es ", error); 
+                        throw new Error(`Error: ${response.status} ${response.statusText}`);
+                    }
+                    
+                }catch(error){
+                    console.error(error);
+                }
                 break;
             case "incomplete":
+                try{
+                    const dataSend = {
+                        "assignment":  {
+                            "id": task.id
+                        },
+                        "new_assignment": {
+                            ...task, 
+                            progress: -1,
+                        }
+                    }
+
+                    const response = await fetch("http://localhost:3000/patch_assignment",{
+                        method: "POST",
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem("token"),
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(dataSend)
+                    });
+                    if(!response.ok){
+                        const error = await response.json();
+                        console.error("El error es ", error); 
+                        throw new Error(`Error: ${response.status} ${response.statusText}`);
+                    }
+                    
+                }catch(error){
+                    console.error(error);
+                }
                 break;  
         }    
     }
@@ -35,7 +92,7 @@ const selectedfetch = async (option : string , selection : Array<number>) => {
     // selection se vuelve un arreglpo vacio
 }
 
-export default function BottonResultBar({selection} : {selection : Array<number>}) : React.ReactNode{
+export default function BottonResultBar({selection} : {selection : Array<Assigment>}) : React.ReactNode{
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
