@@ -1,7 +1,34 @@
 import { useState } from 'react'
 import CreateAssignmentModal from "../AssigmentView/CreateAssigmentModal";
 
-const selectedfetch = (option : string , selection : Array<number>) => {
+const selectedfetch = async (option : string , selection : Array<number>) => {
+    for (const ids of selection){
+        switch(option){
+            case "delete":
+                try{
+                    const response = await fetch("http://localhost:3000/delete_assignment",{
+                        method: "POST", 
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem("token"),
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({id: ids})
+                    });
+                    if(!response.ok){
+                        const error = await response.json();
+                        console.error("El error es ", error);
+                        throw new Error(`Error ${response.status} ${response.statusText}`);
+                    }
+                }catch(error){
+                    console.error(error);
+                }
+                break;
+            case "complete":   
+                break;
+            case "incomplete":
+                break;  
+        }    
+    }
     // Petición a la api para cambiar el progreso de una tarea o borrarlo
     // en delete si es necesario, cambiar el cuerpo de fetch
 

@@ -125,8 +125,13 @@ func (self *AssignmentController) UpdateWithMap(source *models.Assignment, updat
 		foundAssignment.Optional = v
 	}
 	if value, exists := updates["progress"]; exists {
-		v := value.(int)
-		foundAssignment.Progress = v
+		if floatValue, ok := value.(float64); ok {
+			foundAssignment.Progress = int(floatValue)
+		}else{
+			return fmt.Errorf("No estoy recibiendo un numero en progress")
+		}
+		
+
 	}
 	if value, exists := updates["tag"]; exists {
 		v := strings.TrimSpace(value.(string))

@@ -1,7 +1,7 @@
 import { RootState } from "@/constants/store";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-
+import SelectorClass from "@/components/AssigmentView/SelectorClass"
 type ModalProps = {
     isOpen: boolean;
     onClose: () => void;
@@ -13,13 +13,13 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
     const [newAssignment, setNewAssignment] = useState({
         name: "",
         due_date: "",
-        class_name: "",
         tag: "",
         notes: "",
-        optional: "",
-        grade: 0, 
-        progress: ""
+        optional: false,
+        grade: 0.00, 
+        progress: 0
     });
+    const [idN, setIdN] = useState(0);
 
     const user = useSelector((state: RootState) => state.user);
 
@@ -32,6 +32,7 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
         try{
             const dataSend = {
                 ...newAssignment, 
+                class_id: idN,
                 due_date: new Date(newAssignment.due_date).toISOString()
             }
 
@@ -39,7 +40,8 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
                 method: "POST", 
                 headers: {
                     "Authorization": "Bearer " + localStorage.getItem("token"),
-                    "Content-Type": "application/json"},
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify(dataSend)
             });
 
@@ -56,22 +58,6 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
             console.error("Error", error);
             alert("Hubo un problema al crear la clase");
         }
-        /* Manejo de la petición
-        
-        try {
-            const response = await fetch("/api/assignments", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newAssignment)
-            });
-
-            if (!response.ok) throw new Error("Error al crear la tarea");
-            const data = await response.json();
-            onCreate(data);
-            onClose();
-        } catch (error) {
-            console.error(error);
-        }*/
     };
 
     return (
@@ -93,14 +79,9 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
                     value={newAssignment.due_date}
                     onChange={handleChange}
                 />
-                <input
-                    type="text"
-                    name="class_name"
-                    placeholder="Materia"
-                    className="w-full border rounded p-1 mt-2"
-                    value={newAssignment.class_name}
-                    onChange={handleChange}
-                />
+
+                <SelectorClass id={idN} changeId={setIdN} />
+
                 <input
                     type="text"
                     name="tag"

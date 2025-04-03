@@ -19,7 +19,7 @@ package handlers
 
 import (
 	"strings"
-
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
@@ -43,7 +43,13 @@ func PostAssignment(c *fiber.Ctx) error {
 
 	// Rejects assignments without a valid class
 	users := controllers.NewUserController(database.DB.Db)
-	enrolled, err := users.EnrolledIn(user, newAssignment.ID)
+	if err == nil {
+		fmt.Println("Es nulo")
+	}
+	if newAssignment == nil {
+		fmt.Println("No es nulo")
+	}
+	enrolled, err := users.EnrolledIn(user, newAssignment.ClassID)
 	if err != nil {
 		return getServerErr(c)
 	}

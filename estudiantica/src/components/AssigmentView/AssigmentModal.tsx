@@ -28,11 +28,36 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
 
     const [isEdit,setIsEdit] = useState(false);
     const [editedAssigment, setEditedAssigment] = useState({ ... assigment});
+    const [className, setClassName] = useState("");
+
+    const getClass = async() => {
+        try{
+            const response = await fetch(`http://localhost:3000/get_class?id=${assigment.class_id}`,{
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                    "Content-Type": "application/json"
+                }
+            });
+            if(!response.ok){
+                const error = await response.json();
+                console.error("El error es ", error);
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
+            setClassName(data.name);
+        }catch(error){
+            console.error(error);
+        }
+    }
     
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setEditedAssigment((prev) => ({ ...prev, [name]: value }));
     };
+
+
 
     const handleSave = async () => {
         try{
@@ -46,6 +71,7 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                 },
                 "new_assignment": {
                     ...editedAssigment,
+                    progress: Math.trunc(editedAssigment.progress),
                     due_date: new Date (editedAssigment.due_date).toISOString(),
                 }
             }
@@ -77,6 +103,8 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
         setEditedAssigment({ ...assigment });
         setIsEdit(false);
     };
+
+    getClass();
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-10">
@@ -121,7 +149,7 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                 </div>
 
                 <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>Materia: {assigment.class_name}</span>
+                    <span>Materia: {className}</span>
                 </div>
 
                 <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
