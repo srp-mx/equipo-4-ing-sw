@@ -7,7 +7,10 @@ import validator from 'validator';
 //import "../../public/assets/css/index.css";
 
 const Button = ({ onClick, children, icon }: { onClick?: () => void; children: React.ReactNode; icon?: string }) => (
-  <button onClick={onClick} className="pixel-corner-button mb-4 flex bg-[#cbda3d] py-4 px-10 min-w-[300px] transition-all hover:bg-white">
+  <button onClick={onClick} 
+    className="pixel-corner-button mb-4 flex bg-[#cbda3d] text-[#0D0828] py-4 px-10 min-w-[300px] transition-all hover:bg-white"
+    style={{ "--pixel-bg": "#2D304F", "--pixel-hover-bg" : "#FFFFFF", "--size-pixel" : "10px"} as React.CSSProperties}
+  >
     {icon && <img src={icon} className="w-6 h-6 mr-3" alt="Button Icon" />}
     {children}
   </button>
@@ -30,12 +33,12 @@ const PasswordInput = ({ value, onChange }: { value: string; onChange: (e: React
       <input
         type={showPassword ? "text" : "password"}
         className="mb-6 peer block w-full px-3 py-2 text-sm text-white bg-transparent border-2 border-[#cbda3d] rounded-md focus:outline-none focus:border-[#cbda3d] "
-        placeholder="Contraseña"
+        placeholder=""
         value={value}
         onChange={onChange}
         required
       />
-      <label className="absolute text-sm text-[#2d314f] transform scale-50 top-1/3 left-3 -translate-y-1/6 transition-all duration-300 peer-placeholder-shown:top-1/4 peer-placeholder-shown:left-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:text-[#cbda3d] peer-focus:top-0 peer-focus:scale-75 peer-focus:text-[#cbda3d]">Contraseña</label>
+      <label className="absolute text-sm pointer-events-none text-transparent transform scale-50 top-1/3 left-3 -translate-y-1/6 transition-all duration-300 peer-placeholder-shown:top-1/4 peer-placeholder-shown:left-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:text-[#cbda3d] peer-focus:top-0 peer-focus:scale-75 peer-focus:text-[#cbda3d]">Contraseña</label>
       <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-3 flex items-center text-[#cbda3d]">
         {showPassword ? (
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
@@ -138,15 +141,17 @@ export default function Login() {
     }
   }, []); 
     return (
-      <div className="bg-[url(../../public/assets/img/login_bg.jpg)] h-screen bg-cover bg-center flex justify-center items-center font-[\'Pixelify Sans\']">
+      <div className="bg-[url(../../public/assets/img/login_bg.jpg)] w-screen h-screen bg-cover bg-center flex justify-center items-center font-[\'Pixelify Sans\']">
         <div className="relative w-full max-w-lg p-8 rounded-lg">
-        <div id="notification-container" className="hidden fixed top-[calc(50vh-270px)] left-1/2 -translate-x-1/2 z-[9999] w-full max-w-md p-4"></div>
+          <div id="notification-container" className="hidden fixed top-[calc(50vh-270px)] left-1/2 -translate-x-1/2 z-[9999] w-full max-w-md p-4"></div>
           <h2 className="text-4xl font-semibold text-center text-white mb-6">estudiantika</h2>
           
           {!showEmailForm ? (
             <div className="flex flex-col justify-center items-center mt-6">
               <p className="text-center text-xl text-white mb-6">Ingresa para comenzar tu aventura</p>
-              <Button icon="../assets/img/icono_google.png" onClick={() => showNotification("No disponible por el momento","error")}>Continua con Google</Button>
+              <Button 
+                icon="../assets/img/icono_google.png" 
+                onClick={() => showNotification("No disponible por el momento","error")}>Continua con Google</Button>
               <Button onClick={() => setShowEmailForm(true)} icon="../assets/img/icono_correo.png">Continua con correo</Button>
             </div>
           ) : (
@@ -165,12 +170,12 @@ export default function Login() {
                   <input
                     type="email"
                     className="peer block w-full px-3 py-2 text-sm text-white bg-transparent border-2 border-[#cbda3d] rounded-md focus:outline-none focus:border-[#cbda3d]"
-                    placeholder=""
+                    placeholder=" "
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
-                  <label className="absolute text-sm text-[#2d314f] transform scale-50 top-1/3 left-3 -translate-y-1/6 transition-all duration-300 peer-placeholder-shown:top-1/4 peer-placeholder-shown:left-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:text-[#cbda3d] peer-focus:top-0 peer-focus:scale-75 peer-focus:text-[#cbda3d]">Correo</label>
+                  <label className="absolute pointer-events-none text-sm text-transparent transform scale-50 top-1/6 left-3 -translate-y-1/6 transition-all duration-300 peer-placeholder-shown:top-1/4 peer-placeholder-shown:left-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:text-[#cbda3d] peer-focus:top-0 peer-focus:scale-75 peer-focus:text-[#cbda3d]" htmlFor="email">Correo</label>
                 </div>
   
                 <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />

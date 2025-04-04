@@ -28,7 +28,7 @@
       "@/*":["./src/*", "./dist/", ""],
       "assets/*": ["src/assets/*"],
       "@app/*": ["./app/*"],
-      "@assets/*": ["./assets/*"],
+      "@assets/*": ["src/assets/*"],
       "@components/*": ["./components/*"],
       "@styles/*": ["./styles/*"],
       "@utils/*": ["./utils/*"]

@@ -21,7 +21,7 @@ export const navItems = [
     {label: "Clanes", href: "#", imagen: iconoClanes },
     {label: "Mazmorras", href: "#", imagen: iconoMazmorras},
     {label: "Otros", href: "#", imagen: iconoOtros},
-    {label: "Configuración", href: "#", imagen: iconoConfiguracion}
+    //{label: "Configuración", href: "#", imagen: iconoConfiguracion}
   ];
 
   export const itemEquiped = [
@@ -31,7 +31,7 @@ export const navItems = [
   ];
 
   export const characterDates = {
-    nivel: "12",
+    nivel: "0",
     characterURL: characterImage,
     clanShieldURL: "#",
   };
