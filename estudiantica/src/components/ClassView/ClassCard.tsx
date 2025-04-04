@@ -1,5 +1,6 @@
 import { Class } from '../../Object/Class';
 import React from 'react'
+import bandera from "@/assets/img/bandera.png";
 
 const getEndDateStatus = (endDate: Date) => {
     let endDateStatus = { text : "Activo", bgColor : "bg-green-600"};
@@ -27,7 +28,7 @@ export default function ClassCard({ classData, onOpen } : ClassCardProps) : Reac
             className="grid grid-cols-6 grid-rows-3 items-center border-gray-400 rounded-lg w-4/5 bg-[#ffffe6] shadow-md"
         >
             <div className="row-span-3 flex w-30 h-30 items-center justify-center">
-                <img src="assets/img/bandera.png"/>
+                <img src={bandera}/>
             </div>
             <div className="col-span-5 row-span-3">
                 <div className="flex mb-2 mr-4 space-x-2 mt-2 justify-end">
