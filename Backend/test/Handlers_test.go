@@ -24,10 +24,12 @@ import (
 	"io"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/utils"
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
+	"github.com/srp-mx/equipo-4-ing-sw/database"
 	"github.com/srp-mx/equipo-4-ing-sw/models"
 	"github.com/stretchr/testify/assert"
 )
@@ -100,17 +102,42 @@ func testUserClasses(t *testing.T) {
 
 // Test for the /post_class route
 func testPostClass(t *testing.T) {
-	// TODO
+	// The BODY to send to the endpoint
 	payload := map[string]string{
 		"name":          "mate",
 		"start_date":    "2025-03-29T15:47:00Z",
 		"end_date":      "2025-03-30T15:47:00Z",
-		"grade_formula": "0.3*tareas + 0.7*examenes",
+		"grade_formula": "0.3*average(tareas) + 0.7*average(examenes)",
 		"color":         "FFFFFFFF",
 	}
+
+	// The response collected with the interpreted class_id field
 	resp := postWithAuth(t, "/post_class", payload)
-	_, ok := resp["class_id"]
+	idAny, ok := resp["class_id"]
 	assert.True(t, ok)
+	id := uint(idAny.(float64))
+
+	// We retrieve the created class from the database
+	classes := controllers.NewClassController(database.DB.Db)
+	class := models.Class{ID: id}
+	err := classes.Get(&class)
+	assert.NoError(t, err)
+
+	// We check that the fields match
+
+	assert.Equal(t, payload["name"], class.Name)
+
+	startTime, err := time.Parse(controllers.DATETIME_FMT, payload["start_date"])
+	assert.NoError(t, err)
+	assert.Equal(t, startTime, class.StartDate)
+
+	endTime, err := time.Parse(controllers.DATETIME_FMT, payload["end_date"])
+	assert.NoError(t, err)
+	assert.Equal(t, endTime, class.EndDate)
+
+	assert.Equal(t, payload["grade_formula"], class.GradeFormula)
+
+	assert.Equal(t, payload["color"], class.Color)
 }
 
 // Test for the /get_class route
@@ -187,20 +214,19 @@ func fillDummyDb() {
 }
 
 // Sends a POST payload with credentials
-func postWithAuth(t *testing.T, route string, payload map[string]string) map[string]string {
+func postWithAuth(t *testing.T, route string, payload map[string]string) map[string]any {
 	jsonContent, _ := json.Marshal(payload)
 	req := httptest.NewRequest("POST", route, bytes.NewBuffer(jsonContent))
 	tok := getToken(t)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+tok)
-	fmt.Println(tok)
 
 	resp, err := app.Test(req)
 	assert.NoError(t, err)
 	bytes, err := io.ReadAll(resp.Body)
 	assert.NoError(t, err)
 	body := utils.CopyBytes(bytes)
-	var resultMap map[string]string
+	var resultMap map[string]any
 	err = json.Unmarshal(body, &resultMap)
 
 	fmt.Println(string(bytes))
