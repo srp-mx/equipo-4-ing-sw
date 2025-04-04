@@ -15,16 +15,8 @@
 
 */
 
-package models
+package controllers
 
-import (
-	_ "gorm.io/gorm"
-)
+import "time"
 
-type User struct {
-	Username string  `gorm:"primaryKey" json:"username"`
-	Name     string  `gorm:"not null" json:"name"`
-	Email    string  `gorm:"unique;not null" json:"email"`
-	Password string  `gorm:"not null" json:"-"`
-	Classes  []Class `gorm:"foreignKey:OwnerUsername;references:Username;constraint:OnDelete:CASCADE" json:"classes,omitempty"`
-}
+const DATETIME_FMT = time.RFC3339Nano

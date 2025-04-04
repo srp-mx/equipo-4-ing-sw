@@ -20,7 +20,7 @@ const getEndDateStatus = (endDate: Date) => {
 
 export default function ClassModal({ isOpen, onClose, classData } : ModalProps) : React.ReactNode{
     if (!isOpen) return null;
-    const activateClass = getEndDateStatus(classData.endDate)
+    const activateClass = getEndDateStatus(new Date(classData.end_date))
 
     const [isEdit,setIsEdit] = useState(false);
     const [editedClass, setEditedClass] = useState({ ... classData});
@@ -36,17 +36,31 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
                 alert("por favor completa al menos el nombre de la clase");
                 return;
             }
+
+            const dataSend = {
+                "class": {
+                    "id": editedClass.id
+                },
+                "new_class": {
+                    ...editedClass,
+                    start_date: new Date(editedClass.start_date).toISOString(), 
+                    end_date: new Date(editedClass.end_date).toISOString()
+                }
+            }
             
-            const response = await fetch('/classes', {
-                method: 'PUT',
+            const response = await fetch('http://localhost:3000/patch_class', {
+                method: 'POST',
                 headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token"),
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(editedClass),
+                body: JSON.stringify(dataSend),
             });
             
             if (!response.ok) {
-                throw new Error('error al actualizar la clase');
+                const error = await response.json();
+                console.error("El error es ", error);
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
             
             const updatedAssignment = await response.json();
@@ -95,13 +109,13 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
                     {isEdit ? (
                         <input
                             type="date"
-                            name="startDate"
+                            name="start_date"
                             className="border rounded p-1"
-                            value={new Date(editedClass.startDate).toISOString().split('T')[0]}
+                            value={editedClass.start_date}
                             onChange={handleChange}
                         />
                     ) : (
-                        <span>{editedClass.startDate.toLocaleDateString()}</span>
+                        <span>{new Date(editedClass.start_date).toLocaleDateString()}</span>
                     )}     
                 </div>
                 <div className="text-gray-600 text-right text-lg mr-4 px-2 py-1 rounded-full">
@@ -109,13 +123,13 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
                     {isEdit ? (
                         <input
                             type="date"
-                            name="endDate"
+                            name="end_date"
                             className="border rounded p-1"
-                            value={new Date(editedClass.endDate).toISOString().split('T')[0]}
+                            value={editedClass.end_date}
                             onChange={handleChange}
                         />
                     ) : (
-                        <span>{editedClass.endDate.toLocaleDateString()}</span>
+                        <span>{new Date (editedClass.end_date).toLocaleDateString()}</span>
                     )}      
                 </div>
 
@@ -124,13 +138,13 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
                     {isEdit ? (
                         <input
                             type="text"
-                            name="gradeFormula"
+                            name="grade_formula"
                             className="border rounded p-1"
-                            value={editedClass.gradeFormula}
+                            value={editedClass.grade_formula}
                             onChange={handleChange}
                         />
                     ) : (
-                        <span>{editedClass.gradeFormula}</span>
+                        <span>{editedClass.grade_formula}</span>
                     )}
                 </div>
                 <div className="flex mb-2 mr-4 space-x-2 justify-end">

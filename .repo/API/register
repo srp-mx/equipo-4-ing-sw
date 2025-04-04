@@ -1,0 +1,43 @@
+DESCRIPTION: Receives register data, creates the user if possible, and returns
+the data created as confirmation.
+
+
+
+Type: POST
+
+
+
+INPUT:
+{
+    "username": ... ,
+    "email": ... ,
+    "password": ... ,
+    "name": ...
+}
+
+"username" -> string // Nickname
+"email" -> string
+"password" -> string
+"name" -> string // Real name
+
+
+
+RETURNS:
+{
+    "ok": true
+}
+
+"ok" -> bool
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+409 (Conflict)
+    Cause: The user or email already exists
+
+500 (Internal server error)
+    Cause: Internal error
+

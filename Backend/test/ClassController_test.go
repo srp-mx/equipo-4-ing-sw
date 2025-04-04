@@ -25,6 +25,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// Testing data struct
 type classTestData struct {
 	userController *controllers.UserController
 	controller     *controllers.ClassController
@@ -32,6 +33,7 @@ type classTestData struct {
 	class          *models.Class
 }
 
+// Creates testing data
 func newClassTestData() (result classTestData) {
 	result = classTestData{}
 	result.userController = controllers.NewUserController(db)
@@ -56,6 +58,7 @@ func newClassTestData() (result classTestData) {
 	return result
 }
 
+// Tests class creation
 func TestCreateClass(t *testing.T) {
 	resetDb()
 	data := newClassTestData()
@@ -72,6 +75,7 @@ func TestCreateClass(t *testing.T) {
 	assert.Equal(t, data.class.ID, foundClass.ID)
 }
 
+// Tests class updating
 func TestUpdateClass(t *testing.T) {
 	resetDb()
 	data := newClassTestData()
@@ -89,6 +93,7 @@ func TestUpdateClass(t *testing.T) {
 	assert.Equal(t, "average(test)", updatedClass.GradeFormula)
 }
 
+// Tests class removal
 func TestDeleteClass(t *testing.T) {
 	resetDb()
 	data := newClassTestData()

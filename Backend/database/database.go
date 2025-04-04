@@ -27,12 +27,15 @@ import (
 	"os"
 )
 
+// Type that wraps the database instance
 type Dbinstance struct {
 	Db *gorm.DB
 }
 
+// Singleton database
 var DB Dbinstance
 
+// Initializes the connection to the database
 func ConnectDb() {
 	dsn := fmt.Sprintf("host=db user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=Asia/Shanghai",
 		os.Getenv("DB_USER"),
@@ -64,6 +67,7 @@ func ConnectDb() {
 	}
 }
 
+// Sets up some base users
 func UsuariosBase(db *gorm.DB) {
 	users := []models.User{
 		{Username: "admin", Name: "Adminio", Password: "Admin123*", Email: "root@toor.uk"},

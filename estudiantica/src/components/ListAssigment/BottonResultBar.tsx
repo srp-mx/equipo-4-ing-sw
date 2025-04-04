@@ -1,14 +1,98 @@
 import { useState } from 'react'
 import CreateAssignmentModal from "../AssigmentView/CreateAssigmentModal";
+import { Assigment } from '@/Object/Assigment';
 
-const selectedfetch = (option : string , selection : Array<number>) => {
+const selectedfetch = async (option : string , selection : Array<Assigment>) => {
+    for (const task of selection){
+        switch(option){
+            case "delete":
+                try{
+                    const response = await fetch("http://localhost:3000/delete_assignment",{
+                        method: "POST", 
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem("token"),
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({id: task.id})
+                    });
+                    if(!response.ok){
+                        const error = await response.json();
+                        console.error("El error es ", error);
+                        throw new Error(`Error ${response.status} ${response.statusText}`);
+                    }
+                }catch(error){
+                    console.error(error);
+                }
+                break;
+            case "complete":   
+                try{
+                    const dataSend = {
+                        "assignment":  {
+                            "id": task.id
+                        },
+                        "new_assignment": {
+                            ...task, 
+                            progress: 1,
+                        }
+                    }
+
+                    const response = await fetch("http://localhost:3000/patch_assignment",{
+                        method: "POST",
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem("token"),
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(dataSend)
+                    });
+                    if(!response.ok){
+                        const error = await response.json();
+                        console.error("El error es ", error); 
+                        throw new Error(`Error: ${response.status} ${response.statusText}`);
+                    }
+                    
+                }catch(error){
+                    console.error(error);
+                }
+                break;
+            case "incomplete":
+                try{
+                    const dataSend = {
+                        "assignment":  {
+                            "id": task.id
+                        },
+                        "new_assignment": {
+                            ...task, 
+                            progress: -1,
+                        }
+                    }
+
+                    const response = await fetch("http://localhost:3000/patch_assignment",{
+                        method: "POST",
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem("token"),
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(dataSend)
+                    });
+                    if(!response.ok){
+                        const error = await response.json();
+                        console.error("El error es ", error); 
+                        throw new Error(`Error: ${response.status} ${response.statusText}`);
+                    }
+                    
+                }catch(error){
+                    console.error(error);
+                }
+                break;  
+        }    
+    }
     // Petición a la api para cambiar el progreso de una tarea o borrarlo
     // en delete si es necesario, cambiar el cuerpo de fetch
 
     // selection se vuelve un arreglpo vacio
 }
 
-export default function BottonResultBar({selection} : {selection : Array<number>}) : React.ReactNode{
+export default function BottonResultBar({selection} : {selection : Array<Assigment>}) : React.ReactNode{
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (

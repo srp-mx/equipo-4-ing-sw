@@ -1,0 +1,47 @@
+DESCRIPTION: Gets a class.
+
+
+
+Type: GET
+
+
+
+INPUT:
+Query parameter "id" with the class ID.
+For example: ".../get_class?id=${classID}"
+
+
+
+RETURNS:
+{
+    "id": ... ,
+    "name": ... ,
+    "start_date": ... ,
+    "end_date": ... ,
+    "owner_username": ... ,
+    "grade_formula": ... ,
+    "color": ...
+}
+
+"id" -> uint
+"name" -> string
+"start_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"end_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"owner_username" -> string
+"grade_formula" -> string
+"color" -> string // 8 chars representing RGBA
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: The class was not found
+
+500 (Internal server error)
+    Cause: Internal error

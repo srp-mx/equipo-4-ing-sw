@@ -24,11 +24,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// Testing data struct
 type userTestData struct {
 	user       *models.User
 	controller *controllers.UserController
 }
 
+// Creates testing data
 func newUserTestData() (result userTestData) {
 	result = userTestData{}
 
@@ -44,6 +46,7 @@ func newUserTestData() (result userTestData) {
 	return result
 }
 
+// Tests user creation
 func TestCreateUser(t *testing.T) {
 	resetDb()
 	data := newUserTestData()
@@ -57,6 +60,7 @@ func TestCreateUser(t *testing.T) {
 	assert.Equal(t, data.user.Username, foundUser.Username)
 }
 
+// Tests user updating
 func TestUpdateUser(t *testing.T) {
 	resetDb()
 	data := newUserTestData()
@@ -73,6 +77,7 @@ func TestUpdateUser(t *testing.T) {
 	assert.Equal(t, "newpassword", updatedUser.Password)
 }
 
+// Tests user removal
 func TestDeleteUser(t *testing.T) {
 	resetDb()
 	data := newUserTestData()
@@ -88,6 +93,7 @@ func TestDeleteUser(t *testing.T) {
 	assert.Error(t, result.Error)
 }
 
+// Tests searching by credentials (email + password)
 func TestFindByCredentials(t *testing.T) {
 	resetDb()
 	data := newUserTestData()
@@ -101,6 +107,7 @@ func TestFindByCredentials(t *testing.T) {
 	assert.Equal(t, "testuser", foundUser.Username)
 }
 
+// Tests querying if a user exists
 func TestExists(t *testing.T) {
 	resetDb()
 	data := newUserTestData()

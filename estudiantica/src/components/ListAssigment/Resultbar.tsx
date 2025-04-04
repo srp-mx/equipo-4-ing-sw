@@ -5,23 +5,23 @@ import AssigmentModal from "../AssigmentView/AssigmentModal";
 import { Assigment } from "@/Object/Assigment";
 
 export default function Resultbar({ assigment }: { assigment: Array<Assigment> }): React.ReactNode {
-    const [selectedTasks, setSelectedTasks] = useState<Set<number>>(new Set());
+    const [selectedTasks, setSelectedTasks] = useState<Set<Assigment>>(new Set());
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleCheckboxChange = (taskId: number) => {
+    const handleCheckboxChange = (task: Assigment) => {
         setSelectedTasks((prev) => {
             const newSet = new Set(prev);
-            if (newSet.has(taskId)) {
-                newSet.delete(taskId);
+            if (newSet.has(task)) {
+                newSet.delete(task);
             } else {
-                newSet.add(taskId);
+                newSet.add(task);
             }
             return newSet;});
     };
 
     const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            setSelectedTasks(new Set(assigment.map(task => task.id)));
+            setSelectedTasks(new Set(assigment.map(task => task)));
         } else {
             setSelectedTasks(new Set());
         }
@@ -29,7 +29,7 @@ export default function Resultbar({ assigment }: { assigment: Array<Assigment> }
 
     return (
         <div className="rounded-lg p-4 mx-auto w-full h-full">
-            <div className={`${assigment.length > 0 ? "" : "hidden"} w-full rounded-lg bg-gray-700 rounded flex justify-between items-center p-3 border border-gray-600`}>
+            <div className={`${assigment.length >= 0 ? "" : "hidden"} w-full rounded-lg bg-gray-700 rounded flex justify-between items-center p-3 border border-gray-600`}>
                 <div className="flex items-center space-x-2">
                     <input 
                         type="checkbox" 
@@ -51,8 +51,8 @@ export default function Resultbar({ assigment }: { assigment: Array<Assigment> }
                                 <input 
                                     type="checkbox" 
                                     className=" w-5 h-5 text-blue-500 bg-gray-800 border-gray-500 rounded focus:ring-0"
-                                    checked={selectedTasks.has(task.id)}
-                                    onChange={() => handleCheckboxChange(task.id)}
+                                    checked={selectedTasks.has(task)}
+                                    onChange={() => handleCheckboxChange(task)}
                                 />                        
                                 <AssigmentCard assigment={task} onOpen={() => setIsModalOpen(true)} />
                                 <AssigmentModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} assigment={task} />

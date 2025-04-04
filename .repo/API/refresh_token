@@ -1,0 +1,33 @@
+DESCRIPTION: Given a valid token, it generates a new one.
+
+
+
+Type: GET
+
+
+
+INPUT:
+None, only the bearer token is required.
+
+
+
+RETURNS:
+{
+    "token": ... ,
+    "user": ...
+}
+
+"token" -> string
+"user" -> string
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+500 (Internal server error)
+    Cause: Internal error
