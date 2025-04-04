@@ -9,10 +9,12 @@ import { RootState } from "@/constants/store";
 import { useNavigate } from "react-router-dom";
 import { clearUser } from "@/constants/userSlice";
 import { clearClases } from "@/constants/classSlice";
+import { clearAssignments } from "@/constants/assignmentSlice";
 
 const handleLogout = (dispatch : any, navigate : any) => {
     dispatch(clearUser());
     dispatch(clearClases());
+    dispatch(clearAssignments());
     localStorage.removeItem("token");
 
     navigate("/");

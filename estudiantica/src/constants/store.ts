@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
 import userReducer from './userSlice'; // Importamos el slice del usuario
 import classReducer from './classSlice';
+import assignmentReducer from './assignmentSlice';
 
 import {
   persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, 
@@ -13,12 +14,13 @@ import storage from 'redux-persist/lib/storage'
 const persistConfig = {
   key: 'root', 
   storage,
-  whilelist:['user'],
+  whilelist:['user', 'assignments', 'clases'],
 };
 
 const rootReducer = combineReducers({
   user: userReducer,
   clases: classReducer,
+  assignments: assignmentReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
