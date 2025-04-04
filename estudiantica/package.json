@@ -33,7 +33,7 @@
   "devDependencies": {
     "@eslint/js": "^9.21.0",
     "@types/node": "^22.13.5",
-    "@types/react": "^19.0.4",
+    "@types/react": "^19.0.12",
     "@types/react-dom": "19.0.4",
     "@types/react-router-dom": "^5.3.3",
     "@types/validator": "^13.12.2",
