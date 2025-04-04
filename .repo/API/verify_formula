@@ -37,9 +37,4 @@ RETURNS:
 
 ERRORS:
 400 (Bad request)
-    Body:
-    {
-        "code": 400,
-        "error": ...
-    }
     Cause: Malformed JSON
