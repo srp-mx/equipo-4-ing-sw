@@ -9,6 +9,7 @@
     * [Diagrama de clases](#diagrama-de-clases)
     * [Interfaz de usuario](#interfaz-de-usuario)
 * [API](#api)
+    * [Fórmulas de calificación](#fórmulas-de-calificación)
 
 ## Argumento
 Convertirse en el mejor estudiante que uno puede ser es difícil. A pesar de
@@ -354,3 +355,43 @@ Los errores son todos de la forma siguiente.
     }
 }
 ```
+
+### Fórmulas de calificación
+
+Pueden ser pensadas como funciones que toman listas y regresan un número.
+Conceptualmente las *tags* (etiquetas) deben ser tratadas como una lista de
+números, las cuales contienen las calificaciones de todas las tareas con esa
+etiqueta.
+
+Existe una serie relativamente pequeña de funciones para manipular los valores
+de una fórmula:
+* `sum`: Toma una o más listas y suma todas las calificaciones.
+* `average`: Toma una o más listas y obtiene su promedio.
+* `median`: Toma una o más listas y obtiene su mediana.
+* `min`: Toma la calificación más pequeña de una o más listas.
+* `max`: Toma la calificación más alta de una o más listas.
+* `top`: Toma un natural `n` y una o más listas, regresando una lista con las
+         `n` calificaciones más altas.
+* `bottom`: Toma un natural `n`y una o más listas, regresando una lista con las
+            `n` calificaciones más bajas.
+* `offset`: Toma un número `n` y una o más listas, regresando una lista con todos
+            aquellos valores pero sumados con `n`.
+* `scale`: Toma un número `n` y una o más listas, regresando una lista con todos
+            aquellos valores pero multiplicados por `n`.
+
+Por ejemplo:
+```
+top(3, examenes, tareas)*0.6 + 0.4*average(semanales)
+```
+
+Toda fórmula debe evaluarse a un número (y no una lista), por lo que hay que
+tener cuidado con lo que esperamos.
+
+Además, existen operadores prediseñados para trabajar sobre números (y *no* listas).
+* `+`: Suma dos números
+* `*`: Multiplica dos números
+* `-`: Resta dos números
+* `/`: Divide dos números
+
+Para que la fórmula sea aceptada no es necesario que ya existan las etiquetas,
+pero al tratar de obtener un promedio sí lo serán.
