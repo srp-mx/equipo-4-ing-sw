@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import Resultbar from "./ListSchedule/Resultbar";
 import { Class } from "@/Object/Class";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { RootState } from "@/constants/store";
+import { setClases } from "@/constants/classSlice";
 import CreateClassModal from "./ClassView/CreateClassModal";
 
 function DropdownMenu({ options, onSelect }: { options: { label: string, value: number | null }[], onSelect: (option: number | null) => void }){
@@ -54,15 +55,17 @@ export default function SearchbarClass(){
     const [isOpen, setIsOpen] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<null | number>(null);
     const [searchTerm, setSearchTerm] = useState("");
-    const [schedules, setSchedules] = useState<Class[]>([]);
     const [loading, setLoading] = useState(true);
 
     const user = useSelector((state: RootState) => state.user);
+    const clases = useSelector((state: RootState) => state.clases.clases);
+    const dispatch = useDispatch();
+    
     useEffect(() => {
         async function fetchTasks() {
             setLoading(true);
             const data = await getClass(); // Cambia por el usuario real
-            setSchedules(data);
+            dispatch(setClases(data));
             setLoading(false);
         }
 
@@ -83,7 +86,7 @@ export default function SearchbarClass(){
         };
     }, []);
 
-    const filteredClasses = schedules.filter((classItem) => 
+    const filteredClasses = clases.filter((classItem) => 
         ( // Por fecha
             (selectedStatus === null) || 
             (selectedStatus === 0 && new Date(classItem.end_date) < new Date()) || 
