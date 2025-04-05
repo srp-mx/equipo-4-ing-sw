@@ -1,6 +1,8 @@
+import { addClass } from "@/constants/classSlice";
 import { RootState } from "@/constants/store";
+import { Class } from "@/Object/Class";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 type ModalProps = {
     isOpen: boolean;
@@ -11,6 +13,7 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
     if (!isOpen) return null;
 
     const user = useSelector((state: RootState) => state.user);
+    const dispatch = useDispatch();
 
     const [newClass, setNewClass] = useState({
         id : 0,
@@ -50,26 +53,11 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
             }
             const data = await response.json();
             newClass.id = data.id;
+            dispatch(addClass(newClass)); 
             onClose();        
         }catch( error ){
             console.error("Error: ", error);
         }
-        /* Manejo de la petición
-        
-        try {
-            const response = await fetch("/api/assignments", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newAssignment)
-            });
-
-            if (!response.ok) throw new Error("Error al crear la tarea");
-            const data = await response.json();
-            onCreate(data);
-            onClose();
-        } catch (error) {
-            console.error(error);
-        }*/
     };
 
     //fixed inset-0 bg-black bg-opacity-30 backdrop-blur-md flex items-center justify-center ${isOpen ? 'visible' : 'invisible'}

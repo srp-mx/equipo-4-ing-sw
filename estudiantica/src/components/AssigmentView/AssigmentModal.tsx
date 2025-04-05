@@ -1,5 +1,7 @@
+import { updateAssignment } from "@/constants/assignmentSlice";
 import { Assigment } from "@/Object/Assigment";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { data } from "react-router-dom";
 
 type ModalProps = {
@@ -25,6 +27,8 @@ const getProgressStatus = (progress: number) => {
 export default function AssigmentModal({ isOpen, onClose, assigment } : ModalProps) : React.ReactNode{
     if (!isOpen) return null;
     const progressStatus = getProgressStatus(assigment.progress);
+
+    const dispatch = useDispatch();
 
     const [isEdit,setIsEdit] = useState(false);
     const [editedAssigment, setEditedAssigment] = useState({ ... assigment});
@@ -91,7 +95,7 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
             }
 
             const data = await response.json();
-            console.log("Tarea actualizada con exito: ", data);
+            dispatch(updateAssignment(editedAssigment));
             setIsEdit(false);
         }catch(error){
             console.error('Error: ', error);
