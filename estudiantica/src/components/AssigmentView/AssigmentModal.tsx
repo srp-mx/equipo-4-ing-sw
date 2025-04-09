@@ -1,5 +1,8 @@
+import { updateAssignment } from "@/constants/assignmentSlice";
 import { Assigment } from "@/Object/Assigment";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { data } from "react-router-dom";
 
 type ModalProps = {
     isOpen: boolean;
@@ -25,23 +28,87 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
     if (!isOpen) return null;
     const progressStatus = getProgressStatus(assigment.progress);
 
+    const dispatch = useDispatch();
+
     const [isEdit,setIsEdit] = useState(false);
     const [editedAssigment, setEditedAssigment] = useState({ ... assigment});
+    const [className, setClassName] = useState("");
+
+    const getClass = async() => {
+        try{
+            const response = await fetch(`http://localhost:3000/get_class?id=${assigment.class_id}`,{
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                    "Content-Type": "application/json"
+                }
+            });
+            if(!response.ok){
+                const error = await response.json();
+                console.error("El error es ", error);
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+            const data = await response.json();
+            setClassName(data.name);
+        }catch(error){
+            console.error(error);
+        }
+    }
     
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setEditedAssigment((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSave = () => {
-        // Aquí podrías agregar una función para actualizar la tarea en el backend
-        setIsEdit(false);
+
+
+    const handleSave = async () => {
+        try{
+            if(!editedAssigment.name){
+                alert("Por favor, completa al menos el nombre de la tarea");
+                return;
+            }
+            const dataSend = {
+                "assignment": {
+                    "id": editedAssigment.id
+                },
+                "new_assignment": {
+                    ...editedAssigment,
+                    progress: Math.trunc(editedAssigment.progress),
+                    due_date: new Date (editedAssigment.due_date).toISOString(),
+                }
+            }
+            const response = await fetch("http://localhost:3000/patch_assignment",{
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataSend),
+            });
+
+            if(!response.ok){
+                const error = await response.json();
+                console.error("El error es ", error);
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            dispatch(updateAssignment(editedAssigment));
+            setIsEdit(false);
+        }catch(error){
+            console.error('Error: ', error);
+            alert('Hubo un problema al actualizar la tarea')
+        }
     };
 
     const handleCancel = () => {
         setEditedAssigment({ ...assigment });
         setIsEdit(false);
     };
+
+    getClass();
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-10">
@@ -75,18 +142,18 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                     {isEdit ? (
                         <input
                             type="date"
-                            name="dueDate"
+                            name="due_date"
                             className="border rounded p-1"
-                            value={new Date(editedAssigment.dueDate).toISOString().split('T')[0]}
+                            value={editedAssigment.due_date}
                             onChange={handleChange}
                         />
                     ) : (
-                        <span>{assigment.dueDate.toLocaleDateString()}</span>
+                        <span>{new Date(assigment.due_date).toLocaleDateString()}</span>
                     )}
                 </div>
 
                 <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>Materia: {assigment.class.className}</span>
+                    <span>Materia: {className}</span>
                 </div>
 
                 <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">

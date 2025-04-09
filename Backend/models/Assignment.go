@@ -29,9 +29,9 @@ type Assignment struct {
 	ClassID  uint      `gorm:"not null" json:"class_id"`
 	DueDate  time.Time `json:"due_date"`
 	Notes    string    `gorm:"type:varchar(500)" json:"notes"`
-	Grade    float64   `json:"grade"`
+	Grade    float64   `json:"grade,omitempty"`
 	Name     string    `json:"name"`
-	Optional bool      `json:"optional"`
+	Optional bool      `json:"optional,omitempty"`
 	Progress int       `json:"progress"`
-	Tag      string    `gorm:"type:varchar(25);not null" json:"tag"`
+	Tag      string    `gorm:"type:varchar(25)" json:"tag,omitempty"`
 }

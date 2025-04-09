@@ -18,6 +18,7 @@
 package handlers
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -27,37 +28,131 @@ import (
 	"github.com/srp-mx/equipo-4-ing-sw/models"
 )
 
-func parseRequest[T any](c *fiber.Ctx) (*T, error) {
+// Creates a JSON with an error status
+func getStatusError(c *fiber.Ctx, fiberStatus int, message string) error {
+	return c.Status(fiberStatus).JSON(fiber.Map{
+		"error": fiber.Error{
+			Code:    fiberStatus,
+			Message: message,
+		},
+	})
+}
+
+// Creates a bad request JSON error
+func getBadReq(c *fiber.Ctx, message string) error {
+	return getStatusError(c, fiber.StatusBadRequest, message)
+}
+
+// Creates an unauthorized JSON error
+func getUnauth(c *fiber.Ctx, message string) error {
+	return getStatusError(c, fiber.StatusUnauthorized, message)
+}
+
+// Creates a not found JSON error
+func getNotFound(c *fiber.Ctx, message string) error {
+	return getStatusError(c, fiber.StatusNotFound, message)
+}
+
+// Creates a conflict JSON error
+func getConflict(c *fiber.Ctx, message string) error {
+	return getStatusError(c, fiber.StatusConflict, message)
+}
+
+// Creates an internal server error JSON error
+func getServerErr(c *fiber.Ctx) error {
+	return c.Status(fiber.StatusInternalServerError).
+		JSON(fiber.Map{"error": fiber.ErrInternalServerError})
+}
+
+// Converts an incoming request into the generic class type
+func parseRequestBody[T any](c *fiber.Ctx) (*T, error) {
 	request := new(T)
 	if err := c.BodyParser(request); err != nil {
-		return nil, c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return nil, getBadReq(c, err.Error())
 	}
 	return request, nil
 }
 
-func checkJwt(c *fiber.Ctx, user *models.User) error {
-	bearer := c.Locals("user").(*jwt.Token)
-	claims := bearer.Claims.(jwt.MapClaims)
-	username := claims["username"].(string)
-	name := claims["name"].(string)
-	email := claims["email"].(string)
-	expire := int64(claims["exp"].(float64))
-	_ = int64(claims["emitted"].(float64))
+// Validates a token and obtains the user's credentials from it
+func getCredentials(c *fiber.Ctx) (*models.User, error) {
+	bearer, ok := c.Locals("user").(*jwt.Token)
+	if !ok {
+		return nil, getBadReq(c, "JWT not in request.")
+	}
+
+	claims, ok := bearer.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, getBadReq(c, "Couldn't obtain claims from token.")
+	}
+
+	usernameAny, ok := claims["username"]
+	if !ok {
+		return nil, getBadReq(c, "Claims don't contain the username.")
+	}
+
+	username, ok := usernameAny.(string)
+	if !ok {
+		return nil, getBadReq(c, "Claims username is not a string.")
+	}
+
+	expAny, ok := claims["exp"]
+	if !ok {
+		return nil, getBadReq(c, "Claims don't contain expiry datetime.")
+	}
+
+	expFloat, ok := expAny.(float64)
+	if !ok {
+		return nil, getBadReq(c, "Claims exp field is not a number.")
+	}
+
+	expire := int64(expFloat)
+
+	emitAny, ok := claims["emitted"]
+	if !ok {
+		return nil, getBadReq(c, "Claims don't contain emitted datetime.")
+	}
+
+	emitFloat, ok := emitAny.(float64)
+	if !ok {
+		return nil, getBadReq(c, "Claims emitted field is not a number.")
+	}
+
+	_ = int64(emitFloat)
+
 	if !bearer.Valid || time.Now().Unix() >= expire {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Token is invalid or expired",
-		})
+		return nil, getUnauth(c, "Token is invalid or expired.")
+	}
+
+	user := models.User{
+		Username: username,
 	}
 
 	users := controllers.NewUserController(database.DB.Db)
-	users.Get(user)
-
-	if username != user.Username || email != user.Email || name != user.Name {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Token is not this user's",
-		})
+	if exists, err := users.ExistsUsername(user.Username); !exists || err != nil {
+		return nil, getUnauth(c, "Token owner does not exist.")
 	}
-	return nil
+
+	err := users.Get(&user)
+	if err != nil {
+		return nil, getServerErr(c)
+	}
+
+	return &user, nil
+}
+
+// Get the value of a field called "id" from a query parameter
+func getQueryId(c *fiber.Ctx) (uint, error) {
+	// Get ID requested
+	idString := c.Query("id")
+	if idString == "" {
+		return 0, getBadReq(c, "No se dio un ID.")
+	}
+
+	// Parse ID to uint
+	id, err := strconv.ParseUint(idString, 10, 32)
+	if err != nil {
+		return 0, getBadReq(c, "El ID no es un número válido.")
+	}
+
+	return uint(id), nil
 }

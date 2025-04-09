@@ -27,26 +27,32 @@ import (
 	"gorm.io/gorm"
 )
 
+// Assignment controller type
 type AssignmentController struct {
 	DB *gorm.DB
 }
 
+// AssignmentController constructor
 func NewAssignmentController(db *gorm.DB) *AssignmentController {
 	return &AssignmentController{DB: db}
 }
 
+// Creates a new assignment on the database
 func (self *AssignmentController) CreateAssignment(assignment *models.Assignment) error {
 	return self.DB.Create(assignment).Error
 }
 
+// Updates an existing assignment on the database
 func (self *AssignmentController) UpdateAssignment(assignment *models.Assignment) error {
 	return self.DB.Save(assignment).Error
 }
 
+// Deletes an existing assignment on the database
 func (self *AssignmentController) DeleteAssignment(assignment *models.Assignment) error {
 	return self.DB.Delete(assignment).Error
 }
 
+// Fills in the receiver with an existing assignment's data that matches its ID
 func (self *AssignmentController) Get(receiver *models.Assignment) error {
 	err := self.DB.
 		Where(&models.Assignment{
@@ -61,11 +67,12 @@ func (self *AssignmentController) Get(receiver *models.Assignment) error {
 	return nil
 }
 
-func (self *AssignmentController) GetWithCopy(receiver models.Assignment) (*models.Assignment, error) {
+// Returns an assignment that matches the query's ID on the database
+func (self *AssignmentController) GetWithCopy(query models.Assignment) (*models.Assignment, error) {
 	result := models.Assignment{}
 	err := self.DB.
 		Where(&models.Assignment{
-			ID: receiver.ID,
+			ID: query.ID,
 		}).
 		First(&result).Error
 
@@ -76,6 +83,7 @@ func (self *AssignmentController) GetWithCopy(receiver models.Assignment) (*mode
 	return &result, nil
 }
 
+// Tells whether or not an assignment with the given ID exists in the database
 func (self *AssignmentController) Exists(assignment models.Assignment) (bool, error) {
 	var count int64
 	result := self.DB.Model(&models.Assignment{}).
@@ -85,6 +93,8 @@ func (self *AssignmentController) Exists(assignment models.Assignment) (bool, er
 	return count > 0, result.Error
 }
 
+// Updates the assignment which matches the source's ID with the valid entries
+// on the updates map in the database
 func (self *AssignmentController) UpdateWithMap(source *models.Assignment, updates map[string]any) error {
 	foundAssignment, err := self.GetWithCopy(*source)
 	if err != nil {
@@ -92,7 +102,10 @@ func (self *AssignmentController) UpdateWithMap(source *models.Assignment, updat
 	}
 
 	if value, exists := updates["due_date"]; exists {
-		v := value.(time.Time)
+		v, err := time.Parse(DATETIME_FMT, value.(string))
+		if err != nil {
+			return fmt.Errorf("La fecha de entrega no es válida")
+		}
 		foundAssignment.DueDate = v
 	}
 	if value, exists := updates["notes"]; exists {
@@ -112,8 +125,13 @@ func (self *AssignmentController) UpdateWithMap(source *models.Assignment, updat
 		foundAssignment.Optional = v
 	}
 	if value, exists := updates["progress"]; exists {
-		v := value.(int)
-		foundAssignment.Progress = v
+		if floatValue, ok := value.(float64); ok {
+			foundAssignment.Progress = int(floatValue)
+		}else{
+			return fmt.Errorf("No estoy recibiendo un numero en progress")
+		}
+		
+
 	}
 	if value, exists := updates["tag"]; exists {
 		v := strings.TrimSpace(value.(string))
@@ -123,4 +141,15 @@ func (self *AssignmentController) UpdateWithMap(source *models.Assignment, updat
 		foundAssignment.Tag = v
 	}
 	return self.UpdateAssignment(foundAssignment)
+}
+
+// Determines if the assignment was assigned to the user
+func (self *AssignmentController) AssignedTo(assignment *models.Assignment, user *models.User) bool {
+	classes := NewClassController(self.DB)
+	class := models.Class{}
+	err := classes.Get(&class)
+	if err != nil {
+		return false
+	}
+	return class.OwnerUsername == user.Username
 }

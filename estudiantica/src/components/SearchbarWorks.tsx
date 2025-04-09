@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import Resultbar from "./ListAssigment/Resultbar";
 import { Assigment } from "@/Object/Assigment";
 import { RootState } from "@/constants/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setAssignments } from "@/constants/assignmentSlice";
 
 function DropdownMenu({ options, onSelect }: { options: { label: string, value: number | null }[], onSelect: (option: number | null) => void }){
     return (
@@ -29,67 +30,27 @@ function DropdownMenu({ options, onSelect }: { options: { label: string, value: 
  */
 async function getWorks(username : string) : Promise<Assigment[]>{
     // Ejemplo de salida
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve([
-                {
-                    id: 1,
-                    class: { classId: 101, className: "Matemáticas", classColor: "#FF5733" },
-                    dueDate: new Date("2025-04-10"),
-                    notes: "Resolver ejercicios del libro",
-                    grade: 85,
-                    name: "Tarea Álgebra",
-                    optional: false,
-                    progress: 1,
-                    tag: "Álgebra"
-                },
-                {
-                    id: 2,
-                    class: { classId: 102, className: "Historia", classColor: "#33FF57" },
-                    dueDate: new Date("2025-04-12"),
-                    notes: "Ensayo sobre la Revolución Francesa",
-                    grade: 90,
-                    name: "Ensayo Revolución",
-                    optional: true,
-                    progress: 0,
-                    tag: "Historia"
-                },
-                {
-                    id: 3,
-                    class: { classId: 103, className: "Física", classColor: "#3357FF" },
-                    dueDate: new Date("2025-04-15"),
-                    notes: "Simulación de caída libre",
-                    grade: 78,
-                    name: "Simulación Física",
-                    optional: false,
-                    progress: -1,
-                    tag: "Física"
-                },
-                {
-                    id: 4,
-                    class: { classId: 104, className: "Programación", classColor: "#FF33A1" },
-                    dueDate: new Date("2025-04-20"),
-                    notes: "Desarrollar una API REST",
-                    grade: 95,
-                    name: "API REST",
-                    optional: true,
-                    progress: 1, // Completado
-                    tag: "Backend"
-                },
-                {
-                    id: 5,
-                    class: { classId: 105, className: "Literatura", classColor: "#F39C12" },
-                    dueDate: new Date("2025-04-18"),
-                    notes: "Análisis del Quijote",
-                    grade: 88,
-                    name: "Análisis Don Quijote",
-                    optional: false,
-                    progress: 0, // En progreso
-                    tag: "Lectura"
-                }
-            ]);
-        }, 1000);
-    });
+    try{
+        const response = await fetch("http://localhost:3000/all_assignment",{
+            method: "GET", 
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token"),
+                "Content-Type": "application/json"
+            }
+        });
+
+        if(!response.ok){
+            const error = await response.json();
+            console.error("El error es ", error);
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+        } 
+        const data = await response.json();
+        const assignments : Assigment[] = data; 
+        return assignments; 
+    }catch(error){
+        console.error("Error ", error); 
+        return [];
+    }
 }
 
 export default function SearchbarWorks(){
@@ -104,16 +65,18 @@ export default function SearchbarWorks(){
     const [isOpen, setIsOpen] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<null | number>(null);
     const [searchTerm, setSearchTerm] = useState("");
-    const [tasks, setTasks] = useState<Assigment[]>([]);
     const [loading, setLoading] = useState(true);
     const user = useSelector((state: RootState) => state.user);
     //Versión de prueba
     // let tasks = getWorks
+    const tasks = useSelector((state: RootState) => state.assignments.assignments);
+    const dispatch = useDispatch();
+
     useEffect(() => {
         async function fetchTasks() {
             setLoading(true);
             const data = await getWorks(user.name); // Cambia por el usuario real
-            setTasks(data);
+            dispatch(setAssignments(data));
             setLoading(false);
         }
 

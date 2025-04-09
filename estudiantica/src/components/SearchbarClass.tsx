@@ -1,6 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import Resultbar from "./ListSchedule/Resultbar";
 import { Class } from "@/Object/Class";
+import { useSelector,useDispatch } from "react-redux";
+import { RootState } from "@/constants/store";
+import { setClases } from "@/constants/classSlice";
+import CreateClassModal from "./ClassView/CreateClassModal";
 
 function DropdownMenu({ options, onSelect }: { options: { label: string, value: number | null }[], onSelect: (option: number | null) => void }){
     return (
@@ -20,49 +24,24 @@ function DropdownMenu({ options, onSelect }: { options: { label: string, value: 
     );
 }
 
-async function getClass(username : string) : Promise<Class[]> {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(
-                [
-                    new Class({
-                        id: 101,
-                        name: "Matemáticas",
-                        startDate: new Date("2025-01-15"),
-                        endDate: new Date("2025-06-15"),
-                        gradeFormula: "examen + tarea"
-                    }),
-                    new Class({
-                        id: 102,
-                        name: "Física",
-                        startDate: new Date("2025-02-01"),
-                        endDate: new Date("2025-06-01"),
-                        gradeFormula: "examen final + práctica"
-                    }),
-                    new Class({
-                        id: 103,
-                        name: "Historia",
-                        startDate: new Date("2025-03-01"),
-                        endDate: new Date("2025-07-01"),
-                        gradeFormula: "participación + proyecto"
-                    }),
-                    new Class({
-                        id: 104,
-                        name: "Química",
-                        startDate: new Date("2025-04-10"),
-                        endDate: new Date("2025-08-10"),
-                        gradeFormula: "examen + laboratorio"
-                    }),
-                    new Class({
-                        id: 105,
-                        name: "Biología",
-                        startDate: new Date("2025-05-20"),
-                        endDate: new Date("2025-09-20"),
-                        gradeFormula: "clase + ensayo"
-                    })
-            ]);
-        }, 1000);
-    });
+async function getClass() : Promise<Class[]> {
+    try{
+        const response = await fetch("http://localhost:3000/user_classes",{
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token"),
+                "Content-Type": "application/json",
+            },
+        });
+        if(!response.ok) throw new Error(`Error: ${response.status} ${response.statusText}`);
+        const data = await response.json();
+        const clases : Class[] = data; // Tengo la duda si esto es necesario
+        return clases;
+    }catch(error){
+        console.error("Error", error);
+        return [];
+    }
+
 }
 
 export default function SearchbarClass(){
@@ -76,19 +55,23 @@ export default function SearchbarClass(){
     const [isOpen, setIsOpen] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<null | number>(null);
     const [searchTerm, setSearchTerm] = useState("");
-    const [schedules, setSchedules] = useState<Class[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const user = useSelector((state: RootState) => state.user);
+    const clases = useSelector((state: RootState) => state.clases.clases);
+    const dispatch = useDispatch();
+    
     useEffect(() => {
         async function fetchTasks() {
             setLoading(true);
-            const data = await getClass("usuarioEjemplo"); // Cambia por el usuario real
-            setSchedules(data);
+            const data = await getClass(); // Cambia por el usuario real
+            dispatch(setClases(data));
             setLoading(false);
         }
 
         fetchTasks();
     }, []);
+    
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -103,14 +86,14 @@ export default function SearchbarClass(){
         };
     }, []);
 
-    const filteredClasses = schedules.filter((classItem) => 
+    const filteredClasses = clases.filter((classItem) => 
         ( // Por fecha
             (selectedStatus === null) || 
-            (selectedStatus === 0 && classItem.endDate < new Date()) || 
-            (selectedStatus === -1 && classItem.endDate > new Date())
+            (selectedStatus === 0 && new Date(classItem.end_date) < new Date()) || 
+            (selectedStatus === -1 && new Date(classItem.end_date) > new Date())
         ) &&
         classItem.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    )
 
     return (
         <div className="space-y-4">
@@ -192,5 +175,6 @@ export default function SearchbarClass(){
             </div>
         </div>
     );
+    
 
 }

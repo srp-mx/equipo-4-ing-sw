@@ -1,0 +1,35 @@
+DESCRIPTION: Calculates a class' grade.
+
+
+
+Type: GET
+
+
+
+INPUT:
+Query parameter "id" with the class ID.
+For example: ".../class_grade?id=${classID}"
+
+
+
+RETURNS:
+{
+    "grade": ...
+}
+
+"grade" -> double
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: The class was not found
+
+500 (Internal server error)
+    Cause: Internal error

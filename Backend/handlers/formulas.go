@@ -22,24 +22,30 @@ import (
 	"github.com/srp-mx/equipo-4-ing-sw/utils"
 )
 
+// Handles /verify_formula
 func VerifyFormula(c *fiber.Ctx) error {
-	type formula struct {
-		formula string `json:"formula"`
+	type Formula struct {
+		Formula string `json:"formula"`
 	}
-	request := new(formula)
+
+	request := new(Formula)
 	if err := c.BodyParser(request); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
+		return getBadReq(c, err.Error())
+	}
+
+	form, err := utils.NewFormula(request.Formula)
+	if err != nil {
+		return c.JSON(fiber.Map{
+			"ok":      false,
+			"formula": form,
 		})
 	}
 
-	form, err := utils.NewFormula(request.formula)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(form)
-	}
-
 	if !form.VerifyPlausibility() {
-		return c.Status(fiber.StatusBadRequest).JSON(form)
+		return c.JSON(fiber.Map{
+			"ok":      false,
+			"formula": form,
+		})
 	}
 
 	return c.JSON(fiber.Map{

@@ -1,33 +1,38 @@
 import { useState } from 'react'
 import CreateClassModal from '../ClassView/CreateClassModal'
+import { useDispatch } from 'react-redux';
+import { removeClass } from '@/constants/classSlice';
 
-const selectedfetch = async (option: string, selection: number[]) => {
-    try {
-      const endpoint = '/classes';
-      const method = 'DELETE';
-      
-      const response = await fetch(endpoint, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ids: selection }),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-  
-      const data = await response.json();
-      console.log('Eliminación exitosa:', data);
-      
-    } catch (error) {
-      console.error('Error durante la eliminación:', error);
-    }
-  };
+
 
 export default function BottonResultBar({selection} : {selection : Array<number>}) : React.ReactNode{
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const dispatch = useDispatch();
+
+    const selectedfetch = async (option: string, selection: number[]) => {
+      for( const ids of selection) {
+        try{
+        const response = await fetch("http://localhost:3000/delete_class", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " +  localStorage.getItem("token"), 
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ id: ids})
+        });
+        if(!response.ok){
+          const error = await response.json();
+          console.error("El error es ", error);
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        dispatch(removeClass(ids));
+        
+      }catch(error){
+        console.error(error);
+      }
+  
+      }
+    };
 
     return (
         <div className="flex space-x-2">

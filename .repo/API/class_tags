@@ -1,0 +1,36 @@
+DESCRIPTION: Gets all tags from a class' assignments.
+
+
+
+Type: GET
+
+
+
+INPUT:
+Query parameter "id" with the class ID.
+For example: ".../class_tags?id=${classID}"
+
+
+
+RETURNS:
+[
+    ... ,
+    ...
+]
+
+[] -> string[] // The list of tags
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: The class was not found
+
+500 (Internal server error)
+    Cause: Internal error

@@ -1,0 +1,40 @@
+DESCRIPTION: Receives tentative credentials and returns a login token valid for
+an hour if it succeeds.
+
+
+
+Type: POST
+
+
+
+INPUT:
+{
+    "email": ... ,
+    "password": ...
+}
+
+"email" -> string
+"password" -> string
+
+
+
+RETURNS:
+{
+    "token": ... ,
+    "user": ...
+}
+
+"token" -> string
+"user" -> string
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+500 (Internal server error)
+    Cause: Internal error

@@ -1,21 +1,21 @@
 export class Class {
     id : number;
     name : string;
-    startDate : Date;
-    endDate : Date;
-    gradeFormula : string;
+    start_date : string;
+    end_date : string;
+    grade_formula : string;
 
     constructor(classObj : {
         id : number,
         name : string,
-        startDate : Date,
-        endDate : Date,
-        gradeFormula : string
+        start_date : string,
+        end_date : string,
+        grade_formula : string
     }){
         this.id = classObj.id;
         this.name = classObj.name;
-        this.startDate = classObj.startDate;
-        this.endDate = classObj.endDate;
-        this.gradeFormula = classObj.gradeFormula
+        this.start_date = classObj.start_date;
+        this.end_date = classObj.end_date;
+        this.grade_formula = classObj.grade_formula
     }
 }

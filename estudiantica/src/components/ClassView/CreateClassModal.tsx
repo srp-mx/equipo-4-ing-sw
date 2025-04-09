@@ -1,4 +1,8 @@
+import { addClass } from "@/constants/classSlice";
+import { RootState } from "@/constants/store";
+import { Class } from "@/Object/Class";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 type ModalProps = {
     isOpen: boolean;
@@ -8,11 +12,17 @@ type ModalProps = {
 export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
     if (!isOpen) return null;
 
+    const user = useSelector((state: RootState) => state.user);
+    const dispatch = useDispatch();
+
     const [newClass, setNewClass] = useState({
+        id : 0,
         name: "",
-        startDate : "",
-        endDate : "",
-        gradeFormula : ""
+        start_date : "",
+        end_date : "",
+        grade_formula : "",
+        color: "ffffffff", 
+        owner_username: user.name
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -21,23 +31,33 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
     };
 
     const handleCreate = async () => {
-        onClose();        
-        /* Manejo de la petición
-        
-        try {
-            const response = await fetch("/api/assignments", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newAssignment)
-            });
+        try{
+            const dataSend = {
+                ...newClass,
+                start_date: new Date(newClass.start_date).toISOString(), 
+                end_date: new Date(newClass.end_date).toISOString(),
+            }
+            const response = await fetch("http://localhost:3000/post_class",{
+                method: "POST", 
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                    "Content-Type": "application/json"
 
-            if (!response.ok) throw new Error("Error al crear la tarea");
+                },
+                body: JSON.stringify(dataSend)
+            });
+            if(!response.ok) {
+                const error = await response.json();
+                console.error("EL error es ", error);
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
             const data = await response.json();
-            onCreate(data);
-            onClose();
-        } catch (error) {
-            console.error(error);
-        }*/
+            newClass.id = data.id;
+            dispatch(addClass(newClass)); 
+            onClose();        
+        }catch( error ){
+            console.error("Error: ", error);
+        }
     };
 
     //fixed inset-0 bg-black bg-opacity-30 backdrop-blur-md flex items-center justify-center ${isOpen ? 'visible' : 'invisible'}
@@ -56,25 +76,25 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
                 Fecha de inicio:
                 <input
                     type="date"
-                    name="startDate"
+                    name="start_date"
                     className="w-full border rounded p-1 mt-2"
-                    value={newClass.startDate}
+                    value={newClass.start_date}
                     onChange={handleChange}
                 />
                 Fecha de fin:
                 <input
                     type="date"
-                    name="endDate"
+                    name="end_date"
                     className="w-full border rounded p-1 mt-2"
-                    value={newClass.endDate}
+                    value={newClass.end_date}
                     onChange={handleChange}
                 />
                 <input
                     type="text"
-                    name="className"
+                    name="grade_formula"
                     placeholder="Calificación"
                     className="w-full border rounded p-1 mt-2"
-                    value={newClass.gradeFormula}
+                    value={newClass.grade_formula}
                     onChange={handleChange}
                 />
                 <div className="flex justify-end space-x-2 mt-4">
