@@ -2,7 +2,11 @@ import React, { SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Button = ({ onClick, children, icon }: { onClick?: () => void; children: React.ReactNode; icon?: string }) => (
-  <button onClick={onClick} className="pixel-corner-button mb-4 flex bg-[#cbda3d] py-4 px-10 min-w-[300px] transition-all hover:bg-white">
+  <button 
+    onClick={onClick} 
+    className="pixel-corner-button mb-4 flex bg-[#cbda3d] py-4 px-10 min-w-[300px] transition-all hover:bg-white"
+    style={{ "--pixel-bg": "#2D304F", "--pixel-hover-bg" : "#FFFFFF", "--size-pixel" : "10px"} as React.CSSProperties}
+  >
     {icon && <img src={icon} className="w-6 h-6 mr-3" alt="Button Icon" />}
     {children}
   </button>
@@ -21,7 +25,7 @@ const PasswordInput = ({ value, onChange }: { value: string; onChange: (e: React
         onChange={onChange}
         required
       />
-      <label className="absolute text-sm text-[#2d314f] transform scale-50 top-1/3 left-3 -translate-y-1/6 transition-all duration-300 peer-placeholder-shown:top-1/4 peer-placeholder-shown:left-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:text-[#cbda3d] peer-focus:top-0 peer-focus:scale-75 peer-focus:text-[#cbda3d]">Contraseña</label>
+      <label className="absolute pointer-events-none text-sm text-transparent transform scale-50 top-1/3 left-3 -translate-y-1/6 transition-all duration-300 peer-placeholder-shown:top-1/4 peer-placeholder-shown:left-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:text-[#cbda3d] peer-focus:top-0 peer-focus:scale-75 peer-focus:text-[#cbda3d]">Contraseña</label>
       <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-3 flex items-center text-[#cbda3d]">
         {showPassword ? (
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
@@ -129,7 +133,7 @@ export default function Register() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                                 />
-                            <label className="absolute text-sm text-[#2d314f] transform scale-50 top-1/3 left-3 
+                            <label className="absolute pointer-events-none text-sm text-transparent transform scale-50 top-1/3 left-3 
                             -translate-y-1/6 transition-all duration-300 peer-placeholder-shown:top-1/4 peer-placeholder-shown:left-3 
                             peer-placeholder-shown:scale-100 peer-placeholder-shown:text-[#cbda3d] peer-focus:top-0 peer-focus:scale-75 
                             peer-focus:text-[#cbda3d]">Correo</label>
@@ -144,7 +148,7 @@ export default function Register() {
                                 onChange={(e) => setUserName(e.target.value)}
                                 required
                                 />
-                            <label className="absolute text-sm text-[#2d314f] transform scale-50 top-1/3 left-3 
+                            <label className="absolute pointer-events-none text-sm text-transparent transform scale-50 top-1/3 left-3 
                             -translate-y-1/6 transition-all duration-300 peer-placeholder-shown:top-1/4 peer-placeholder-shown:left-3 
                             peer-placeholder-shown:scale-100 peer-placeholder-shown:text-[#cbda3d] peer-focus:top-0 peer-focus:scale-75 
                             peer-focus:text-[#cbda3d]">Nombre de Usuario</label>
@@ -158,7 +162,7 @@ export default function Register() {
                                 onChange={(e) => setName(e.target.value)}
                                 required
                                 />
-                            <label className="absolute text-sm text-[#2d314f] transform scale-50 top-1/3 left-3 
+                            <label className="absolute pointer-events-none text-sm text-transparent transform scale-50 top-1/3 left-3 
                             -translate-y-1/6 transition-all duration-300 peer-placeholder-shown:top-1/4 peer-placeholder-shown:left-3 
                             peer-placeholder-shown:scale-100 peer-placeholder-shown:text-[#cbda3d] peer-focus:top-0 peer-focus:scale-75 
                             peer-focus:text-[#cbda3d]">Nombre</label>
