@@ -6,7 +6,15 @@ import { Assigment } from "@/Object/Assigment";
 
 export default function Resultbar({ assigment }: { assigment: Array<Assigment> }): React.ReactNode {
     const [selectedTasks, setSelectedTasks] = useState<Set<Assigment>>(new Set());
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedTaskId, setSelectedTaskId] = useState<number | null> (null);
+
+    const handleOpenModal = (task : Assigment) => {
+        setSelectedTaskId(task.id);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedTaskId(null);
+    }
 
     const handleCheckboxChange = (task: Assigment) => {
         setSelectedTasks((prev) => {
@@ -54,8 +62,8 @@ export default function Resultbar({ assigment }: { assigment: Array<Assigment> }
                                     checked={selectedTasks.has(task)}
                                     onChange={() => handleCheckboxChange(task)}
                                 />                        
-                                <AssigmentCard assigment={task} onOpen={() => setIsModalOpen(true)} />
-                                <AssigmentModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} assigment={task} />
+                                <AssigmentCard assigment={task} onOpen={() => handleOpenModal(task)} />
+                                <AssigmentModal isOpen={selectedTaskId === task.id} onClose={() => handleCloseModal()} assigment={task} />
                             </li>
                         ))}
                     </ul>

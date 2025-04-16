@@ -46,6 +46,7 @@ async function getWorks(username : string) : Promise<Assigment[]>{
         } 
         const data = await response.json();
         const assignments : Assigment[] = data; 
+        
         return assignments; 
     }catch(error){
         console.error("Error ", error); 

@@ -26,14 +26,17 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
     const dispatch = useDispatch();
     const [isEdit,setIsEdit] = useState(false);
     const [editedClass, setEditedClass] = useState({ ... classData});
-    
+    console.log('clase:', editedClass);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setEditedClass((prev) => ({ ...prev, [name]: value }));
     };
+    
 
     const handleSave = async () => {
         try {
+            console.log('clase actualizada:', editedClass);
+
             if (!editedClass.name) {
                 alert("por favor completa al menos el nombre de la clase");
                 return;
@@ -66,7 +69,7 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
             }
             
             const updatedAssignment = await response.json();
-            dispatch(updateClass(editedClass));
+            dispatch(updateClass({...dataSend.new_class}));
             console.log('clase actualizada con exito:', updatedAssignment);
             
             setIsEdit(false);

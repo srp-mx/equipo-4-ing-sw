@@ -92,7 +92,7 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
                 <input
                     type="text"
                     name="grade_formula"
-                    placeholder="Calificación"
+                    placeholder="Formula Calificación"
                     className="w-full border rounded p-1 mt-2"
                     value={newClass.grade_formula}
                     onChange={handleChange}

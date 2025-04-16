@@ -6,7 +6,15 @@ import ClassModal from "../ClassView/ClassModal";
 
 export default function Resultbar({ classes } : { classes : Array<Class>}) : React.ReactNode {
     const [selectedTasks, setSelectedTasks] = useState<Set<number>>(new Set());
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedClassId, setSelectedClassId] = useState<number | null>(null);
+    
+    const handleOpenModal = (c: Class) => {
+        setSelectedClassId(c.id);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedClassId(null);
+    }
 
     const handleCheckboxChange = (scheduleId: number) => {
         setSelectedTasks((prev) => {
@@ -55,8 +63,8 @@ export default function Resultbar({ classes } : { classes : Array<Class>}) : Rea
                                     checked={selectedTasks.has(schedule.id)}
                                     onChange={() => handleCheckboxChange(schedule.id)}
                                 />                        
-                                <ClassCard classData={schedule} onOpen={() => setIsModalOpen(true)} />
-                                <ClassModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} classData={schedule} />
+                                <ClassCard classData={schedule} onOpen={() => handleOpenModal(schedule)} />
+                                <ClassModal isOpen={selectedClassId === schedule.id} onClose={() => handleCloseModal()} classData={schedule} />
                             </li>
                         ))}
                     </ul>

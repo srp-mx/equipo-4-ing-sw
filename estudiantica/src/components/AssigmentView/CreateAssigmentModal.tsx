@@ -35,6 +35,7 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
             const dataSend = {
                 ...newAssignment, 
                 class_id: idN,
+                grade: 0.0,
                 due_date: new Date(newAssignment.due_date).toISOString()
             }
 
@@ -55,7 +56,8 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
             const data = await response.json();
             const assig : Assigment = {
                 ...dataSend,
-                id: data.id
+                id: data.id,
+                grade: data.grade
             }
             dispatch(addAssignment(assig));
 

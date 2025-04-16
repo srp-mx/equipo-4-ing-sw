@@ -33,7 +33,6 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
     const [isEdit,setIsEdit] = useState(false);
     const [editedAssigment, setEditedAssigment] = useState({ ... assigment});
     const [className, setClassName] = useState("");
-
     const getClass = async() => {
         try{
             const response = await fetch(`http://localhost:3000/get_class?id=${assigment.class_id}`,{
@@ -75,6 +74,7 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                 },
                 "new_assignment": {
                     ...editedAssigment,
+                    grade: editedAssigment.grade * 1,
                     progress: Math.trunc(editedAssigment.progress),
                     due_date: new Date (editedAssigment.due_date).toISOString(),
                 }
@@ -95,7 +95,7 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
             }
 
             const data = await response.json();
-            dispatch(updateAssignment(editedAssigment));
+            dispatch(updateAssignment(dataSend.new_assignment));
             setIsEdit(false);
         }catch(error){
             console.error('Error: ', error);
@@ -170,6 +170,25 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                         <span>{assigment.tag}</span>
                     )}
                 </div>
+                
+                <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
+                    <span>Calificacion: </span>
+                    {isEdit ? (
+                        <input
+                            type="number"
+                            min="0"
+                            step=".01"
+                            max="20"
+                            name="grade"
+                            className="border rounded p-1"
+                            value={editedAssigment.grade}
+                            onChange={handleChange}
+                        />
+                    ) : (
+                        <span>{assigment.grade}</span>
+                    )}
+                </div>
+
                 <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
                     <span>Notas: </span>
                     {isEdit ? (
