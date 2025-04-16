@@ -26,7 +26,6 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
     const dispatch = useDispatch();
     const [isEdit,setIsEdit] = useState(false);
     const [editedClass, setEditedClass] = useState({ ... classData});
-    console.log('clase:', editedClass);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setEditedClass((prev) => ({ ...prev, [name]: value }));
