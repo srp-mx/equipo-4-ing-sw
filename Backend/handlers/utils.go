@@ -18,6 +18,7 @@
 package handlers
 
 import (
+	"errors"
 	"strconv"
 	"time"
 
@@ -30,12 +31,16 @@ import (
 
 // Creates a JSON with an error status
 func getStatusError(c *fiber.Ctx, fiberStatus int, message string) error {
-	return c.Status(fiberStatus).JSON(fiber.Map{
+	err := c.Status(fiberStatus).JSON(fiber.Map{
 		"error": fiber.Error{
 			Code:    fiberStatus,
 			Message: message,
 		},
 	})
+	if err != nil {
+		return err
+	}
+	return errors.New(message)
 }
 
 // Creates a bad request JSON error
