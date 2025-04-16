@@ -1,7 +1,9 @@
 import { RootState } from "@/constants/store";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SelectorClass from "@/components/AssigmentView/SelectorClass"
+import { Assigment } from "@/Object/Assigment";
+import { addAssignment } from "@/constants/assignmentSlice";
 type ModalProps = {
     isOpen: boolean;
     onClose: () => void;
@@ -9,7 +11,7 @@ type ModalProps = {
 
 export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
     if (!isOpen) return null;
-
+    const dispatch = useDispatch();
     const [newAssignment, setNewAssignment] = useState({
         name: "",
         due_date: "",
@@ -51,7 +53,12 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
             const data = await response.json();
-            console.log("Tarea creada con exito", data); 
+            const assig : Assigment = {
+                ...dataSend,
+                id: data.id
+            }
+            dispatch(addAssignment(assig));
+
             onClose();
 
         }catch(error){

@@ -1,5 +1,7 @@
+import { updateClass } from "@/constants/classSlice";
 import { Class } from "@/Object/Class";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 type ModalProps = {
     isOpen: boolean;
@@ -21,7 +23,7 @@ const getEndDateStatus = (endDate: Date) => {
 export default function ClassModal({ isOpen, onClose, classData } : ModalProps) : React.ReactNode{
     if (!isOpen) return null;
     const activateClass = getEndDateStatus(new Date(classData.end_date))
-
+    const dispatch = useDispatch();
     const [isEdit,setIsEdit] = useState(false);
     const [editedClass, setEditedClass] = useState({ ... classData});
     
@@ -64,7 +66,7 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
             }
             
             const updatedAssignment = await response.json();
-            
+            dispatch(updateClass(editedClass));
             console.log('clase actualizada con exito:', updatedAssignment);
             
             setIsEdit(false);

@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import Resultbar from "./ListAssigment/Resultbar";
 import { Assigment } from "@/Object/Assigment";
 import { RootState } from "@/constants/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setAssignments } from "@/constants/assignmentSlice";
 
 function DropdownMenu({ options, onSelect }: { options: { label: string, value: number | null }[], onSelect: (option: number | null) => void }){
     return (
@@ -64,16 +65,18 @@ export default function SearchbarWorks(){
     const [isOpen, setIsOpen] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<null | number>(null);
     const [searchTerm, setSearchTerm] = useState("");
-    const [tasks, setTasks] = useState<Assigment[]>([]);
     const [loading, setLoading] = useState(true);
     const user = useSelector((state: RootState) => state.user);
     //Versión de prueba
     // let tasks = getWorks
+    const tasks = useSelector((state: RootState) => state.assignments.assignments);
+    const dispatch = useDispatch();
+
     useEffect(() => {
         async function fetchTasks() {
             setLoading(true);
             const data = await getWorks(user.name); // Cambia por el usuario real
-            setTasks(data);
+            dispatch(setAssignments(data));
             setLoading(false);
         }
 
