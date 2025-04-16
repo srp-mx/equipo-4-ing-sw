@@ -22,9 +22,10 @@ import (
 )
 
 type User struct {
-	Username string  `gorm:"primaryKey" json:"username"`
-	Name     string  `gorm:"not null" json:"name"`
-	Email    string  `gorm:"unique;not null" json:"email"`
-	Password string  `gorm:"not null" json:"-"`
-	Classes  []Class `gorm:"foreignKey:OwnerUsername;references:Username;constraint:OnDelete:CASCADE" json:"classes,omitempty"`
+	Username  string     `gorm:"primaryKey" json:"username"`
+	Name      string     `gorm:"not null" json:"name"`
+	Email     string     `gorm:"unique;not null" json:"email"`
+	Password  string     `gorm:"not null" json:"-"`
+	Classes   []Class    `gorm:"foreignKey:OwnerUsername;references:Username;constraint:OnDelete:CASCADE" json:"classes,omitempty"`
+	Character *Character `gorm:"unique;foreignKey:UserUsername;references:Username;constraint:OnDelete:CASCADE" json:"character"`
 }

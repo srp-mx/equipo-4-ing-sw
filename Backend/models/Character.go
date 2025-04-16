@@ -23,8 +23,9 @@ import (
 )
 
 type Character struct {
+	ID                   uint `gorm:"primaryKey"`
 	UserUsername         string
-	Name                 string `gorm:"primaryKey"`
+	Name                 string `gorm:"unique"`
 	MomentOfLatestAction time.Time
 	Streak               int `gorm:"check:streak >= 0"`
 	Hp                   int
@@ -34,10 +35,10 @@ type Character struct {
 	HeartExtra           int
 	ExtraPoints          int
 	Type                 string `gorm:"type:varchar(20);check type in ('wizzard', 'knight', 'sage')"`
-	Accompanies          Accompanies
-	Wears                Wears
-	Equips               Equips
-	OwnsArmor            []OwnsArmor
-	OwnsPet              []OwnsPet
-	OwnsWeapon           []OwnsWeapon
+	//Accompanies          Accompanies
+	//Wears                Wears
+	//Equips               Equips
+	//OwnsArmor            []OwnsArmor
+	//OwnsPet              []OwnsPet
+	//OwnsWeapon           []OwnsWeapon
 }
