@@ -4,7 +4,7 @@ import AssigmentCard from "../AssigmentView/AssigmentCard";
 import AssigmentModal from "../AssigmentView/AssigmentModal";
 import { Assigment } from "@/Object/Assigment";
 
-export default function Resultbar({ assigment }: { assigment: Array<Assigment> }): React.ReactNode {
+export default function Resultbar({ assigment, onClickCard }: { assigment: Array<Assigment>, onClickCard : (valor:boolean) => void}): React.ReactNode {
     const [selectedTasks, setSelectedTasks] = useState<Set<Assigment>>(new Set());
     const [selectedTaskId, setSelectedTaskId] = useState<number | null> (null);
 
@@ -62,8 +62,8 @@ export default function Resultbar({ assigment }: { assigment: Array<Assigment> }
                                     checked={selectedTasks.has(task)}
                                     onChange={() => handleCheckboxChange(task)}
                                 />                        
-                                <AssigmentCard assigment={task} onOpen={() => handleOpenModal(task)} />
-                                <AssigmentModal isOpen={selectedTaskId === task.id} onClose={() => handleCloseModal()} assigment={task} />
+                                <AssigmentCard assigment={task} onOpen={() => {handleOpenModal(task); onClickCard(false)}} />
+                                <AssigmentModal isOpen={selectedTaskId === task.id} onClose={() => {handleCloseModal(); onClickCard(true);}} assigment={task} />
                             </li>
                         ))}
                     </ul>
