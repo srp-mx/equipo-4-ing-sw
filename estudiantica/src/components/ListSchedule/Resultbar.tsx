@@ -49,7 +49,7 @@ export default function Resultbar({ classes, onClickCard } : { classes : Array<C
                     <span className="text-white text-lg font-semibold">Resultado</span>
                 </div>
 
-                <BottonResultBar selection={Array.from(selectedTasks)}/>
+                <BottonResultBar selection={Array.from(selectedTasks)} onClickCard={onClickCard}/>
             </div>
 
             <div className="mt-2 mb-3 h-[calc(100vh-450px)] overflow-y-auto">

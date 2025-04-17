@@ -1,7 +1,7 @@
 import { addClass } from "@/constants/classSlice";
 import { RootState } from "@/constants/store";
 import { Class } from "@/Object/Class";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 type ModalProps = {
@@ -14,6 +14,7 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
 
     const user = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch();
+    const modalRef = useRef<HTMLDivElement>(null);
 
     const [newClass, setNewClass] = useState({
         id : 0,
@@ -60,11 +61,28 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
         }
     };
 
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent){
+            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+                onClose();
+              }
+            }
+        
+            if (isOpen) {
+              document.addEventListener("mousedown", handleClickOutside);
+            }
+        
+            return () => {
+              document.removeEventListener("mousedown", handleClickOutside);
+            };
+          }, [isOpen, onClose]);
+
     //fixed inset-0 bg-black bg-opacity-30 backdrop-blur-md flex items-center justify-center ${isOpen ? 'visible' : 'invisible'}
     return (
         <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-md flex items-center justify-center ${isOpen ? 'visible' : 'invisible'">
-            <div className="p-6 w-1/3 shadow-lg border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
-                <h2 className="text-2xl font-semibold">Nueva Tarea</h2>
+            <div ref={modalRef}
+            className="p-6 w-1/3 shadow-lg border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
+                <h2 className="text-2xl font-semibold">Nueva Clase</h2>
                 <input
                     type="text"
                     name="name"
