@@ -4,7 +4,7 @@ import { Class } from  "@/Object/Class";
 import ClassCard from "../ClassView/ClassCard";
 import ClassModal from "../ClassView/ClassModal";
 
-export default function Resultbar({ classes } : { classes : Array<Class>}) : React.ReactNode {
+export default function Resultbar({ classes, onClickCard } : { classes : Array<Class>, onClickCard:(valor:boolean) => void }) : React.ReactNode {
     const [selectedTasks, setSelectedTasks] = useState<Set<number>>(new Set());
     const [selectedClassId, setSelectedClassId] = useState<number | null>(null);
     
@@ -63,8 +63,8 @@ export default function Resultbar({ classes } : { classes : Array<Class>}) : Rea
                                     checked={selectedTasks.has(schedule.id)}
                                     onChange={() => handleCheckboxChange(schedule.id)}
                                 />                        
-                                <ClassCard classData={schedule} onOpen={() => handleOpenModal(schedule)} />
-                                <ClassModal isOpen={selectedClassId === schedule.id} onClose={() => handleCloseModal()} classData={schedule} />
+                                <ClassCard classData={schedule} onOpen={() => {handleOpenModal(schedule); onClickCard(false);}} />
+                                <ClassModal isOpen={selectedClassId === schedule.id} onClose={() => {handleCloseModal(); onClickCard(true);}} classData={schedule} />
                             </li>
                         ))}
                     </ul>
