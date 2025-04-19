@@ -1,0 +1,34 @@
+DESCRIPTION: Deletes the user's character.
+
+
+
+Type: POST
+
+
+
+INPUT:
+None, it is gotten from the token.
+
+
+
+RETURNS:
+{
+    "ok": true
+}
+
+"ok" -> bool
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: The user had no character to remove
+
+500 (Internal server error)
+    Cause: Internal error
