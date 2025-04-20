@@ -67,6 +67,12 @@ func PostAssignment(c *fiber.Ctx) error {
 		return getServerErr(c)
 	}
 
+	// Update user time-related data
+	_, err = pingActive(*user)
+	if err != nil {
+		return getServerErr(c)
+	}
+
 	return c.JSON(fiber.Map{
 		"assignment_id": newAssignment.ID,
 	})
@@ -157,7 +163,7 @@ func PatchAssignment(c *fiber.Ctx) error {
 	}
 
 	// Do the updates
-	err = assignments.UpdateWithMap(&request.Assignment, request.NewAssignment)
+	activity, err := assignments.UpdateWithMap(&request.Assignment, request.NewAssignment)
 	if err != nil {
 		return getBadReq(c, "No se pudo actualizar.\n"+err.Error())
 	}
@@ -166,6 +172,19 @@ func PatchAssignment(c *fiber.Ctx) error {
 	err = assignments.Get(&request.Assignment)
 	if err != nil {
 		return getServerErr(c)
+	}
+
+	// Update user time-related data
+	if activity {
+		_, err = pingActive(*user)
+		if err != nil {
+			return getServerErr(c)
+		}
+	} else {
+		_, err = tickData(*user)
+		if err != nil {
+			return getServerErr(c)
+		}
 	}
 
 	return c.JSON(request.Assignment)

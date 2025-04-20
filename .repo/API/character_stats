@@ -1,0 +1,55 @@
+DESCRIPTION: Gets the user's character's stats, or indicates if there is none.
+
+
+
+Type: GET
+
+
+
+INPUT:
+None, the user is inferred from the credentials.
+
+
+
+RETURNS:
+{
+    "alive": ... ,
+    "stats": {
+        "skills": {
+            "strength": ... ,
+            "defense": ... ,
+            "intelligence": ... ,
+            "heart": ...
+        }
+        "streak_bonus_percent": ... ,
+        "xp": ... ,
+        "level": ... ,
+        "level_percent": ... ,
+        "xp_to_next_level": ...
+    },
+}
+
+"alive" -> boolean
+"stats" // If alive is false, this is undefined
+"stats.skills" // Character skills, already scaled by multipliers
+"stats.skills.strength" -> uint
+"stats.skills.defense" -> uint
+"stats.skills.intelligence" -> uint
+"stats.skills.heart" -> uint
+"stats.streak_bonus_percent" -> float // Already applied streak +% on all skills
+"stats.xp" -> uint
+"stats.level" -> uint
+"stats.level_percent" -> float // How far along their current level they are
+"stats.xp_to_next_level" -> uint
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+500 (Internal server error)
+    Cause: Internal error

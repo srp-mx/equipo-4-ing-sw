@@ -59,6 +59,7 @@ func ConnectDb() {
 
 	db.AutoMigrate(&models.Assignment{})
 	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Character{})
 	db.AutoMigrate(&models.Class{})
 
 	UsuariosBase(db)

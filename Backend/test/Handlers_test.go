@@ -21,7 +21,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"math"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 	"time"
 
@@ -35,8 +37,7 @@ import (
 
 // Tests the handlers
 func TestHandlers(t *testing.T) {
-	resetDb()
-	fillDummyDb()
+	refillDummyDb()
 
 	app.Get("/test", func(c *fiber.Ctx) error {
 		return c.SendString("testing")
@@ -51,24 +52,28 @@ func TestHandlers(t *testing.T) {
 	t.Run("Test for /user_classes", testUserClasses)
 
 	t.Run("Test for /post_class", testPostClass)
-	resetDb()
-	fillDummyDb()
 	t.Run("Test for /get_class", testGetClass)
 	t.Run("Test for /delete_class", testDeleteClass)
 	t.Run("Test for /patch_class", testPatchClass)
 
 	t.Run("Test for /class_assignments", testClassAssignments)
-	resetDb()
-	fillDummyDb()
 	t.Run("Test for /class_tags", testClassTags)
 	t.Run("Test for /class_grade", testClassGrade)
 
 	t.Run("Test for /post_assignment", testPostAssignment)
-	resetDb()
-	fillDummyDb()
 	t.Run("Test for /get_assignment", testGetAssignment)
 	t.Run("Test for /delete_assignment", testDeleteAssignment)
 	t.Run("Test for /patch_assignment", testPatchAssignment)
+
+	t.Run("Test for /post_character", testPostCharacter)
+	t.Run("Test for /delete_character", testDeleteCharacter)
+	t.Run("Test for /patch_character", testPatchCharacter)
+
+	t.Run("Test for /character_basic_data", testCharacterBasicData)
+	t.Run("Test for /character_stats", testCharacterStats)
+	t.Run("Test for /character_next_refresh", testCharacterNextRefresh)
+	t.Run("Test for /character_free_skill", testCharacterFreeSkill)
+	t.Run("Test for /character_add_skills", testCharacterAddSkills)
 }
 
 // Tests the endpoint testing framework
@@ -107,6 +112,9 @@ func testUserClasses(t *testing.T) {
 
 // Test for the /post_class route
 func testPostClass(t *testing.T) {
+	// Since we modify the DB, we want to clean it up after we exit
+	defer refillDummyDb()
+
 	// The BODY to send to the endpoint
 	payload := map[string]any{
 		"name":          "mate",
@@ -183,6 +191,9 @@ func testClassGrade(t *testing.T) {
 
 // Test for the /post_assignment route
 func testPostAssignment(t *testing.T) {
+	// Since we modify the DB, we want to clean it up after we exit
+	defer refillDummyDb()
+
 	// Get the test user's testing class
 	users := controllers.NewUserController(database.DB.Db)
 	user := models.User{
@@ -256,12 +267,284 @@ func testPatchAssignment(t *testing.T) {
 	assert.True(t, true)
 }
 
+// Test for the /post_character route
+func testPostCharacter(t *testing.T) {
+	// Since we modify the DB, we want to clean it up after we exit
+	defer refillDummyDb()
+
+	// Sneakily delete the user's character just for this test
+	users := controllers.NewUserController(db)
+	user := models.User{Username: "test"}
+	err := users.LoadCharacter(&user)
+	assert.NoError(t, err)
+	characters := controllers.NewCharacterController(db)
+	characters.DeleteCharacter(user.Character)
+
+	// The BODY to send to the endpoint
+	payload := map[string]any{
+		"name": "testington",
+	}
+
+	// Get and verify the response
+	resp := postWithAuth(t, "/post_character", payload)
+	respNameAny, ok := resp["character_name"]
+	assert.True(t, ok)
+	respName, ok := respNameAny.(string)
+	assert.True(t, ok)
+	assert.Equal(t, "testington", respName)
+
+	// Check that the character created on the database makes sense
+	err = users.LoadCharacter(&user)
+	assert.NoError(t, err)
+	assert.NotNil(t, user.Character)
+	assert.True(t, time.Now().Add(-time.Hour).Before(user.Character.MomentOfLatestAction))
+	assert.Equal(t, user.Username, user.Character.UserUsername)
+	assert.Equal(t, "testington", user.Character.Name)
+}
+
+// Test for the /delete_character route
+func testDeleteCharacter(t *testing.T) {
+	// Since we modify the DB, we want to clean it up after we exit
+	defer refillDummyDb()
+
+	// Get the response
+	resp := postWithAuth(t, "/delete_character", map[string]any{})
+	okAny, ok := resp["ok"]
+	assert.True(t, ok)
+
+	// Interpret the ok
+	okk, ok := okAny.(bool)
+	assert.True(t, ok)
+	assert.True(t, okk)
+
+	// Verify deletion
+	users := controllers.NewUserController(db)
+	user := models.User{Username: "test"}
+	err := users.LoadCharacter(&user)
+	assert.NoError(t, err)
+	assert.Nil(t, user.Character)
+}
+
+// Test for the /patch_character route
+func testPatchCharacter(t *testing.T) {
+	// Since we modify the DB, we want to clean it up after we exit
+	defer refillDummyDb()
+
+	// The BODY to send to the endpoint
+	payload := map[string]any{
+		"name": "testington",
+	}
+
+	// Get the response and verify it
+	resp := postWithAuth(t, "/patch_character", payload)
+	nameAny, ok := resp["name"]
+	assert.True(t, ok)
+	name, ok := nameAny.(string)
+	assert.True(t, ok)
+	assert.Equal(t, "testington", name)
+
+	// Check if it was modified on the database successfully
+	users := controllers.NewUserController(db)
+	user := models.User{Username: "test"}
+	err := users.LoadCharacter(&user)
+	assert.NoError(t, err)
+	assert.Equal(t, "testington", user.Character.Name)
+}
+
+// Test for the /character_basic_data route
+func testCharacterBasicData(t *testing.T) {
+	// Get the response
+	resp := getWithAuth(t, "/character_basic_data", map[string]string{})
+
+	// Make a struct for easier unwrapping
+	type Resp struct {
+		Alive bool             `json:"alive"`
+		Data  models.Character `json:"data"`
+	}
+	interpResp, err := mapToStruct[Resp](resp)
+	assert.NoError(t, err)
+
+	// Get the character from the DB to cross-reference the response
+	users := controllers.NewUserController(db)
+	user := models.User{Username: "test"}
+	err = users.LoadCharacter(&user)
+	assert.NoError(t, err)
+
+	// Verify response
+	assert.True(t, interpResp.Alive)
+	assert.Equal(t, user.Character.ID, interpResp.Data.ID)
+	assert.Equal(t, user.Character.UserUsername, interpResp.Data.UserUsername)
+	assert.Equal(t, user.Character.Name, interpResp.Data.Name)
+	assert.Equal(t, user.Character.MomentOfLatestAction.UTC(),
+		interpResp.Data.MomentOfLatestAction.UTC())
+	assert.Equal(t, user.Character.Streak, interpResp.Data.Streak)
+	assert.Equal(t, user.Character.Hp, interpResp.Data.Hp)
+}
+
+// Test for the /character_stats route
+func testCharacterStats(t *testing.T) {
+	// Get the response
+	resp := getWithAuth(t, "/character_stats", map[string]string{})
+
+	// Make a struct for easier unwrapping
+	type Stats struct {
+		Skills             models.CharacterStats `json:"skills"`
+		StreakBonusPercent float64               `json:"streak_bonus_percent"`
+		Xp                 uint64                `json:"xp"`
+		Level              int                   `json:"level"`
+		LevelPercent       float64               `json:"level_percent"`
+		XpToNext           uint64                `json:"xp_to_next_level"`
+	}
+	type Resp struct {
+		Alive bool  `json:"alive"`
+		Stats Stats `json:"stats"`
+	}
+	interpResp, err := mapToStruct[Resp](resp)
+	assert.NoError(t, err)
+
+	// Get the character from the DB to cross-reference the response
+	users := controllers.NewUserController(db)
+	user := models.User{Username: "test"}
+	err = users.LoadCharacter(&user)
+	assert.NoError(t, err)
+
+	// Verify the response
+	assert.True(t, interpResp.Alive)
+	assert.Greater(t, interpResp.Stats.StreakBonusPercent, 0.0)
+	assert.Greater(t, interpResp.Stats.Xp, uint64(0))
+
+	// TODO: Modify this when we take items into account for skills
+	streakBonus := interpResp.Stats.StreakBonusPercent
+	expStrength := user.Character.StrengthExtra
+	expStrength += int(math.Round(float64(expStrength) * streakBonus))
+	expDefense := user.Character.DefenseExtra
+	expDefense += int(math.Round(float64(expDefense) * streakBonus))
+	expIntelligence := user.Character.IntelligenceExtra
+	expIntelligence += int(math.Round(float64(expIntelligence) * streakBonus))
+	expHeart := user.Character.HeartExtra
+	expHeart += int(math.Round(float64(expHeart) * streakBonus))
+	assert.Equal(t, expStrength, interpResp.Stats.Skills.Strength)
+	assert.Equal(t, expDefense, interpResp.Stats.Skills.Defense)
+	assert.Equal(t, expIntelligence, interpResp.Stats.Skills.Intelligence)
+	assert.Equal(t, expHeart, interpResp.Stats.Skills.Heart)
+}
+
+// Test for the /character_next_refresh route
+func testCharacterNextRefresh(t *testing.T) {
+	// Get the response
+	resp := getWithAuth(t, "/character_next_refresh", map[string]string{})
+
+	// Make a struct for easier unwrapping
+	type Timers struct {
+		StreakLoss time.Time `json:"streak_loss"`
+		Deletion   time.Time `json:"deletion"`
+		NextHeal   time.Time `json:"next_heal"`
+	}
+	type Resp struct {
+		Alive     bool      `json:"alive"`
+		NextCheck time.Time `json:"next_check"`
+		Timers    Timers    `json:"timers"`
+	}
+	interpResp, err := mapToStruct[Resp](resp)
+	assert.NoError(t, err)
+
+	// Get the character from the DB to cross-reference the response
+	users := controllers.NewUserController(db)
+	user := models.User{Username: "test"}
+	err = users.LoadCharacter(&user)
+	assert.NoError(t, err)
+	mola := user.Character.MomentOfLatestAction
+
+	// Check validity
+	assert.True(t, interpResp.Alive)
+	assert.GreaterOrEqual(t, 0, interpResp.NextCheck.
+		Compare(interpResp.Timers.StreakLoss))
+	assert.GreaterOrEqual(t, 0, interpResp.NextCheck.
+		Compare(interpResp.Timers.Deletion))
+	assert.GreaterOrEqual(t, 0, interpResp.NextCheck.
+		Compare(interpResp.Timers.NextHeal))
+	expHeal := mola.Truncate(time.Hour).Add(time.Hour).UTC()
+	assert.Equal(t, expHeal, interpResp.Timers.NextHeal.UTC())
+	expStreak := mola.Truncate(24*time.Hour).AddDate(0, 0, 2).UTC()
+	assert.Equal(t, expStreak, interpResp.Timers.StreakLoss.UTC())
+	expDel := mola.AddDate(0, 0, controllers.DAYS_TO_DIE).UTC()
+	assert.Equal(t, expDel, interpResp.Timers.Deletion.UTC())
+}
+
+// Test for the /character_free_skill route
+func testCharacterFreeSkill(t *testing.T) {
+	// Get the response
+	resp := getWithAuth(t, "/character_free_skill", map[string]string{})
+
+	// Make a struct for easier unwrapping
+	type Resp struct {
+		Alive  bool `json:"alive"`
+		Points int  `json:"points"`
+	}
+	interpResp, err := mapToStruct[Resp](resp)
+	assert.NoError(t, err)
+
+	// Since we assigned a lot of skill points, we shouldn't have any left
+	assert.GreaterOrEqual(t, 0, interpResp.Points)
+}
+
+// Test for the /character_add_skills route
+func testCharacterAddSkills(t *testing.T) {
+	// Since we modify the DB, we want to clean it up after we exit
+	defer refillDummyDb()
+
+	// Set to 1 all skill points to allow testing
+	users := controllers.NewUserController(db)
+	user := models.User{Username: "test"}
+	err := users.LoadCharacter(&user)
+	assert.NoError(t, err)
+	user.Character.StrengthExtra = 1
+	user.Character.DefenseExtra = 1
+	user.Character.IntelligenceExtra = 1
+	user.Character.HeartExtra = 1
+	characters := controllers.NewCharacterController(db)
+	characters.UpdateCharacter(user.Character)
+
+	// The BODY to send to the endpoint
+	payload := map[string]any{
+		"strength":     2,
+		"defense":      0,
+		"intelligence": 1,
+		"heart":        1,
+	}
+
+	// Get the response and verify it
+	resp := postWithAuth(t, "/character_add_skills", payload)
+	okAny, ok := resp["ok"]
+	assert.True(t, ok)
+	okk, ok := okAny.(bool)
+	assert.True(t, ok)
+	assert.True(t, okk)
+
+	// Verify modification
+	err = users.LoadCharacter(&user)
+	assert.NoError(t, err)
+	assert.Equal(t, 3, user.Character.StrengthExtra)
+	assert.Equal(t, 1, user.Character.DefenseExtra)
+	assert.Equal(t, 2, user.Character.IntelligenceExtra)
+	assert.Equal(t, 2, user.Character.HeartExtra)
+}
+
+// Resets the database and fills it in again
+func refillDummyDb() {
+	resetDb()
+	fillDummyDb()
+}
+
 // Fills up the database with dummy values
 func fillDummyDb() {
 	// Controllers
 	var users = controllers.NewUserController(db)
+	var characters = controllers.NewCharacterController(db)
 	var classes = controllers.NewClassController(db)
 	var assignments = controllers.NewAssignmentController(db)
+
+	// Raw data
 
 	// User
 	user := models.User{
@@ -270,73 +553,176 @@ func fillDummyDb() {
 		Email:    "test@test.com",
 		Password: "test",
 	}
-
-	if err := users.CreateUser(&user); err != nil {
-		panic(err)
+	// Character
+	character := models.Character{
+		UserUsername:         user.Username,
+		Name:                 "test",
+		MomentOfLatestAction: time.Now(),
+		Streak:               10,
+		Hp:                   40,
+		StrengthExtra:        3,
+		DefenseExtra:         4,
+		IntelligenceExtra:    5,
+		HeartExtra:           7,
+		ExtraPoints:          10,
 	}
-
-	// Class
-	class := models.Class{
+	// Classes
+	class1 := models.Class{
 		Name:          "math",
 		StartDate:     time.Now(),
 		EndDate:       time.Now().Add(128 * 24 * time.Hour),
-		OwnerUsername: "test",
+		OwnerUsername: user.Username,
 		GradeFormula:  "0.3*average(homework) + 0.7*average(exams)",
-		Color:         "FFFFFFFF",
+		Color:         "FF0000FF",
 	}
-
-	if err := classes.CreateClass(&class); err != nil {
-		panic(err)
+	class2 := models.Class{
+		Name:          "history",
+		StartDate:     time.Now().AddDate(0, -5, 0),
+		EndDate:       time.Now().AddDate(0, -1, 0),
+		OwnerUsername: user.Username,
+		GradeFormula:  "average(top(2, exams))",
+		Color:         "00FF00FF",
 	}
-
-	if err := users.LoadClasses(&user); err != nil {
-		panic(err)
-	}
-
-	class = user.Classes[0]
-
-	// Assignment
-	homework := models.Assignment{
-		ClassID:  class.ID,
+	// Assignments
+	assignment1_1 := models.Assignment{
 		DueDate:  time.Now().Add(time.Hour),
 		Notes:    "Lorem ipsum dolor sit amet",
-		Grade:    9.6,
+		Grade:    96,
 		Name:     "Homework 1",
 		Optional: false,
 		Progress: 1,
 		Tag:      "homework",
 	}
-
-	exam := models.Assignment{
-		ClassID:  class.ID,
+	assignment1_2 := models.Assignment{
 		DueDate:  time.Now().Add(time.Hour),
 		Notes:    "Lorem ipsum dolor sit amet",
-		Grade:    8.7,
+		Grade:    87,
 		Name:     "Midterm",
 		Optional: false,
 		Progress: 1,
 		Tag:      "exams",
 	}
+	assignment2_1 := models.Assignment{
+		DueDate:  time.Now().AddDate(0, -1, -1),
+		Notes:    "Lorem ipsum dolor sit amet",
+		Grade:    100,
+		Name:     "Exam 1",
+		Optional: false,
+		Progress: 1,
+		Tag:      "exams",
+	}
+	assignment2_2 := models.Assignment{
+		DueDate:  time.Now().AddDate(0, -1, -1),
+		Notes:    "Lorem ipsum dolor sit amet",
+		Grade:    100,
+		Name:     "Exam 2",
+		Optional: false,
+		Progress: 1,
+		Tag:      "exams",
+	}
+	assignment2_3 := models.Assignment{
+		DueDate:  time.Now().AddDate(0, -1, -1),
+		Notes:    "Lorem ipsum dolor sit amet",
+		Grade:    0,
+		Name:     "Exam 3",
+		Optional: false,
+		Progress: 1,
+		Tag:      "exams",
+	}
 
-	if err := assignments.CreateAssignment(&homework); err != nil {
+	// Maps to easily fill-in generated IDs
+
+	classMap := make(map[string]*models.Class)
+	classMap[class1.Name] = &class1
+	classMap[class2.Name] = &class2
+	assignmentMap := make(map[string]*models.Assignment)
+	assignmentMap[assignment1_1.Name] = &assignment1_1
+	assignmentMap[assignment1_2.Name] = &assignment1_2
+	assignmentMap[assignment2_1.Name] = &assignment2_1
+	assignmentMap[assignment2_2.Name] = &assignment2_2
+	assignmentMap[assignment2_3.Name] = &assignment2_3
+	classAssignmentsMap := make(map[string][]*models.Assignment)
+	classAssignmentsMap[class1.Name] = []*models.Assignment{
+		&assignment1_1,
+		&assignment1_2,
+	}
+	classAssignmentsMap[class2.Name] = []*models.Assignment{
+		&assignment2_1,
+		&assignment2_2,
+		&assignment2_3,
+	}
+
+	// Adding to the database
+
+	// Create the user
+	if err := users.CreateUser(&user); err != nil {
 		panic(err)
 	}
-
-	if err := assignments.CreateAssignment(&exam); err != nil {
+	// Create the character
+	if err := characters.CreateCharacter(&character); err != nil {
 		panic(err)
 	}
-
-	if err := classes.LoadAssignments(&class); err != nil {
+	// Load the character into the user
+	if err := users.LoadCharacter(&user); err != nil {
 		panic(err)
 	}
-
-	if class.Assignments[0].Tag == "homework" {
-		homework = class.Assignments[0]
-		exam = class.Assignments[1]
-	} else {
-		exam = class.Assignments[0]
-		homework = class.Assignments[1]
+	// Set the character's ID properly
+	character.ID = user.Character.ID
+	// Create the classes
+	for _, class := range classMap {
+		if err := classes.CreateClass(class); err != nil {
+			panic(err)
+		}
 	}
+	// Load the classes into the user
+	if err := users.LoadClasses(&user); err != nil {
+		panic(err)
+	}
+	// Assign the ClassID into each assignment
+	for _, class := range user.Classes {
+		classMap[class.Name].ID = class.ID
+		for _, assignment := range classAssignmentsMap[class.Name] {
+			assignment.ClassID = class.ID
+		}
+	}
+	// Create the assignments
+	for _, assignment := range assignmentMap {
+		if err := assignments.CreateAssignment(assignment); err != nil {
+			panic(err)
+		}
+	}
+	// Load each assignment into each class and set the assignment ID
+	for _, class := range classMap {
+		if err := classes.LoadAssignments(class); err != nil {
+			panic(err)
+		}
+		for _, assignment := range class.Assignments {
+			assignmentMap[assignment.Name].ID = assignment.ID
+		}
+	}
+}
+
+// Sends a GET request with credentials
+func getWithAuth(t *testing.T, route string, queryParams map[string]string) map[string]any {
+	req := httptest.NewRequest("GET", route, nil)
+	tok := getToken(t)
+	req.Header.Set("Authorization", "Bearer "+tok)
+	querys := url.Values{}
+	for key, value := range queryParams {
+		querys.Add(key, value)
+	}
+	req.URL.RawQuery = querys.Encode()
+
+	resp, err := app.Test(req)
+	assert.NoError(t, err)
+	bytes, err := io.ReadAll(resp.Body)
+	assert.NoError(t, err)
+	body := utils.CopyBytes(bytes)
+	var resultMap map[string]any
+	err = json.Unmarshal(body, &resultMap)
+
+	assert.Equal(t, fiber.StatusOK, resp.StatusCode, string(body))
+	return resultMap
 }
 
 // Sends a POST payload with credentials
@@ -378,4 +764,17 @@ func getToken(t *testing.T) string {
 	var resultMap map[string]string
 	err = json.Unmarshal(body, &resultMap)
 	return resultMap["token"]
+}
+
+// Converts a map[string]any into a struct
+func mapToStruct[T any](m map[string]any) (*T, error) {
+	jsonData, err := json.Marshal(m)
+	if err != nil {
+		return nil, err
+	}
+	var t = new(T)
+	if err := json.Unmarshal(jsonData, t); err != nil {
+		return nil, err
+	}
+	return t, nil
 }

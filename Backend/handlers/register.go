@@ -38,6 +38,7 @@ func Register(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	request.Username = cleanDisplayName(request.Username)
 
 	// Verify fields
 	if request.Username == "" {
@@ -74,7 +75,7 @@ func Register(c *fiber.Ctx) error {
 		Email:    request.Email,
 		Name:     request.Name,
 		Password: request.Password,
-		Classes: []models.Class{},
+		Classes:  []models.Class{},
 	})
 
 	// If creation failed, internal server error
