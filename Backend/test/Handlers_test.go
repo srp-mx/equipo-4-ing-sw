@@ -69,6 +69,21 @@ func TestHandlers(t *testing.T) {
 	t.Run("Test for /get_assignment", testGetAssignment)
 	t.Run("Test for /delete_assignment", testDeleteAssignment)
 	t.Run("Test for /patch_assignment", testPatchAssignment)
+
+	//t.Run("Test for /post_character", testPostCharacter)
+	//resetDb()
+	//fillDummyDb()
+	//t.Run("Test for /delete_character", testDeleteCharacter)
+	//t.Run("Test for /patch_character", testPatchCharacter)
+
+	//t.Run("Test for /character_basic_data", testCharacterBasicData)
+	//t.Run("Test for /character_stats", testCharacterStats)
+	//t.Run("Test for /character_next_refresh", testCharacterNextRefresh)
+	//t.Run("Test for /character_free_skill", testCharacterFreeSkill)
+	//t.Run("Test for /character_add_skills", testCharacterAddSkills)
+	//resetDb()
+	//fillDummyDb()
+
 }
 
 // Tests the endpoint testing framework
@@ -262,6 +277,9 @@ func fillDummyDb() {
 	var users = controllers.NewUserController(db)
 	var classes = controllers.NewClassController(db)
 	var assignments = controllers.NewAssignmentController(db)
+	//var characters = controllers.NewCharacterController(db)
+
+	// Raw data
 
 	// User
 	user := models.User{
@@ -270,72 +288,129 @@ func fillDummyDb() {
 		Email:    "test@test.com",
 		Password: "test",
 	}
-
-	if err := users.CreateUser(&user); err != nil {
-		panic(err)
-	}
-
-	// Class
-	class := models.Class{
+	// Classes
+	class1 := models.Class{
 		Name:          "math",
 		StartDate:     time.Now(),
 		EndDate:       time.Now().Add(128 * 24 * time.Hour),
 		OwnerUsername: "test",
 		GradeFormula:  "0.3*average(homework) + 0.7*average(exams)",
-		Color:         "FFFFFFFF",
+		Color:         "FF0000FF",
 	}
-
-	if err := classes.CreateClass(&class); err != nil {
-		panic(err)
+	class2 := models.Class{
+		Name:          "history",
+		StartDate:     time.Now().AddDate(0, -5, 0),
+		EndDate:       time.Now().AddDate(0, -1, 0),
+		OwnerUsername: "test",
+		GradeFormula:  "average(top(2, exams))",
+		Color:         "00FF00FF",
 	}
-
-	if err := users.LoadClasses(&user); err != nil {
-		panic(err)
-	}
-
-	class = user.Classes[0]
-
-	// Assignment
-	homework := models.Assignment{
-		ClassID:  class.ID,
+	// Assignments
+	assignment1_1 := models.Assignment{
 		DueDate:  time.Now().Add(time.Hour),
 		Notes:    "Lorem ipsum dolor sit amet",
-		Grade:    9.6,
+		Grade:    96,
 		Name:     "Homework 1",
 		Optional: false,
 		Progress: 1,
 		Tag:      "homework",
 	}
-
-	exam := models.Assignment{
-		ClassID:  class.ID,
+	assignment1_2 := models.Assignment{
 		DueDate:  time.Now().Add(time.Hour),
 		Notes:    "Lorem ipsum dolor sit amet",
-		Grade:    8.7,
+		Grade:    87,
 		Name:     "Midterm",
 		Optional: false,
 		Progress: 1,
 		Tag:      "exams",
 	}
-
-	if err := assignments.CreateAssignment(&homework); err != nil {
-		panic(err)
+	assignment2_1 := models.Assignment{
+		DueDate:  time.Now().AddDate(0, -1, -1),
+		Notes:    "Lorem ipsum dolor sit amet",
+		Grade:    100,
+		Name:     "Exam 1",
+		Optional: false,
+		Progress: 1,
+		Tag:      "exams",
+	}
+	assignment2_2 := models.Assignment{
+		DueDate:  time.Now().AddDate(0, -1, -1),
+		Notes:    "Lorem ipsum dolor sit amet",
+		Grade:    100,
+		Name:     "Exam 2",
+		Optional: false,
+		Progress: 1,
+		Tag:      "exams",
+	}
+	assignment2_3 := models.Assignment{
+		DueDate:  time.Now().AddDate(0, -1, -1),
+		Notes:    "Lorem ipsum dolor sit amet",
+		Grade:    0,
+		Name:     "Exam 3",
+		Optional: false,
+		Progress: 1,
+		Tag:      "exams",
 	}
 
-	if err := assignments.CreateAssignment(&exam); err != nil {
-		panic(err)
+	// Maps to easily fill-in generated IDs
+
+	classMap := make(map[string]*models.Class)
+	classMap[class1.Name] = &class1
+	classMap[class2.Name] = &class2
+	assignmentMap := make(map[string]*models.Assignment)
+	assignmentMap[assignment1_1.Name] = &assignment1_1
+	assignmentMap[assignment1_2.Name] = &assignment1_2
+	assignmentMap[assignment2_1.Name] = &assignment2_1
+	assignmentMap[assignment2_2.Name] = &assignment2_2
+	assignmentMap[assignment2_3.Name] = &assignment2_3
+	classAssignmentsMap := make(map[string][]*models.Assignment)
+	classAssignmentsMap[class1.Name] = []*models.Assignment{
+		&assignment1_1,
+		&assignment1_2,
+	}
+	classAssignmentsMap[class2.Name] = []*models.Assignment{
+		&assignment2_1,
+		&assignment2_2,
+		&assignment2_3,
 	}
 
-	if err := classes.LoadAssignments(&class); err != nil {
+	// Adding to the database
+
+	// Create the user
+	if err := users.CreateUser(&user); err != nil {
 		panic(err)
 	}
-
-	if class.Assignments[0].Tag == "homework" {
-		homework = class.Assignments[0]
-		exam = class.Assignments[1]
-	} else {
-		exam = class.Assignments[0]
-		homework = class.Assignments[1]
+	// Create the classes
+	for _, class := range classMap {
+		if err := classes.CreateClass(class); err != nil {
+			panic(err)
+		}
+	}
+	// Load the classes into the user
+	if err := users.LoadClasses(&user); err != nil {
+		panic(err)
+	}
+	// Assign the ClassID into each assignment
+	for _, class := range user.Classes {
+		classMap[class.Name].ID = class.ID
+		for _, assignment := range classAssignmentsMap[class.Name] {
+			assignment.ClassID = class.ID
+		}
+	}
+	// Create the assignments
+	for _, assignment := range assignmentMap {
+		if err := assignments.CreateAssignment(assignment); err != nil {
+			panic(err)
+		}
+	}
+	// Load each assignment into each class and set the assignment ID
+	for _, class := range classMap {
+		if err := classes.LoadAssignments(class); err != nil {
+			panic(err)
+		}
+		for _, assignment := range class.Assignments {
+			assignmentMap[assignment.Name].ID = assignment.ID
+		}
 	}
 }
 
