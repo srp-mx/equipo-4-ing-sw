@@ -297,6 +297,10 @@ func (self *CharacterController) ComputeLevel(character *models.Character) (leve
 // The isActive flag updates MomentOfLatestAction at the end if it's enabled.
 // This might delete the character if it has remained inactive.
 func (self *CharacterController) ActivityUpdate(character *models.Character, isActive bool) (deleted bool, err error) {
+	if character == nil {
+		return true, nil // Not existing is ok
+	}
+
 	exists, err := self.Exists(*character)
 	if err != nil {
 		return false, err
