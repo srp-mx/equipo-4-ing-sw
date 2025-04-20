@@ -30,7 +30,7 @@ import (
 const DAYS_TO_DIE int = 7
 
 // Number of levels corresponding to one earned skill point
-const LEVELS_PER_SKILL_POINT int = 5
+const LEVELS_PER_SKILL_POINT int = 1
 
 // Amount of HP healed passively per hour
 const HP_PER_HOUR int = 5
@@ -121,6 +121,12 @@ func (self *CharacterController) UpdateWithMap(source *models.Character, updates
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("El nuevo nombre no es una cadena")
+		}
+		if v == "" {
+			return fmt.Errorf("El nuevo nombre no puede ser vacío")
+		}
+		if _, err := self.FindByName(v); err == nil {
+			return fmt.Errorf("El nombre ya está en uso")
 		}
 		foundCharacter.Name = v
 	}

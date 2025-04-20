@@ -48,4 +48,14 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/get_assignment", jwt, handlers.GetAssignment)
 	app.Post("/delete_assignment", jwt, handlers.DeleteAssignment)
 	app.Post("/patch_assignment", jwt, handlers.PatchAssignment)
+
+	app.Post("/post_character", jwt, handlers.PostCharacter)
+	app.Post("/delete_character", jwt, handlers.DeleteCharacter)
+	app.Post("/patch_character", jwt, handlers.PatchCharacter)
+
+	app.Get("/character_basic_data", jwt, handlers.CharacterBasicData)
+	app.Get("/character_stats", jwt, handlers.CharacterStats)
+	app.Get("/character_next_refresh", jwt, handlers.CharacterNextRefresh)
+	app.Get("/character_free_skill", jwt, handlers.CharacterFreeSkill)
+	app.Post("/character_add_skills", jwt, handlers.CharacterAddSkills)
 }
