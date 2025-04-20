@@ -94,7 +94,7 @@ func TestDeleteUser(t *testing.T) {
 }
 
 // Tests searching by credentials (email + password)
-func TestFindByCredentials(t *testing.T) {
+func TestUserFindByCredentials(t *testing.T) {
 	resetDb()
 	data := newUserTestData()
 
@@ -108,7 +108,7 @@ func TestFindByCredentials(t *testing.T) {
 }
 
 // Tests querying if a user exists
-func TestExists(t *testing.T) {
+func TestUserExists(t *testing.T) {
 	resetDb()
 	data := newUserTestData()
 
