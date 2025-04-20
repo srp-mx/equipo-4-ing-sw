@@ -18,13 +18,13 @@
 package handlers
 
 import (
-	"regexp"
-	"strings"
 	"github.com/gofiber/fiber/v2"
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
 	"github.com/srp-mx/equipo-4-ing-sw/models"
 	"github.com/srp-mx/equipo-4-ing-sw/utils"
+	"regexp"
+	"strings"
 )
 
 // Handles /post_class
@@ -43,7 +43,7 @@ func PostClass(c *fiber.Ctx) error {
 
 	// Assigns the user as the class' owner
 	newClass.OwnerUsername = user.Username
-	newClass.Assignments = []models.Assignment{} 
+	newClass.Assignments = []models.Assignment{}
 	// Checks if there already is a class with the same candidate key
 	classes := controllers.NewClassController(database.DB.Db)
 	yes, err := classes.Exists(*newClass)
@@ -69,6 +69,12 @@ func PostClass(c *fiber.Ctx) error {
 
 	// Create the class (creation should fill in the ID field)
 	err = classes.CreateClass(newClass)
+	if err != nil {
+		return getServerErr(c)
+	}
+
+	// Update user time-related data
+	_, err = pingActive(*user)
 	if err != nil {
 		return getServerErr(c)
 	}
