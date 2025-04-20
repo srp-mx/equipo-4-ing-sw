@@ -4,9 +4,17 @@ import { Class } from  "@/Object/Class";
 import ClassCard from "../ClassView/ClassCard";
 import ClassModal from "../ClassView/ClassModal";
 
-export default function Resultbar({ classes } : { classes : Array<Class>}) : React.ReactNode {
+export default function Resultbar({ classes, onClickCard } : { classes : Array<Class>, onClickCard:(valor:boolean) => void }) : React.ReactNode {
     const [selectedTasks, setSelectedTasks] = useState<Set<number>>(new Set());
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedClassId, setSelectedClassId] = useState<number | null>(null);
+    
+    const handleOpenModal = (c: Class) => {
+        setSelectedClassId(c.id);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedClassId(null);
+    }
 
     const handleCheckboxChange = (scheduleId: number) => {
         setSelectedTasks((prev) => {
@@ -41,7 +49,7 @@ export default function Resultbar({ classes } : { classes : Array<Class>}) : Rea
                     <span className="text-white text-lg font-semibold">Resultado</span>
                 </div>
 
-                <BottonResultBar selection={Array.from(selectedTasks)}/>
+                <BottonResultBar selection={Array.from(selectedTasks)} onClickCard={onClickCard}/>
             </div>
 
             <div className="mt-2 mb-3 h-[calc(100vh-450px)] overflow-y-auto">
@@ -55,8 +63,8 @@ export default function Resultbar({ classes } : { classes : Array<Class>}) : Rea
                                     checked={selectedTasks.has(schedule.id)}
                                     onChange={() => handleCheckboxChange(schedule.id)}
                                 />                        
-                                <ClassCard classData={schedule} onOpen={() => setIsModalOpen(true)} />
-                                <ClassModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} classData={schedule} />
+                                <ClassCard classData={schedule} onOpen={() => {handleOpenModal(schedule); onClickCard(false);}} />
+                                <ClassModal isOpen={selectedClassId === schedule.id} onClose={() => {handleCloseModal(); onClickCard(true);}} classData={schedule} />
                             </li>
                         ))}
                     </ul>

@@ -1,6 +1,6 @@
 import { updateAssignment } from "@/constants/assignmentSlice";
 import { Assigment } from "@/Object/Assigment";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { data } from "react-router-dom";
 
@@ -33,7 +33,8 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
     const [isEdit,setIsEdit] = useState(false);
     const [editedAssigment, setEditedAssigment] = useState({ ... assigment});
     const [className, setClassName] = useState("");
-
+    const modalRef = useRef<HTMLDivElement>(null);
+    
     const getClass = async() => {
         try{
             const response = await fetch(`http://localhost:3000/get_class?id=${assigment.class_id}`,{
@@ -75,6 +76,7 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                 },
                 "new_assignment": {
                     ...editedAssigment,
+                    grade: editedAssigment.grade * 1,
                     progress: Math.trunc(editedAssigment.progress),
                     due_date: new Date (editedAssigment.due_date).toISOString(),
                 }
@@ -95,7 +97,7 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
             }
 
             const data = await response.json();
-            dispatch(updateAssignment(editedAssigment));
+            dispatch(updateAssignment(dataSend.new_assignment));
             setIsEdit(false);
         }catch(error){
             console.error('Error: ', error);
@@ -110,9 +112,26 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
 
     getClass();
 
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent){
+            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+                onClose();
+              }
+            }
+        
+            if (isOpen) {
+              document.addEventListener("mousedown", handleClickOutside);
+            }
+        
+            return () => {
+              document.removeEventListener("mousedown", handleClickOutside);
+            };
+          }, [isOpen, onClose]);
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-10">
-            <div className="p-6 w-1/3 shadow-lg items-center border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
+            <div ref={modalRef} 
+            className="p-6 w-1/3 shadow-lg items-center border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
                 <div className="flex mb-2 mr-4 space-x-2 justify-end">
                     <div className="flex space-x-2">
                         {assigment.optional && (
@@ -170,6 +189,25 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                         <span>{assigment.tag}</span>
                     )}
                 </div>
+                
+                <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
+                    <span>Calificacion: </span>
+                    {isEdit ? (
+                        <input
+                            type="number"
+                            min="0"
+                            step=".01"
+                            max="20"
+                            name="grade"
+                            className="border rounded p-1"
+                            value={editedAssigment.grade}
+                            onChange={handleChange}
+                        />
+                    ) : (
+                        <span>{assigment.grade}</span>
+                    )}
+                </div>
+
                 <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
                     <span>Notas: </span>
                     {isEdit ? (

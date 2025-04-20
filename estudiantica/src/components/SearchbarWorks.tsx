@@ -22,7 +22,23 @@ function DropdownMenu({ options, onSelect }: { options: { label: string, value: 
         </ul>
     );
 }
-
+function DropdownMenuSort({ options, onSelect }: { options: { label: string, value: string }[], onSelect: (option: string) => void }){
+    return (
+        <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
+            {options.map((option, index) => (
+                <li key={index}>
+                    <button 
+                        type="button" 
+                        className="inline-flex w-full px-4 py-2 hover:bg-gray-600 hover:text-white"
+                        onClick={() => onSelect(option.value)}
+                    >
+                        {option.label}
+                    </button>
+                </li>
+            ))}
+        </ul>
+    );
+}
 /**
  * Función que recupera los trabajos de un usuario
  * @param User - usuario
@@ -46,6 +62,7 @@ async function getWorks(username : string) : Promise<Assigment[]>{
         } 
         const data = await response.json();
         const assignments : Assigment[] = data; 
+        
         return assignments; 
     }catch(error){
         console.error("Error ", error); 
@@ -61,14 +78,25 @@ export default function SearchbarWorks(){
         { label: "En progreso", value: 0 }
     ];
 
+    const sortOptions = [
+        { label: "Nombre (A-Z)", value: "name-asc"}, 
+        { label: "Nombre (Z-A)", value: "name-desc"},
+        { label: "Calificación (↑)", value: "grade-asc"},
+        { label: "Calificación (↓)", value: "grade-desc"},
+        { label: "Fecha más cercana", value: "dueDate-asc"},
+        { label: "Fecha más lejana", value: "dueDate-desc"},
+    ];
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef2 = useRef<HTMLDivElement>(null);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [isOrderOpen, setIsOrderOpen] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<null | number>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(true);
+    const [sortCriteria, setSortCriteria] = useState<"name" | "grade" | "dueDate">("dueDate");
+    const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+    const [isOpen, setIsOpen] = useState(true);
     const user = useSelector((state: RootState) => state.user);
-    //Versión de prueba
-    // let tasks = getWorks
     const tasks = useSelector((state: RootState) => state.assignments.assignments);
     const dispatch = useDispatch();
 
@@ -87,7 +115,7 @@ export default function SearchbarWorks(){
         function handleClickOutside(event: MouseEvent) {
             const dropdownProgreso = document.getElementById('dropdown')
             if (dropdownProgreso?.classList.contains('block') && dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
+                setIsFilterOpen(false);
             }
         }
         document.addEventListener("mousedown", handleClickOutside);
@@ -96,36 +124,98 @@ export default function SearchbarWorks(){
         };
     }, []);
 
-    const filteredTasks = tasks.filter(
-        (task) => 
-            (selectedStatus === null || task.progress === selectedStatus) &&
-            task.name.toLowerCase().includes(searchTerm.toLowerCase())
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            const dropdownProgreso = document.getElementById('dropSort')
+            if (dropdownProgreso?.classList.contains('block') && dropdownRef2.current && !dropdownRef2.current.contains(event.target as Node)) {
+                setIsOrderOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const sortTask = (tasks: Assigment[]) => {
+        return [...tasks].sort( (a, b) => {
+            if(sortCriteria === "name") {
+                const nameA = a.name.toLowerCase(); 
+                const nameB = b.name.toLowerCase();
+                return sortDirection === "asc" 
+                ? nameA.localeCompare(nameB)
+                : nameB.localeCompare(nameA);
+            }else if (sortCriteria === "grade") {
+                return sortDirection === "asc"
+                ? a.grade - b.grade 
+                : b.grade - a.grade;
+            }else if (sortCriteria === "dueDate" && a.due_date && b.due_date) {
+                const dateA = new Date(a.due_date).getTime();
+                const dateB = new Date(b.due_date).getTime();
+                return sortDirection === "asc" 
+                ? dateA - dateB 
+                : dateB - dateA;
+            }
+            return 0;
+        });
+    }
+
+    const filteredTasks = sortTask(
+        tasks.filter(
+            (task) => 
+                (selectedStatus === null || task.progress === selectedStatus) &&
+                task.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
     );
 
     return (
         <div className="space-y-4">
             <div className="mx-auto w-full">
+            {isOpen && (
+            
             <div className="flex relative">
                 <button
-                    id="dropdown-button"
+                    id="filter-button"
                     className="shrink-0 z-10 inline-flex items-center py-2.5 px-4 bg-gray-700 text-sm font-medium text-center border rounded-s-lg focus:ring-4 hover:bg-gray-600 focus:ring-gray-700 text-white border-gray-600"
-                    type="button"
-                    onClick={() => setIsOpen((prev) => !prev)}
+                    onClick={() => setIsFilterOpen(!isFilterOpen)}
                 >
                     {statusMap.find((s) => s.value === selectedStatus)?.label || "Seleccionar"}
                     <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
                     </svg>
                 </button>
-
+                <button
+                    id="sort-button"
+                    className="shrink-0 z-10 inline-flex items-center py-2.5 px-4 bg-gray-700 text-sm font-medium text-center border focus:ring-4 hover:bg-gray-600 focus:ring-gray-700 text-white border-gray-600"
+                    onClick={() => setIsOrderOpen(!isOrderOpen)}
+                    >
+                    Ordenar por: {sortOptions.find((s) => s.value === `${sortCriteria}-${sortDirection}`)?.label || "Fecha más cercana"}
+                    <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+                <div
+                    ref={dropdownRef2}
+                    id="dropSort"
+                    className={`absolute ml-22 mt-10 w-44 bg-gray-700 rounded-lg shadow-sm divide-y divide-gray-100 transition-opacity ${
+                        isOrderOpen ? "block" : "hidden"
+                    }`}
+                    >
+                        <DropdownMenuSort options={sortOptions} onSelect={(value) => {
+                            const[criteria, direction] = value.split("-");
+                            setSortCriteria(criteria as "name" | "grade" | "dueDate");
+                            setSortDirection(direction as "asc" | "desc");
+                            setIsOrderOpen(false);
+                        }} />
+                </div>
                 <div
                     ref={dropdownRef}
                     id="dropdown"
                     className={`absolute mt-10 w-44 bg-gray-700 rounded-lg shadow-sm divide-y divide-gray-100 transition-opacity ${
-                        isOpen ? "block" : "hidden"
+                        isFilterOpen ? "block" : "hidden"
                     }`}
                 >
-                    <DropdownMenu options={statusMap} onSelect={(value) => { setSelectedStatus(value); setIsOpen(false); }} />
+                    <DropdownMenu options={statusMap} onSelect={(value) => { setSelectedStatus(value); setIsFilterOpen(false); }} />
                 </div>
                 <div className="relative w-full">
                     <input 
@@ -167,7 +257,8 @@ export default function SearchbarWorks(){
                     </div>
                 </div>
             </div>
-            
+            )}
+
             {loading ? (
                 <div className="mt-2 mb-3 h-3/4 mt-8 overflow-y-auto">
                     <div id="loading-skeleton" className="space-y-4">
@@ -177,7 +268,9 @@ export default function SearchbarWorks(){
                     </div>
                 </div>
                 ) : (
-                <Resultbar assigment={filteredTasks} />
+                <Resultbar assigment={filteredTasks} onClickCard = {(valor) => {
+                    setIsOpen(valor)
+                }} />
             )}
             </div>
         </div>
