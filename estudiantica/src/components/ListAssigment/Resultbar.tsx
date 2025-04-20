@@ -1,5 +1,5 @@
 import BottonResultBar from "./BottonResultBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AssigmentCard from "../AssigmentView/AssigmentCard";
 import AssigmentModal from "../AssigmentView/AssigmentModal";
 import { Assigment } from "@/Object/Assigment";
@@ -39,6 +39,10 @@ export default function Resultbar({ assigment, onClickCard }: { assigment: Array
             setSelectedTasks(new Set());
         }
     };
+
+    useEffect(() => {
+            setSelectedTasks(new Set());        
+        },[assigment]);
 
     return (
         <div className="rounded-lg p-4 mx-auto w-full h-full">
