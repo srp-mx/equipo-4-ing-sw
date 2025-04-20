@@ -38,6 +38,7 @@ func resetDb() {
 	db.Exec("DELETE from users")
 	db.Exec("DELETE from classes")
 	db.Exec("DELETE from assignments")
+	db.Exec("DELETE from characters")
 }
 
 // Entry-point of all tests
@@ -52,6 +53,7 @@ func TestMain(m *testing.M) {
 
 	db.AutoMigrate(&models.Assignment{})
 	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Character{})
 	db.AutoMigrate(&models.Class{})
 
 	database.DB.Db = db

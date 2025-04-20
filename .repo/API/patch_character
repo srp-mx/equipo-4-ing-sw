@@ -1,0 +1,41 @@
+DESCRIPTION: Updates the fields of the character passed into it.
+
+
+
+Type: POST
+
+
+
+INPUT:
+{
+    "name": ...
+}
+
+"name" -> string // Currently the only directly modifiable field
+
+
+
+RETURNS:
+{
+    "name": ...
+}
+
+"name" -> string // The modified character name as left in the database
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: The user has no character
+
+409 (Conflict)
+    Cause: The proposed character name is already taken
+
+500 (Internal server error)
+    Cause: Internal error

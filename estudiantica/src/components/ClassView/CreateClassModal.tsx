@@ -53,7 +53,7 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
             const data = await response.json();
-            newClass.id = data.id;
+            newClass.id = data.class_id;
             dispatch(addClass(newClass)); 
             onClose();        
         }catch( error ){

@@ -18,10 +18,10 @@
 package handlers
 
 import (
-	"github.com/srp-mx/equipo-4-ing-sw/models"
 	"github.com/gofiber/fiber/v2"
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
+	"github.com/srp-mx/equipo-4-ing-sw/models"
 )
 
 // Handles /user_classes
@@ -43,7 +43,8 @@ func GetUserClasses(c *fiber.Ctx) error {
 	// Returns the classes
 	return c.JSON(user.Classes)
 }
-// Handles /all_assignments 
+
+// Handles /all_assignments
 func GetAllAssignments(c *fiber.Ctx) error {
 	user, err := getCredentials(c)
 	if err != nil {
@@ -51,7 +52,7 @@ func GetAllAssignments(c *fiber.Ctx) error {
 	}
 	users := controllers.NewUserController(database.DB.Db)
 	var ass []models.Assignment
-	ass, err =  users.LoadAssignments(user)
+	ass, err = users.LoadAssignments(user)
 	if err != nil {
 		return getServerErr(c)
 	}
