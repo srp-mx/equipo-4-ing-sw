@@ -16,7 +16,11 @@ INPUT:
 
 
 RETURNS:
-The modified character name as it is left in the database as a JSON object
+{
+    "name": ...
+}
+
+"name" -> string // The modified character name as left in the database
 
 
 
@@ -26,6 +30,9 @@ ERRORS:
 
 401 (Unauthorized)
     Cause: Bad credentials
+
+404 (Not found)
+    Cause: The user has no character
 
 409 (Conflict)
     Cause: The proposed character name is already taken

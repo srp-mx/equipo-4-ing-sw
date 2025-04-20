@@ -17,9 +17,9 @@ INPUT:
 
 RETURNS:
 {
-    "character_id": ...
+    "character_name": ...
 }
-"character_id" The character's ID, as fetched from the database
+"character_name" The character's name, as fetched from the database
 
 
 

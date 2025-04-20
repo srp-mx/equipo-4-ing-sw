@@ -1,4 +1,5 @@
-DESCRIPTION: Tries to assign skill points to a character.
+DESCRIPTION: Tries to assign skill points to a character. The input is the
+skill points to add into each attribute.
 
 
 
