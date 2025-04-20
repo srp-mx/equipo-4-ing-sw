@@ -17,15 +17,9 @@
 
 package models
 
-import (
-	_ "gorm.io/gorm"
-)
-
-type User struct {
-	Username  string     `gorm:"primaryKey" json:"username"`
-	Name      string     `gorm:"not null" json:"name"`
-	Email     string     `gorm:"unique;not null" json:"email"`
-	Password  string     `gorm:"not null" json:"-"`
-	Classes   []Class    `gorm:"foreignKey:OwnerUsername;references:Username;constraint:OnDelete:CASCADE" json:"classes,omitempty"`
-	Character *Character `gorm:"foreignKey:UserUsername;references:Username;constraint:OnDelete:CASCADE" json:"character"`
+type CharacterStats struct {
+	Strength     int `json:"strength"`
+	Defense      int `json:"defense"`
+	Intelligence int `json:"intelligence"`
+	Heart        int `json:"heart"`
 }

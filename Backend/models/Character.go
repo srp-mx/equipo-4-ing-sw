@@ -22,19 +22,27 @@ import (
 	"time"
 )
 
+const MAX_HP int = 100
+
 type Character struct {
-	ID                   uint `gorm:"primaryKey"`
-	UserUsername         string
-	Name                 string `gorm:"unique"`
-	MomentOfLatestAction time.Time
-	Streak               int `gorm:"check:streak >= 0"`
-	Hp                   int
-	StrengthExtra        int
-	DefenseExtra         int
-	IntelligenceExtra    int
-	HeartExtra           int
-	ExtraPoints          int
-	Type                 string `gorm:"type:varchar(20);check type in ('wizzard', 'knight', 'sage')"`
+	ID                   uint      `gorm:"primaryKey" json:"id"`
+	UserUsername         string    `gorm:"not null" json:"user_username"`
+	Name                 string    `gorm:"unique;not null" json:"name"`
+	MomentOfLatestAction time.Time `gorm:"datetime;not null" json:"moment_of_last_action,string"`
+	// Number of consecutive days
+	Streak int `gorm:"check:streak >= 0" json:"streak"`
+	// Health
+	Hp int `json:"hp"`
+	// Points dedicated to Strength
+	StrengthExtra int `json:"-"`
+	// Points dedicated to Defense
+	DefenseExtra int `json:"-"`
+	// Points dedicated to Intelligence
+	IntelligenceExtra int `json:"-"`
+	// Points dedicated to Heart
+	HeartExtra int `json:"-"`
+	// Extra XP gained from events
+	ExtraPoints uint64 `json:"-"`
 	//Accompanies          Accompanies
 	//Wears                Wears
 	//Equips               Equips
