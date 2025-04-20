@@ -54,17 +54,11 @@ func (self *AssignmentController) DeleteAssignment(assignment *models.Assignment
 
 // Fills in the receiver with an existing assignment's data that matches its ID
 func (self *AssignmentController) Get(receiver *models.Assignment) error {
-	err := self.DB.
+	return self.DB.
 		Where(&models.Assignment{
 			ID: receiver.ID,
 		}).
 		First(receiver).Error
-
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // Returns an assignment that matches the query's ID on the database
@@ -127,11 +121,9 @@ func (self *AssignmentController) UpdateWithMap(source *models.Assignment, updat
 	if value, exists := updates["progress"]; exists {
 		if floatValue, ok := value.(float64); ok {
 			foundAssignment.Progress = int(floatValue)
-		}else{
+		} else {
 			return fmt.Errorf("No estoy recibiendo un numero en progress")
 		}
-		
-
 	}
 	if value, exists := updates["tag"]; exists {
 		v := strings.TrimSpace(value.(string))
