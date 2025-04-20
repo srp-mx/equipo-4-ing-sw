@@ -88,27 +88,31 @@ func (self *AssignmentController) Exists(assignment models.Assignment) (bool, er
 }
 
 // Updates the assignment which matches the source's ID with the valid entries
-// on the updates map in the database
-func (self *AssignmentController) UpdateWithMap(source *models.Assignment, updates map[string]any) error {
+// on the updates map in the database. Also returns whether or not the update
+// counted as user activity (to continue a streak)
+func (self *AssignmentController) UpdateWithMap(source *models.Assignment, updates map[string]any) (bool, error) {
 	foundAssignment, err := self.GetWithCopy(*source)
+	activity := false
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	if value, exists := updates["due_date"]; exists {
 		v, err := time.Parse(DATETIME_FMT, value.(string))
 		if err != nil {
-			return fmt.Errorf("La fecha de entrega no es válida")
+			return false, fmt.Errorf("La fecha de entrega no es válida")
 		}
 		foundAssignment.DueDate = v
 	}
 	if value, exists := updates["notes"]; exists {
 		v := value.(string)
 		foundAssignment.Notes = v
+		activity = true
 	}
 	if value, exists := updates["grade"]; exists {
 		v := value.(float64)
 		foundAssignment.Grade = v
+		activity = true
 	}
 	if value, exists := updates["name"]; exists {
 		v := value.(string)
@@ -122,17 +126,18 @@ func (self *AssignmentController) UpdateWithMap(source *models.Assignment, updat
 		if floatValue, ok := value.(float64); ok {
 			foundAssignment.Progress = int(floatValue)
 		} else {
-			return fmt.Errorf("No estoy recibiendo un numero en progress")
+			return false, fmt.Errorf("No estoy recibiendo un numero en progress")
 		}
+		activity = true
 	}
 	if value, exists := updates["tag"]; exists {
 		v := strings.TrimSpace(value.(string))
 		if !utils.ValidTagName(v) {
-			return fmt.Errorf("El nombre de etiqueta es inválido.")
+			return false, fmt.Errorf("El nombre de etiqueta es inválido.")
 		}
 		foundAssignment.Tag = v
 	}
-	return self.UpdateAssignment(foundAssignment)
+	return activity, self.UpdateAssignment(foundAssignment)
 }
 
 // Determines if the assignment was assigned to the user

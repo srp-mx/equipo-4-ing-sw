@@ -59,6 +59,12 @@ func Login(c *fiber.Ctx) error {
 		return getServerErr(c)
 	}
 
+	// Update user time-related data
+	_, err = tickData(*user)
+	if err != nil {
+		return getServerErr(c)
+	}
+
 	return c.JSON(TokenResponse{
 		Token: token,
 		User:  *user,

@@ -84,6 +84,15 @@ func DeleteCharacter(c *fiber.Ctx) error {
 		return err
 	}
 
+	// Update time-related data
+	del, err := tickData(*user)
+	if err != nil {
+		return getServerErr(c)
+	}
+	if del {
+		return getNotFound(c, "El personaje ya no existe")
+	}
+
 	// Load the character from the user
 	users := controllers.NewUserController(database.DB.Db)
 	err = users.LoadCharacter(user)
@@ -114,6 +123,15 @@ func PatchCharacter(c *fiber.Ctx) error {
 	user, err := getCredentials(c)
 	if err != nil {
 		return err
+	}
+
+	// Update time-related data
+	del, err := tickData(*user)
+	if err != nil {
+		return getServerErr(c)
+	}
+	if del {
+		return getNotFound(c, "El personaje ya no existe")
 	}
 
 	// Request type
@@ -294,6 +312,15 @@ func CharacterAddSkills(c *fiber.Ctx) error {
 		return err
 	}
 
+	// Update time-related data
+	del, err := tickData(*user)
+	if err != nil {
+		return getServerErr(c)
+	}
+	if del {
+		return getNotFound(c, "El personaje ya no existe")
+	}
+
 	// Load in their character
 	users := controllers.NewUserController(database.DB.Db)
 	err = users.LoadCharacter(user)
@@ -331,6 +358,15 @@ func characterGetBase(c *fiber.Ctx) (*models.User, error) {
 	user, err := getCredentials(c)
 	if err != nil {
 		return nil, err
+	}
+
+	// Update time-related data
+	del, err := tickData(*user)
+	if err != nil {
+		return user, getServerErr(c)
+	}
+	if del {
+		return user, getNotFound(c, "El personaje ya no existe")
 	}
 
 	// Load in their character

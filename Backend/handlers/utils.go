@@ -182,3 +182,33 @@ func cleanDisplayName(input string) string {
 
 	return result
 }
+
+// Does timing updates before fetching data
+func tickData(user models.User) (deleted bool, err error) {
+	users := controllers.NewUserController(database.DB.Db)
+	characters := controllers.NewCharacterController(database.DB.Db)
+
+	err = users.LoadCharacter(&user)
+	if err != nil {
+		return false, err
+	}
+
+	if user.Character == nil {
+		return true, nil
+	}
+
+	return characters.ActivityUpdate(user.Character, false)
+}
+
+// Indicates user activity
+func pingActive(user models.User) (deleted bool, err error) {
+	users := controllers.NewUserController(database.DB.Db)
+	characters := controllers.NewCharacterController(database.DB.Db)
+
+	err = users.LoadCharacter(&user)
+	if err != nil {
+		return false, err
+	}
+
+	return characters.ActivityUpdate(user.Character, true)
+}

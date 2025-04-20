@@ -302,7 +302,7 @@ func (self *CharacterController) ActivityUpdate(character *models.Character, isA
 		return false, err
 	}
 	if !exists {
-		return true, fmt.Errorf("El personaje ya no existe")
+		return true, nil // Not existing is ok
 	}
 
 	err = self.Get(character)
