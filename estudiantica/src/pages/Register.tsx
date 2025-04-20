@@ -16,12 +16,11 @@ const PasswordInput = ({ value, onChange }: { value: string; onChange: (e: React
       <input
         type={showPassword ? "text" : "password"}
         className="mb-6 peer block w-full px-3 py-2 text-sm text-white bg-transparent border-2 border-[#cbda3d] rounded-md focus:outline-none focus:border-[#cbda3d] "
-        placeholder=""
+        placeholder="Contraseña"
         value={value}
         onChange={onChange}
         required
       />
-      <label className="absolute text-sm text-[#2d314f] transform scale-50 top-1/3 left-3 -translate-y-1/6 transition-all duration-300 peer-placeholder-shown:top-1/4 peer-placeholder-shown:left-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:text-[#cbda3d] peer-focus:top-0 peer-focus:scale-75 peer-focus:text-[#cbda3d]">Contraseña</label>
       <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-3 flex items-center text-[#cbda3d]">
         {showPassword ? (
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
@@ -124,45 +123,32 @@ export default function Register() {
                             <input 
                                 type="email"
                                 className="peer block w-full px-3 py-2 text-sm text-white bg-transparent border-2 border-[#cbda3d] rounded-md focus:outline-none focus:border-[#cbda3d]" 
-                                placeholder=""
+                                placeholder="Correo"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                                 />
-                            <label className="absolute text-sm text-[#2d314f] transform scale-50 top-1/3 left-3 
-                            -translate-y-1/6 transition-all duration-300 peer-placeholder-shown:top-1/4 peer-placeholder-shown:left-3 
-                            peer-placeholder-shown:scale-100 peer-placeholder-shown:text-[#cbda3d] peer-focus:top-0 peer-focus:scale-75 
-                            peer-focus:text-[#cbda3d]">Correo</label>
-    
                         </div>
                         <div className="relative flex flex-col mb-4">
                             <input 
                                 type="userName"
                                 className="peer block w-full px-3 py-2 text-sm text-white bg-transparent border-2 border-[#cbda3d] rounded-md focus:outline-none focus:border-[#cbda3d]" 
-                                placeholder=""
+                                placeholder="Nombre de Usuario"
                                 value={userName}
                                 onChange={(e) => setUserName(e.target.value)}
                                 required
                                 />
-                            <label className="absolute text-sm text-[#2d314f] transform scale-50 top-1/3 left-3 
-                            -translate-y-1/6 transition-all duration-300 peer-placeholder-shown:top-1/4 peer-placeholder-shown:left-3 
-                            peer-placeholder-shown:scale-100 peer-placeholder-shown:text-[#cbda3d] peer-focus:top-0 peer-focus:scale-75 
-                            peer-focus:text-[#cbda3d]">Nombre de Usuario</label>
                         </div>
                         <div className="relative flex flex-col mb-4">
                             <input 
                                 type="Name"
                                 className="peer block w-full px-3 py-2 text-sm text-white bg-transparent border-2 border-[#cbda3d] rounded-md focus:outline-none focus:border-[#cbda3d]" 
-                                placeholder=""
+                                placeholder="Nombre"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 required
                                 />
-                            <label className="absolute text-sm text-[#2d314f] transform scale-50 top-1/3 left-3 
-                            -translate-y-1/6 transition-all duration-300 peer-placeholder-shown:top-1/4 peer-placeholder-shown:left-3 
-                            peer-placeholder-shown:scale-100 peer-placeholder-shown:text-[#cbda3d] peer-focus:top-0 peer-focus:scale-75 
-                            peer-focus:text-[#cbda3d]">Nombre</label>
-    
+                            
                         </div>
                         <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
                         <Button> Registrarse </Button>
