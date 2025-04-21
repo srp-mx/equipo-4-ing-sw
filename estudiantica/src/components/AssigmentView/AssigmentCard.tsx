@@ -32,7 +32,7 @@ export default function AssigmentCard({ assigment, onOpen } : AssigmentCardProps
             <div className="row-span-3 flex w-30 h-30 items-center justify-center">
                 <img src="assets/img/bandera.png"/>
             </div>
-            <div className="col-span-5 row-span-3">
+            <div className="ml-3 col-span-5 row-span-3">
                 <div className="flex mb-2 mr-4 space-x-2 justify-end">
                     <div className="flex space-x-2">
                         {assigment.optional && (

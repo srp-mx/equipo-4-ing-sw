@@ -65,7 +65,7 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
 
         }catch(error){
             console.error("Error", error);
-            alert("Hubo un problema al crear la clase");
+            alert("Ha ocurrido un error");
         }
     };
 
