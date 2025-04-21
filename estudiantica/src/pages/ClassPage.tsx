@@ -2,8 +2,12 @@ import Header from "@/components/Header";
 import Navbar from "@/components/home/Navbar";
 import SearchbarClass from "@/components/SearchbarClass";
 import SideBar from "@/components/SideBar";
+import { useAuth } from "@/constants";
 
 export default function ClassPage(){
+
+    useAuth();
+
     return (
         <div className="bg-[#0B090F] h-screen w-screen bg-cover bg-center">
             <Navbar/>

@@ -8,8 +8,11 @@ import HorarioImg from "@/assets/img/home/icono_horario.png";
 import MateriaImg from "@/assets/img/home/icono_materias.png";
 import Stats from "@/components/home/Stats"
 import { Link } from "react-router-dom";
+import { useAuth } from "@/constants";
 
 export default function Home(){
+    useAuth();
+
     return (
         <>
             <NavBar />
