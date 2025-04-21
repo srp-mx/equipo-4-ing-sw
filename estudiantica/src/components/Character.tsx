@@ -37,7 +37,7 @@ const Character = () => {
     
     const getStats = async() => {
         try{
-            const response = await fetch("http://localgost:3000/character_stats", {
+            const response = await fetch("http://localhost:3000/character_stats", {
                 method: "GET", 
                 headers: {
                     "Content-Type": "application/json", 
