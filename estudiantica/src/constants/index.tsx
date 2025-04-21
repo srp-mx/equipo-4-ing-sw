@@ -7,6 +7,8 @@ import iconoOtros from '@/assets/img/sidebar/icono_otros.png';
 import iconoConfiguracion from '@/assets/img/sidebar/icono_configuracion.png';
 import characterImage from '@/assets/img/personaje_elfa_1.png';
 import { RootState } from './store';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 
 export const navItems = [
@@ -34,4 +36,15 @@ export const navItems = [
     nivel: "12",
     characterURL: characterImage,
     clanShieldURL: "#",
+  };
+
+  export const useAuth = () => {
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/");
+      }
+    }, [navigate]);
   };

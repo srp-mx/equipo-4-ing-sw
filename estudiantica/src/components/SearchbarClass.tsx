@@ -62,6 +62,7 @@ export default function SearchbarClass(){
     const clases = useSelector((state: RootState) => state.clases.clases);
     const dispatch = useDispatch();
     
+    
     useEffect(() => {
         async function fetchTasks() {
             setLoading(true);
