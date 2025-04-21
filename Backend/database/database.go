@@ -92,10 +92,10 @@ func setupMock(db *gorm.DB) {
 		Email:    "pepito@pepito.com",
 	}
 	users[usernames[1]] = &models.User{
-		Username: "pedrito",
-		Name:     "Pedro",
+		Username: "matilda",
+		Name:     "Matilda",
 		Password: "pass",
-		Email:    "pedrito@pedrito.com",
+		Email:    "matilda@matilda.com",
 	}
 	users[usernames[2]] = &models.User{
 		Username: "marinela",
@@ -104,7 +104,7 @@ func setupMock(db *gorm.DB) {
 		Email:    "marinela@marinela.com",
 	}
 
-	characterNames := []string{"xXpepitasXx", "piedritas", "marimbas44"}
+	characterNames := []string{"xXpepitasXx", "matilda", "marimbas44"}
 	characters := make(map[string]*models.Character)
 	for i := range len(users) {
 		username := usernames[i]
@@ -132,7 +132,7 @@ func setupMock(db *gorm.DB) {
 			classes[className] = &models.Class{
 				Name:          className,
 				StartDate:     time.Now().Truncate(24*time.Hour).AddDate(0, -3, 0),
-				EndDate:       time.Now().Truncate(24*time.Hour).AddDate(0, 1, 0),
+				EndDate:       time.Now().Truncate(24*time.Hour).AddDate(0, 3-2*j, 0),
 				OwnerUsername: usernames[i],
 				GradeFormula:  "0.3*average(tarea) + 0.7*average(top(2,examen))",
 				Color:         colors[j%3],
@@ -152,7 +152,7 @@ func setupMock(db *gorm.DB) {
 				hwkProgress = 0
 			}
 			assignments[className][hwkName] = &models.Assignment{
-				DueDate:  time.Now().Truncate(24*time.Hour).AddDate(0, 0, i+1-homeworks),
+				DueDate:  time.Now().Truncate(24*time.Hour).AddDate(0, -1, i+1-homeworks),
 				Notes:    "Ya valió",
 				Grade:    float64(rand.Intn(100 + 1)),
 				Name:     hwkName,
@@ -164,7 +164,7 @@ func setupMock(db *gorm.DB) {
 		for i := 1; i <= exams; i++ {
 			exName := "Examen " + strconv.FormatInt(int64(i), 10) + " " + className
 			assignments[className][exName] = &models.Assignment{
-				DueDate:  time.Now().Truncate(24*time.Hour).AddDate(0, 0, i-1-homeworks),
+				DueDate:  time.Now().Truncate(24*time.Hour).AddDate(0, -1, i-1-homeworks),
 				Notes:    "Ya valió",
 				Grade:    float64(rand.Intn(100 + 1)),
 				Name:     exName,
