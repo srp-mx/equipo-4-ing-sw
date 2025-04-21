@@ -10,7 +10,7 @@ const HeroSection = () => {
             </h1>
             <p className="mt-10 text-lg text-center text-neutral-400 max-w-4xl"> Ha llegado la hora de que organices tu vida estudiantil. Toma tus espadas y recoge las flechas necesarias para salir a la aventura, conquistando todas tus materias una mazmorra a la vez. Tareas, horarios y promedios, cada uno de ellos esperando ser conquistado.</p>
             <div className="flex justify-center my-10">
-                <Link to="/" className="bg-gradient-to-r from-blue-400 to-blue-900 py-3 px-4 mx-3 rounded-md">
+                <Link to="/register" className="bg-gradient-to-r from-blue-400 to-blue-900 py-3 px-4 mx-3 rounded-md">
                     Start for free
                 </Link>
             </div>

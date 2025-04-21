@@ -1,5 +1,5 @@
 import { RootState } from "@/constants/store";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SelectorClass from "@/components/AssigmentView/SelectorClass"
 import { Assigment } from "@/Object/Assigment";
@@ -12,6 +12,7 @@ type ModalProps = {
 export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
     if (!isOpen) return null;
     const dispatch = useDispatch();
+    const modalRef = useRef<HTMLDivElement>(null);
     const [newAssignment, setNewAssignment] = useState({
         name: "",
         due_date: "",
@@ -35,6 +36,7 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
             const dataSend = {
                 ...newAssignment, 
                 class_id: idN,
+                grade: 0.0,
                 due_date: new Date(newAssignment.due_date).toISOString()
             }
 
@@ -55,7 +57,7 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
             const data = await response.json();
             const assig : Assigment = {
                 ...dataSend,
-                id: data.id
+                id: data.id,
             }
             dispatch(addAssignment(assig));
 
@@ -63,14 +65,31 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
 
         }catch(error){
             console.error("Error", error);
-            alert("Hubo un problema al crear la clase");
+            alert("Ha ocurrido un error");
         }
     };
 
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent){
+            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+                onClose();
+              }
+            }
+        
+            if (isOpen) {
+              document.addEventListener("mousedown", handleClickOutside);
+            }
+        
+            return () => {
+              document.removeEventListener("mousedown", handleClickOutside);
+            };
+          }, [isOpen, onClose]);    
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-md flex items-center justify-center ${isOpen ? 'visible' : 'invisible'">
-            <div className="p-6 w-1/3 shadow-lg border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
-                <h2 className="text-2xl font-semibold">Nueva Clase</h2>
+            <div ref={modalRef} 
+            className="p-6 w-1/3 shadow-lg border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
+                <h2 className="text-2xl font-semibold">Nueva Tarea</h2>
                 <input
                     type="text"
                     name="name"

@@ -10,11 +10,15 @@ import { useNavigate } from "react-router-dom";
 import { clearUser } from "@/constants/userSlice";
 import { clearClases } from "@/constants/classSlice";
 import { clearAssignments } from "@/constants/assignmentSlice";
+import { clearDataCharacter } from "@/constants/dataCharacterSlice";
+import { clearStats } from "@/constants/StatsSlice";
 
 const handleLogout = (dispatch : any, navigate : any) => {
     dispatch(clearUser());
     dispatch(clearClases());
     dispatch(clearAssignments());
+    dispatch(clearStats());
+    dispatch(clearDataCharacter());
     localStorage.removeItem("token");
 
     navigate("/");

@@ -56,10 +56,12 @@ export default function SearchbarClass(){
     const [selectedStatus, setSelectedStatus] = useState<null | number>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(true);
+    const [isDrowOpen, setIsDrowOpen] = useState(true);
 
     const user = useSelector((state: RootState) => state.user);
     const clases = useSelector((state: RootState) => state.clases.clases);
     const dispatch = useDispatch();
+    
     
     useEffect(() => {
         async function fetchTasks() {
@@ -98,6 +100,7 @@ export default function SearchbarClass(){
     return (
         <div className="space-y-4">
             <div className="mx-auto w-full">
+                {isDrowOpen && (
                 <div className="flex relative">
                     <button
                         id="dropdown-button"
@@ -160,6 +163,7 @@ export default function SearchbarClass(){
                         </div>
                     </div>
                 </div>
+                )}
 
                 {loading ? (
                     <div className="mt-2 mb-3 h-3/4 mt-8 overflow-y-auto">
@@ -170,7 +174,9 @@ export default function SearchbarClass(){
                         </div>
                     </div>
                     ) : (
-                    <Resultbar classes={filteredClasses} />
+                    <Resultbar classes={filteredClasses} onClickCard={(valor) => {
+                        setIsDrowOpen(valor)
+                    }}/>
                 )}
             </div>
         </div>

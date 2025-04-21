@@ -91,27 +91,33 @@ func (self *UserController) ExistsEmail(email string) (bool, error) {
 	return count > 0, result.Error
 }
 
+// Loads the related character to the user passed in
+func (self *UserController) LoadCharacter(user *models.User) error {
+	return self.DB.Preload("Character").First(user, "username=?", user.Username).Error
+}
+
 // Loads the related classes to the user passed in
 func (self *UserController) LoadClasses(user *models.User) error {
 	//return self.DB.Model(user).Association("Classes").Find(user.Classes)
 	return self.DB.Preload("Classes").First(user, "username=?", user.Username).Error
 }
 
+// TODO: Rename to GetAssignments
 func (self *UserController) LoadAssignments(user *models.User) ([]models.Assignment, error) {
 	err := self.LoadClasses(user)
-	if err != nil{
+	if err != nil {
 		return nil, err
 	}
 	var assignment = []models.Assignment{}
 	c := NewClassController(self.DB)
 	for _, class := range user.Classes {
-		nerr := c.LoadAssignments(&class)
-		if nerr != nil{
-			return nil, nerr
+		err = c.LoadAssignments(&class)
+		if err != nil {
+			return nil, err
 		}
 		assignment = append(assignment, class.Assignments...)
 	}
-	return assignment, nil 
+	return assignment, nil
 }
 
 // Determines whether a user is enrolled in a class or not

@@ -6,9 +6,13 @@ import CalendarioImg from "@/assets/img/home/icono_calendario.png"
 import TareasImg from "@/assets/img/home/icono_tareas.png";
 import HorarioImg from "@/assets/img/home/icono_horario.png";
 import MateriaImg from "@/assets/img/home/icono_materias.png";
+import Stats from "@/components/home/Stats"
 import { Link } from "react-router-dom";
+import { useAuth } from "@/constants";
 
 export default function Home(){
+    useAuth();
+
     return (
         <>
             <NavBar />
@@ -38,7 +42,7 @@ export default function Home(){
                     <Link to="/class" className="flex rounded-xl items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-green-500 to-green-600 hover:bg-green-800 transition hover:-translate-y-1 hover:scale-100 group" >
                     <img src={MateriaImg} alt="" className="w-10 h-10 mr-4" />
                     
-                    Materias
+                    Clases
                     </Link>
                     
                     <Link to="/home" className="flex rounded-xl items-center text-center w-full h-1/4 px-4 py-4 bg-gradient-to-r bg-amber-500 to-amber-600 hover:bg-amber-800 transition hover:-translate-y-1 hover:scale-100 group" >

@@ -17,22 +17,9 @@
 
 package models
 
-import (
-	_ "gorm.io/gorm"
-	"time"
-)
-
-const MAX_TAG_LEN int = 25
-
-type Assignment struct {
-	ID       uint      `gorm:"primaryKey;autoIncrement" json:"id"`
-	ClassID  uint      `gorm:"not null" json:"class_id"`
-	DueDate  time.Time `json:"due_date"`
-	Notes    string    `gorm:"type:varchar(500)" json:"notes"`
-	Grade    float64   `json:"grade"`
-	Name     string    `json:"name"`
-	Optional bool      `json:"optional,omitempty"`
-	// < 0: not doing, = 0: in progress, > 0: done
-	Progress int    `json:"progress"`
-	Tag      string `gorm:"type:varchar(25)" json:"tag,omitempty"`
+type CharacterStats struct {
+	Strength     int `json:"strength"`
+	Defense      int `json:"defense"`
+	Intelligence int `json:"intelligence"`
+	Heart        int `json:"heart"`
 }

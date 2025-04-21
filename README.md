@@ -1,6 +1,11 @@
 # Estudiantica ⚔
 > Conviértete en el mejor estudiante y domina todas tus materias.
 
+| Rama    | Estado
+|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|`main`   | [![Backend CI (main)](https://github.com/srp-mx/equipo-4-ing-sw/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/srp-mx/equipo-4-ing-sw/actions/workflows/ci.yml)
+|`develop`| [![Backend CI (develop)](https://github.com/srp-mx/equipo-4-ing-sw/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/srp-mx/equipo-4-ing-sw/actions/workflows/ci.yml)
+
 Ha llegado la hora de que organices tu vida estudiantil. Toma tus espadas y
 recoge las flechas necesarias para salir a la aventura, conquistando todas tus
 materias una mazmorra a la vez. Tareas, horarios y promedios, cada uno de ellos

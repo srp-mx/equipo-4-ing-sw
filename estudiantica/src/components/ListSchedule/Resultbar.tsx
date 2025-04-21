@@ -1,12 +1,21 @@
 import BottonResultBar from "./BottonResultBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Class } from  "@/Object/Class";
 import ClassCard from "../ClassView/ClassCard";
 import ClassModal from "../ClassView/ClassModal";
+import { scheduler } from "timers/promises";
 
-export default function Resultbar({ classes } : { classes : Array<Class>}) : React.ReactNode {
+export default function Resultbar({ classes, onClickCard } : { classes : Array<Class>, onClickCard:(valor:boolean) => void }) : React.ReactNode {
     const [selectedTasks, setSelectedTasks] = useState<Set<number>>(new Set());
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedClassId, setSelectedClassId] = useState<number | null>(null);
+    
+    const handleOpenModal = (c: Class) => {
+        setSelectedClassId(c.id);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedClassId(null);
+    }
 
     const handleCheckboxChange = (scheduleId: number) => {
         setSelectedTasks((prev) => {
@@ -28,6 +37,10 @@ export default function Resultbar({ classes } : { classes : Array<Class>}) : Rea
         }
     };
 
+    useEffect(() => {
+        setSelectedTasks(new Set());        
+    },[classes]);
+
     return (
         <div className="rounded-lg p-4 mx-auto w-full h-full">
             <div className={`${classes.length >= 0 ? "" : "hidden"} w-full rounded-lg bg-gray-700 rounded flex justify-between items-center p-3 border border-gray-600`}>
@@ -41,7 +54,7 @@ export default function Resultbar({ classes } : { classes : Array<Class>}) : Rea
                     <span className="text-white text-lg font-semibold">Resultado</span>
                 </div>
 
-                <BottonResultBar selection={Array.from(selectedTasks)}/>
+                <BottonResultBar selection={Array.from(selectedTasks)} onClickCard={onClickCard} />
             </div>
 
             <div className="mt-2 mb-3 h-[calc(100vh-450px)] overflow-y-auto">
@@ -50,13 +63,14 @@ export default function Resultbar({ classes } : { classes : Array<Class>}) : Rea
                         {classes.map((schedule) => (
                             <li key={schedule.id} className="p-3 rounded flex items-center transition space-x-5 cursor-pointer">
                                 <input 
+                                    key={schedule.id}
                                     type="checkbox" 
                                     className=" w-5 h-5 text-blue-500 bg-gray-800 border-gray-500 rounded focus:ring-0"
                                     checked={selectedTasks.has(schedule.id)}
                                     onChange={() => handleCheckboxChange(schedule.id)}
                                 />                        
-                                <ClassCard classData={schedule} onOpen={() => setIsModalOpen(true)} />
-                                <ClassModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} classData={schedule} />
+                                <ClassCard classData={schedule} onOpen={() => {handleOpenModal(schedule); onClickCard(false);}} />
+                                <ClassModal isOpen={selectedClassId === schedule.id} onClose={() => {handleCloseModal(); onClickCard(true);}} classData={schedule} />
                             </li>
                         ))}
                     </ul>

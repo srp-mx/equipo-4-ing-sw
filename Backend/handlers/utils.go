@@ -18,8 +18,11 @@
 package handlers
 
 import (
+	"errors"
 	"strconv"
+	"strings"
 	"time"
+	"unicode"
 
 	"github.com/gofiber/fiber/v2"
 	jwt "github.com/golang-jwt/jwt/v4"
@@ -30,12 +33,16 @@ import (
 
 // Creates a JSON with an error status
 func getStatusError(c *fiber.Ctx, fiberStatus int, message string) error {
-	return c.Status(fiberStatus).JSON(fiber.Map{
+	err := c.Status(fiberStatus).JSON(fiber.Map{
 		"error": fiber.Error{
 			Code:    fiberStatus,
 			Message: message,
 		},
 	})
+	if err != nil {
+		return err
+	}
+	return errors.New(message)
 }
 
 // Creates a bad request JSON error
@@ -155,4 +162,53 @@ func getQueryId(c *fiber.Ctx) (uint, error) {
 	}
 
 	return uint(id), nil
+}
+
+// Cleans up a display name
+func cleanDisplayName(input string) string {
+	// Trim leading and trailing space
+	result := strings.TrimSpace(input)
+
+	// Remove control and space characters except <space>
+	result = strings.Map(func(r rune) rune {
+		if unicode.IsControl(r) || unicode.IsSpace(r) && r != ' ' {
+			return -1
+		}
+		return r
+	}, result)
+
+	// Remove duplicated spaces
+	result = strings.Join(strings.Fields(result), " ")
+
+	return result
+}
+
+// Does timing updates before fetching data
+func tickData(user models.User) (deleted bool, err error) {
+	users := controllers.NewUserController(database.DB.Db)
+	characters := controllers.NewCharacterController(database.DB.Db)
+
+	err = users.LoadCharacter(&user)
+	if err != nil {
+		return false, err
+	}
+
+	if user.Character == nil {
+		return true, nil
+	}
+
+	return characters.ActivityUpdate(user.Character, false)
+}
+
+// Indicates user activity
+func pingActive(user models.User) (deleted bool, err error) {
+	users := controllers.NewUserController(database.DB.Db)
+	characters := controllers.NewCharacterController(database.DB.Db)
+
+	err = users.LoadCharacter(&user)
+	if err != nil {
+		return false, err
+	}
+
+	return characters.ActivityUpdate(user.Character, true)
 }

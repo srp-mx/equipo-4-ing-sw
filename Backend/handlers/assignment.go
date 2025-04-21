@@ -19,7 +19,7 @@ package handlers
 
 import (
 	"strings"
-	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
@@ -43,12 +43,6 @@ func PostAssignment(c *fiber.Ctx) error {
 
 	// Rejects assignments without a valid class
 	users := controllers.NewUserController(database.DB.Db)
-	if err == nil {
-		fmt.Println("Es nulo")
-	}
-	if newAssignment == nil {
-		fmt.Println("No es nulo")
-	}
 	enrolled, err := users.EnrolledIn(user, newAssignment.ClassID)
 	if err != nil {
 		return getServerErr(c)
@@ -69,6 +63,12 @@ func PostAssignment(c *fiber.Ctx) error {
 	// Create the assignment (the variable's ID field should get populated)
 	assignments := controllers.NewAssignmentController(database.DB.Db)
 	err = assignments.CreateAssignment(newAssignment)
+	if err != nil {
+		return getServerErr(c)
+	}
+
+	// Update user time-related data
+	_, err = pingActive(*user)
 	if err != nil {
 		return getServerErr(c)
 	}
@@ -163,7 +163,7 @@ func PatchAssignment(c *fiber.Ctx) error {
 	}
 
 	// Do the updates
-	err = assignments.UpdateWithMap(&request.Assignment, request.NewAssignment)
+	activity, err := assignments.UpdateWithMap(&request.Assignment, request.NewAssignment)
 	if err != nil {
 		return getBadReq(c, "No se pudo actualizar.\n"+err.Error())
 	}
@@ -172,6 +172,19 @@ func PatchAssignment(c *fiber.Ctx) error {
 	err = assignments.Get(&request.Assignment)
 	if err != nil {
 		return getServerErr(c)
+	}
+
+	// Update user time-related data
+	if activity {
+		_, err = pingActive(*user)
+		if err != nil {
+			return getServerErr(c)
+		}
+	} else {
+		_, err = tickData(*user)
+		if err != nil {
+			return getServerErr(c)
+		}
 	}
 
 	return c.JSON(request.Assignment)

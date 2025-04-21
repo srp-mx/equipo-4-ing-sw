@@ -31,7 +31,7 @@ export default function ClassCard({ classData, onOpen } : ClassCardProps) : Reac
             <div className="row-span-3 flex w-30 h-30 items-center justify-center">
                 <img src="assets/img/bandera.png"/>
             </div>
-            <div className="col-span-5 row-span-3">
+            <div className="ml-3 col-span-5 row-span-3">
                 <div className="flex mb-2 mr-4 space-x-2 mt-2 justify-end">
                     <div className="flex space-x-2">
                         <label className={`flex items-center space-x-1 px-2 py-1 text-white ${activateClass.bgColor} rounded-full`}>

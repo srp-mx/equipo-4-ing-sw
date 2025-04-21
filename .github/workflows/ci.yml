@@ -1,0 +1,33 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Go
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.24
+
+      # Step 3: Run tests in backend
+      - name: Run tests in backend
+        run: |
+          cd Backend
+          go mod tidy
+          go test ./test
