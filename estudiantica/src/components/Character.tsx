@@ -1,10 +1,64 @@
 import { characterDates } from "@/constants";
 import Bandera from "@/assets/img/bandera.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/constants/store";
+import { DataCharacter, StatsCharacter } from "@/Object/Character";
+import { setDataCharacter } from "@/constants/dataCharacterSlice";
+import { setStats } from "@/constants/StatsSlice";
+import { useEffect } from "react";
+
 
 const Character = () => {
     const user = useSelector((state: RootState) => state.user);
+    const datacharacter = useSelector((state: RootState) => state.dataCharacter);
+    const stats = useSelector((state: RootState) => state.stats);
+    const dispatch = useDispatch();
+
+    const getCharacterDefaultInfo = async() => {
+        try{
+            const response = await fetch("http://localgost:3000/character_basic_data", {
+                method: "GET", 
+                headers: {
+                    "Content-Type": "application/json", 
+                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                }
+            });
+            if(!response.ok){
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            const character : DataCharacter = data.data;
+            dispatch(setDataCharacter(character));
+
+        }catch(error){
+            console.error("Error ", error);
+        }
+    }
+    useEffect(() => {
+        const getStats = async() => {
+            try{
+                const response = await fetch("http://localhost:3000/character_stats", {
+                    method: "GET", 
+                    headers: {
+                        "Content-Type": "application/json", 
+                        "Authorization": "Bearer " + localStorage.getItem("token"),
+                    }
+                });
+                if(!response.ok){
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
+                }
+    
+                const data = await response.json();
+                const character : StatsCharacter = data.stats;
+                dispatch(setStats(character));
+    
+            }catch(error){
+                console.error("Error ", error);
+            }
+        };
+        getStats();
+    },[dispatch]);
 
     return (
         <div className="grid grid-cols-4 grid-rows-4">
@@ -13,7 +67,7 @@ const Character = () => {
                 {user.name}
             </div>
             <div className="text-start text-4xl text-cyan-400 ml-8">
-                Nivel: {characterDates.nivel}
+                Nivel: {stats.stats.level}
             </div>
         </div>
         <div className="mt-12 ml-4 col-start-2 col-end-3 row-start-1 row-end-5">

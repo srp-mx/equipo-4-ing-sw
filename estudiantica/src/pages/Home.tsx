@@ -6,6 +6,7 @@ import CalendarioImg from "@/assets/img/home/icono_calendario.png"
 import TareasImg from "@/assets/img/home/icono_tareas.png";
 import HorarioImg from "@/assets/img/home/icono_horario.png";
 import MateriaImg from "@/assets/img/home/icono_materias.png";
+import Stats from "@/components/home/Stats"
 import { Link } from "react-router-dom";
 
 export default function Home(){
