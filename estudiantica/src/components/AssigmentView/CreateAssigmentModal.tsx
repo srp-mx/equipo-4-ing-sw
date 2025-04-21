@@ -57,7 +57,7 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
             const data = await response.json();
             const assig : Assigment = {
                 ...dataSend,
-                id: data.assigment_id,
+                id: data.assignment_id,
             }
             dispatch(addAssignment(assig));
 
