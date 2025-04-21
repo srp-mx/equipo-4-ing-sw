@@ -34,27 +34,35 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
     const [editedAssigment, setEditedAssigment] = useState({ ... assigment});
     const [className, setClassName] = useState("");
     const modalRef = useRef<HTMLDivElement>(null);
-    
-    const getClass = async() => {
-        try{
-            const response = await fetch(`http://localhost:3000/get_class?id=${assigment.class_id}`,{
-                method: "GET",
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("token"),
-                    "Content-Type": "application/json"
+
+
+    useEffect(() => {
+
+        const getClass = async() => {
+            try{
+                const response = await fetch(`http://localhost:3000/get_class?id=${assigment.class_id}`,{
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem("token"),
+                        "Content-Type": "application/json"
+                    }
+                });
+                if(!response.ok){
+                    const error = await response.json();
+                    console.error("El error es ", error);
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
-            });
-            if(!response.ok){
-                const error = await response.json();
-                console.error("El error es ", error);
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
+                const data = await response.json();
+                setClassName(data.name);
+            }catch(error){
+                console.error(error);
             }
-            const data = await response.json();
-            setClassName(data.name);
-        }catch(error){
-            console.error(error);
         }
-    }
+    
+    
+        getClass();    
+
+    },[dispatch]);
     
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -112,7 +120,6 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
         setIsEdit(false);
     };
 
-    getClass();
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent){
