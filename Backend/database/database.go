@@ -19,12 +19,17 @@ package database
 
 import (
 	"fmt"
+	"log"
+	"math/rand"
+	"os"
+	"strconv"
+	"time"
+
+	"github.com/srp-mx/equipo-4-ing-sw/controllers"
 	"github.com/srp-mx/equipo-4-ing-sw/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"log"
-	"os"
 )
 
 // Type that wraps the database instance
@@ -62,33 +67,142 @@ func ConnectDb() {
 	db.AutoMigrate(&models.Character{})
 	db.AutoMigrate(&models.Class{})
 
-	UsuariosBase(db)
+	setupMock(db)
 	DB = Dbinstance{
 		Db: db,
 	}
 }
 
-// Sets up some base users
-func UsuariosBase(db *gorm.DB) {
-	users := []models.User{
-		{Username: "admin", Name: "Adminio", Password: "Admin123*", Email: "root@toor.uk"},
-		{Username: "pepito", Name: "Pepe", Password: "Pepa24*", Email: "pepe.pica.papas@pepe.gov.mx"},
-		{Username: "pedrito", Name: "Pedro", Password: "Piedras1#", Email: "pp@pemex.gov.mx"},
-		{Username: "marinela", Name: "Marcelo", Password: "Gansitos$02", Email: "bonais@ciencias.unam.mx"},
+// Sets up some base data
+func setupMock(db *gorm.DB) {
+	// Controllers
+	var userCtl = controllers.NewUserController(db)
+	var characterCtl = controllers.NewCharacterController(db)
+	var classCtl = controllers.NewClassController(db)
+	var assignmentCtl = controllers.NewAssignmentController(db)
+
+	// Raw data
+
+	users := make(map[string]*models.User)
+	usernames := []string{"pepito", "pedrito", "marinela"}
+	users[usernames[0]] = &models.User{
+		Username: "pepito",
+		Name:     "Pepe",
+		Password: "pass",
+		Email:    "pepito@pepito.com",
+	}
+	users[usernames[1]] = &models.User{
+		Username: "pedrito",
+		Name:     "Pedro",
+		Password: "pass",
+		Email:    "pedrito@pedrito.com",
+	}
+	users[usernames[2]] = &models.User{
+		Username: "marinela",
+		Name:     "Marcela",
+		Password: "pass",
+		Email:    "marinela@marinela.com",
+	}
+
+	characterNames := []string{"xXpepitasXx", "piedritas", "marimbas44"}
+	characters := make(map[string]*models.Character)
+	for i := range len(users) {
+		username := usernames[i]
+		characterName := characterNames[i]
+		characters[characterName] = &models.Character{
+			UserUsername:         username,
+			Name:                 characterName,
+			MomentOfLatestAction: time.Now().AddDate(0, 0, -i),
+			Streak:               10,
+			Hp:                   20,
+			StrengthExtra:        0, DefenseExtra: 0, IntelligenceExtra: 0,
+			HeartExtra: 0, ExtraPoints: 0,
+		}
+	}
+
+	classes := make(map[string]*models.Class)
+	colors := []string{"FF0000FF", "00FF00FF", "0000FFFF"}
+	for i := range len(users) {
+		classNames := []string{
+			"Álgebra Moderna " + strconv.FormatInt(int64(i+1), 10),
+			"Geometría " + strconv.FormatInt(int64(i+1), 10),
+			"Crayolas " + strconv.FormatInt(int64(i+1), 10),
+		}
+		for j, className := range classNames {
+			classes[className] = &models.Class{
+				Name:          className,
+				StartDate:     time.Now().Truncate(24*time.Hour).AddDate(0, -3, 0),
+				EndDate:       time.Now().Truncate(24*time.Hour).AddDate(0, 1, 0),
+				OwnerUsername: usernames[i],
+				GradeFormula:  "0.3*average(tarea) + 0.7*average(top(2,examen))",
+				Color:         colors[j%3],
+			}
+		}
+	}
+
+	assignments := make(map[string](map[string]*models.Assignment))
+	for className := range classes {
+		assignments[className] = make(map[string]*models.Assignment)
+		homeworks := 4
+		exams := 3
+		for i := 1; i <= homeworks; i++ {
+			hwkName := "Tarea " + strconv.FormatInt(int64(i), 10) + " " + className
+			hwkProgress := 1
+			if i == homeworks {
+				hwkProgress = 0
+			}
+			assignments[className][hwkName] = &models.Assignment{
+				DueDate:  time.Now().Truncate(24*time.Hour).AddDate(0, 0, i+1-homeworks),
+				Notes:    "Ya valió",
+				Grade:    float64(rand.Intn(100 + 1)),
+				Name:     hwkName,
+				Optional: false,
+				Progress: hwkProgress,
+				Tag:      "tarea",
+			}
+		}
+		for i := 1; i <= exams; i++ {
+			exName := "Examen " + strconv.FormatInt(int64(i), 10) + " " + className
+			assignments[className][exName] = &models.Assignment{
+				DueDate:  time.Now().Truncate(24*time.Hour).AddDate(0, 0, i-1-homeworks),
+				Notes:    "Ya valió",
+				Grade:    float64(rand.Intn(100 + 1)),
+				Name:     exName,
+				Optional: false,
+				Progress: 1,
+				Tag:      "examen",
+			}
+		}
+	}
+
+	// Fill in the database
+
+	for username, user := range users {
+		if exists, err := userCtl.ExistsUsername(username); exists || err == nil {
+			userCtl.DeleteUser(&models.User{Username: username})
+			userCtl.CreateUser(user)
+		}
+	}
+
+	for charName, character := range characters {
+		theCharacter, err := characterCtl.FindByName(charName)
+		if err == nil || theCharacter != nil {
+			characterCtl.DeleteCharacter(theCharacter)
+		}
+		characterCtl.CreateCharacter(character)
+	}
+
+	for _, class := range classes {
+		classCtl.CreateClass(class)
 	}
 
 	for _, user := range users {
-		var existing models.User
-		err := db.Where("username = ?", user.Username).First(&existing).Error
-		if err != nil {
-			if err == gorm.ErrRecordNotFound {
-				db.Create(&user)
-				fmt.Printf("Usuario creado: %s\n", user.Username)
-			} else {
-				log.Fatalf("Error al verificar usuario: %v", err)
+		userCtl.LoadClasses(user)
+		for _, class := range user.Classes {
+			for _, assignment := range assignments[class.Name] {
+				assignment.ClassID = class.ID
+				assignmentCtl.CreateAssignment(assignment)
 			}
-		} else {
-			fmt.Printf("Usuario ya existe: %s\n", user.Username)
 		}
 	}
 }
