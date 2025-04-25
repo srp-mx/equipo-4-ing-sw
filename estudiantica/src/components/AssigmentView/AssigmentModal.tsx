@@ -89,6 +89,9 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                 },
                 body: JSON.stringify(dataSend),
             });
+    
+            const rawResponse = await response.text(); // Primero lee como texto
+            console.log("Respuesta cruda:", rawResponse); // Inspecciona qué devuelve
 
             if(!response.ok){
                 const error = await response.json();
@@ -96,7 +99,6 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
 
-            const data = await response.json();
             dispatch(updateAssignment(dataSend.new_assignment));
             setIsEdit(false);
         }catch(error){
