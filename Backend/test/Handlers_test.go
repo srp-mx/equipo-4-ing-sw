@@ -436,14 +436,14 @@ func testCharacterNextRefresh(t *testing.T) {
 
 	// Make a struct for easier unwrapping
 	type Timers struct {
-		StreakLoss time.Time `json:"streak_loss"`
-		Deletion   time.Time `json:"deletion"`
-		NextHeal   time.Time `json:"next_heal"`
+		StreakLoss int64 `json:"streak_loss"`
+		Deletion   int64 `json:"deletion"`
+		NextHeal   int64 `json:"next_heal"`
 	}
 	type Resp struct {
-		Alive     bool      `json:"alive"`
-		NextCheck time.Time `json:"next_check"`
-		Timers    Timers    `json:"timers"`
+		Alive     bool   `json:"alive"`
+		NextCheck int64  `json:"next_check"`
+		Timers    Timers `json:"timers"`
 	}
 	interpResp, err := mapToStruct[Resp](resp)
 	assert.NoError(t, err)
@@ -455,20 +455,31 @@ func testCharacterNextRefresh(t *testing.T) {
 	assert.NoError(t, err)
 	mola := user.Character.MomentOfLatestAction
 
+	// Construct the times of the next evaluations
+	streakLoss := time.Now().
+		Add(time.Millisecond * time.Duration(interpResp.Timers.StreakLoss))
+	deletion := time.Now().
+		Add(time.Millisecond * time.Duration(interpResp.Timers.Deletion))
+	nextHeal := time.Now().
+		Add(time.Millisecond * time.Duration(interpResp.Timers.NextHeal))
+
 	// Check validity
+	millisecondsEpsilon := time.Duration(500 * time.Millisecond)
 	assert.True(t, interpResp.Alive)
-	assert.GreaterOrEqual(t, 0, interpResp.NextCheck.
-		Compare(interpResp.Timers.StreakLoss))
-	assert.GreaterOrEqual(t, 0, interpResp.NextCheck.
-		Compare(interpResp.Timers.Deletion))
-	assert.GreaterOrEqual(t, 0, interpResp.NextCheck.
-		Compare(interpResp.Timers.NextHeal))
+	assert.LessOrEqual(t, interpResp.NextCheck, interpResp.Timers.StreakLoss)
+	assert.LessOrEqual(t, interpResp.NextCheck, interpResp.Timers.Deletion)
+	assert.LessOrEqual(t, interpResp.NextCheck, interpResp.Timers.NextHeal)
 	expHeal := mola.Truncate(time.Hour).Add(time.Hour).UTC()
-	assert.Equal(t, expHeal, interpResp.Timers.NextHeal.UTC())
+	assert.GreaterOrEqual(t, millisecondsEpsilon,
+		expHeal.Sub(nextHeal.UTC()).Milliseconds())
 	expStreak := mola.Truncate(24*time.Hour).AddDate(0, 0, 2).UTC()
-	assert.Equal(t, expStreak, interpResp.Timers.StreakLoss.UTC())
+	//assert.Equal(t, expStreak, streakLoss.UTC())
+	assert.GreaterOrEqual(t, millisecondsEpsilon,
+		expStreak.Sub(streakLoss.UTC()).Milliseconds())
 	expDel := mola.AddDate(0, 0, controllers.DAYS_TO_DIE).UTC()
-	assert.Equal(t, expDel, interpResp.Timers.Deletion.UTC())
+	//assert.Equal(t, expDel, deletion.UTC())
+	assert.GreaterOrEqual(t, millisecondsEpsilon,
+		expDel.Sub(deletion.UTC()).Milliseconds())
 }
 
 // Test for the /character_free_skill route
