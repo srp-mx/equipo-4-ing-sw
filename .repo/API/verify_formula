@@ -1,0 +1,40 @@
+DESCRIPTION: Receives a formula and checks if the syntax is valid.
+
+
+
+Type: POST
+
+
+
+INPUT:
+{
+    "formula": ...
+}
+
+"formula" -> string
+
+
+
+RETURNS:
+{
+    "ok": ... ,
+    "formula": {
+        "source": ... ,
+        "tags": ... ,
+        "error": {
+            "message": ...
+        }
+    }
+}
+
+"ok" -> bool
+"formula.source" -> string // The input passed
+"formula.tags" -> string[] // The identifiers required to execute it
+"formula.error" // Appears only if ok is false
+"formula.error.message" -> string
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON

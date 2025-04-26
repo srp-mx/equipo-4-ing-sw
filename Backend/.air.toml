@@ -1,0 +1,17 @@
+# Archivo de configuración de Air
+root = "."
+
+[build]
+  bin = "tmp/main"
+  cmd = "go build -o tmp/main ."
+  delay = 1000
+  exclude_dir = ["tmp", "vendor"]
+  include_ext = ["go", "tpl", "tmpl", "html"]
+  exclude_file = ["*.md"]
+  full_bin = "tmp/main"
+
+[log]
+  level = "debug"
+
+[serve]
+  cmd = "tmp/main"

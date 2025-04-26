@@ -1,0 +1,49 @@
+DESCRIPTION: Gets all classes a user is enrolled in.
+
+
+
+Type: GET
+
+
+
+INPUT:
+None, the user is retrieved from the bearer token.
+
+
+
+RETURNS:
+[
+    {
+        "id": ... ,
+        "name": ... ,
+        "start_date": ... ,
+        "end_date": ... ,
+        "owner_username": ... ,
+        "grade_formula": ... ,
+        "color": ...
+    },
+    ...
+]
+
+"[n].id" -> uint
+"[n].name" -> string
+"[n].start_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"[n].end_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"owner_username" -> string
+"grade_formula" -> string
+"color" -> string
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: The user was not found
+
+500 (Internal server error)
+    Cause: Internal error

@@ -1,0 +1,14 @@
+echo ">> Starting pre-commit hook..."
+BACKEND_FILES=$(git diff --cached --name-only --diff-filter=d | grep '^Backend/.*\.go$' || true)
+
+if [ -n "$BACKEND_FILES" ]; then
+    echo ">> Running go fmt on files in the backend folder..."
+    for file in $BACKEND_FILES; do
+        go fmt "$file"
+        git add "$file"
+    done
+    echo ">> Finished running go fmt"
+fi
+
+echo ">> Finished pre-commit hook!"
+exit 0

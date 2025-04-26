@@ -1,0 +1,37 @@
+DESCRIPTION: Removes an assignment.
+
+
+
+Type: POST
+
+
+
+INPUT:
+{
+    "id": ...
+}
+
+"id" -> uint
+
+
+RETURNS:
+{
+    "ok": true
+}
+
+"ok" -> bool
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON or nonexistent class
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: Assignment not found
+
+500 (Internal server error)
+    Cause: Internal error

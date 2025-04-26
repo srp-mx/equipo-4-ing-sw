@@ -1,0 +1,32 @@
+DESCRIPTION: Gets the user's character's free (unassigned) skill points.
+
+
+
+Type: GET
+
+
+
+INPUT:
+None, the user is inferred from the credentials.
+
+
+
+RETURNS:
+{
+    "alive": ... ,
+    "points": ...
+}
+
+"alive" -> boolean // Everything after is undefined if this is false
+"points" -> int
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+500 (Internal server error)
+    Cause: Internal error

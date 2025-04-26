@@ -1,0 +1,43 @@
+
+services:
+  backend:
+    build: ./Backend/.
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+    volumes:
+      - ./Backend/.:/usr/src/app/backend
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-db:/var/lib/postgresql/data3
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U estudiantica -d dbEstudiantica"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build: ./estudiantica/.
+    env_file:
+      - .env
+    ports:
+      - 3001:3001
+    volumes:
+      - ./estudiantica/.:/usr/src/app/frontend
+    command: npm run dev
+volumes:
+  postgres-db:

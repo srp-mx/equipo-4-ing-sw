@@ -1,0 +1,50 @@
+DESCRIPTION: Gets an assignment.
+
+
+
+Type: POST
+
+
+
+INPUT:
+Query parameter "id" with the assignment ID.
+For example: ".../get_assignment?id=${assignmentID}"
+
+
+RETURNS:
+{
+    "id": ... ,
+    "class_id": ... ,
+    "due_date": ... ,
+    "notes": ... ,
+    "grade": ... ,
+    "name": ... ,
+    "optional": ... ,
+    "progress": ... ,
+    "tag": ...
+}
+
+"id" -> uint
+"class_id" -> uint
+"due_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"notes" -> string
+"grade" -> double
+"name" -> string
+"optional" -> bool
+"progress" -> int // <0 is not doing, 0 in progress, >0 finished
+"tag" -> string
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON or nonexistent class
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: Assignment not found
+
+500 (Internal server error)
+    Cause: Internal error

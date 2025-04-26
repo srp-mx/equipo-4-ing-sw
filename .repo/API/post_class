@@ -1,0 +1,74 @@
+DESCRIPTION: Creates a class.
+
+
+
+Type: POST
+
+
+
+INPUT:
+{
+    "name": ... ,
+    "start_date": ... ,
+    "end_date": ... ,
+    "grade_formula": ... ,
+    "color": ...
+}
+
+"name" -> string
+"start_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"end_date" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"grade_formula" -> string
+"color" -> string // 8 chars representing RGBA
+
+
+
+RETURNS:
+{
+    "class_id": ...
+}
+
+"class_id" -> uint // The class' ID, as fetched from the database
+
+
+
+ERRORS:
+400 (Bad request)
+    Body:
+    {
+        "error": {
+            "code": 400,
+            "message": ...
+        }
+    }
+    Cause: Malformed JSON, invalid grade_formula, or invalid color.
+
+401 (Unauthorized)
+    Body:
+    {
+        "error": {
+            "code": 401,
+            "message": ...
+        }
+    }
+    Cause: Bad credentials
+
+409 (Conflict)
+    Body:
+    {
+        "error": {
+            "code": 409,
+            "message": ...
+        }
+    }
+    Cause: The class already exists
+
+500 (Internal server error)
+    Body:
+    {
+        "error": {
+            "code": 500,
+            "message": ...
+        }
+    }
+    Cause: Internal error

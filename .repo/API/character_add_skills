@@ -1,0 +1,40 @@
+DESCRIPTION: Tries to assign skill points to a character. The input is the
+skill points to add into each attribute.
+
+
+
+Type: POST
+
+
+
+INPUT:
+{
+    "strength": ... ,
+    "defense": ... ,
+    "intelligence": ... ,
+    "heart": ...
+}
+
+
+
+RETURNS:
+{
+    "ok": ...
+}
+
+"ok" -> boolean // False if not enough free skill points, true otherwise
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: The user has no character
+
+500 (Internal server error)
+    Cause: Internal error
