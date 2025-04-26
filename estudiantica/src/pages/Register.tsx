@@ -8,6 +8,15 @@ const Button = ({ onClick, children, icon }: { onClick?: () => void; children: R
   </button>
 );
 
+const ButtonReturn = ({ onClick }: { onClick?: () => void}) => (
+  <button onClick={onClick} className="absolute -top-3 left-0 flex items-center text-[#cbda3d] hover:text-white transition-all focus:text-[#ffffff]">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">  
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+    <span className="ml-2 text-sm">Regresar</span>
+  </button>
+);
+
 const PasswordInput = ({ value, onChange }: { value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -119,6 +128,7 @@ export default function Register() {
                       }
                     }}
                     onSubmit={(e) => {e.preventDefault(); submit(email, password, userName, name, navigate)}}>
+                        <ButtonReturn onClick={() => navigate("/")} />
                         <div className="relative flex flex-col mb-4">
                             <input 
                                 type="email"

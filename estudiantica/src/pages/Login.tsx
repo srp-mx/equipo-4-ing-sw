@@ -22,6 +22,13 @@ const ButtonReturn = ({ onClick }: { onClick?: () => void}) => (
   </button>
 );
 
+const ButtonRegister = ({ onClick } : {onClick: () => void}) => (
+  <button onClick={onClick} className="flex items-center text-[#cbda3d] hover:text-white transition-all focus:text-[#ffffff]">
+    
+    <span className="ml-2 text-sm">Registrarse</span>
+  </button>
+);
+
 const PasswordInput = ({ value, onChange }: { value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -140,13 +147,15 @@ export default function Login() {
       <div className="bg-[url(../../public/assets/img/login_bg.jpg)] h-screen bg-cover bg-center flex justify-center items-center font-[\'Pixelify Sans\']">
         <div className="relative w-full max-w-lg p-8 rounded-lg">
         <div id="notification-container" className="hidden fixed top-[calc(50vh-270px)] left-1/2 -translate-x-1/2 z-[9999] w-full max-w-md p-4"></div>
-          <h2 className="text-4xl font-semibold text-center text-white mb-6">estudiantika</h2>
+          <h2 className="text-4xl font-semibold text-center text-white mb-6">estudiantica</h2>
           
           {!showEmailForm ? (
             <div className="flex flex-col justify-center items-center mt-6">
               <p className="text-center text-xl text-white mb-6">Ingresa para comenzar tu aventura</p>
+              <ButtonReturn onClick={() => navigate("/")} />
               <Button icon="../assets/img/icono_google.png" onClick={() => showNotification("No disponible por el momento","error")}>Continua con Google</Button>
               <Button onClick={() => setShowEmailForm(true)} icon="../assets/img/icono_correo.png">Continua con correo</Button>
+              <ButtonRegister onClick={() => navigate("/register")} />
             </div>
           ) : (
             <div className="flex flex-col justify-center items-center mt-6">

@@ -59,7 +59,7 @@ export default function ModalCharacterCreation({onClose} : ModalProps) {
                     <div className="flex flex-row">
                         <button
                         className="mt-5 flex px-1 py-2 bg-green-600 font-bold rounded-full hover:bg-green-500 text-white items-center"
-                        onClick={(e) => {e.preventDefault(); crearPersornaje(nombre); onClose();}}
+                        onClick={() => {crearPersornaje(nombre); onClose();}}
                         > 
                             Crear Personaje
                         </button>
