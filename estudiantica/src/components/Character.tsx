@@ -2,84 +2,135 @@ import { characterDates } from "@/constants";
 import Bandera from "@/assets/img/bandera.png";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/constants/store";
-import { DataCharacter, StatsCharacter } from "@/Object/Character";
+import { DataCharacter, RachaCharacter, StatsCharacter } from "@/Object/Character";
 import { setDataCharacter } from "@/constants/dataCharacterSlice";
 import { setStats } from "@/constants/StatsSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { setRacha } from "@/constants/rachaSlice";
+import ModalCharacterCreation from '@/components/Character/ModalCharacterCreation'
+
+const getRefresh = async(dispatch:any) => {
+    try{
+        const response = await fetch("http://localhost:3000/character_next_refresh", {
+            method: "GET", 
+            headers: {
+                "Content-Type": "application/json", 
+                "Authorization": "Bearer " + localStorage.getItem("token"),
+            }
+        });
+        if(!response.ok)
+            throw new Error(`Error: ${response.status} ${response.statusText}`)
+
+        const data = await response.json();
+        const rachaCharacter : RachaCharacter = data; 
+        dispatch(setRacha(rachaCharacter));
+    }catch(error){
+        console.error("Error ", error);
+    }
+}
+
+
+const getStats = async(dispatch:any) => {
+    try{
+        const response = await fetch("http://localhost:3000/character_stats", {
+            method: "GET", 
+            headers: {
+                "Content-Type": "application/json", 
+                "Authorization": "Bearer " + localStorage.getItem("token"),
+            }
+        });
+        if(!response.ok){
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        const character : StatsCharacter = data.stats;
+        dispatch(setStats(character));
+
+    }catch(error){
+        console.error("Error ", error);
+    }
+}
+
+const getCharacterDefaultInfo = async(dispatch:any) => {
+    try{
+        const response = await fetch("http://localgost:3000/character_basic_data", {
+            method: "GET", 
+            headers: {
+                "Content-Type": "application/json", 
+                "Authorization": "Bearer " + localStorage.getItem("token"),
+            }
+        });
+        if(!response.ok){
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        const character : DataCharacter = data.data;
+        dispatch(setDataCharacter(character));
+
+    }catch(error){
+        console.error("Error ", error);
+    }
+}
 
 
 const Character = () => {
+    const [showModal, setShowModal] = useState(false)
     const user = useSelector((state: RootState) => state.user);
     const datacharacter = useSelector((state: RootState) => state.dataCharacter);
     const stats = useSelector((state: RootState) => state.stats);
+    const rachaRefresh = useSelector((state: RootState) => state.racha);
     const dispatch = useDispatch();
 
-    const getCharacterDefaultInfo = async() => {
-        try{
-            const response = await fetch("http://localgost:3000/character_basic_data", {
-                method: "GET", 
-                headers: {
-                    "Content-Type": "application/json", 
-                    "Authorization": "Bearer " + localStorage.getItem("token"),
-                }
-            });
-            if(!response.ok){
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
-            }
-
-            const data = await response.json();
-            const character : DataCharacter = data.data;
-            dispatch(setDataCharacter(character));
-
-        }catch(error){
-            console.error("Error ", error);
-        }
-    }
+    
     useEffect(() => {
-        const getStats = async() => {
-            try{
-                const response = await fetch("http://localhost:3000/character_stats", {
-                    method: "GET", 
-                    headers: {
-                        "Content-Type": "application/json", 
-                        "Authorization": "Bearer " + localStorage.getItem("token"),
-                    }
-                });
-                if(!response.ok){
-                    throw new Error(`Error: ${response.status} ${response.statusText}`);
-                }
-    
-                const data = await response.json();
-                const character : StatsCharacter = data.stats;
-                dispatch(setStats(character));
-    
-            }catch(error){
-                console.error("Error ", error);
+        async function characterHome(){
+            getRefresh(dispatch);
+            if(rachaRefresh.racha.alive){
+                getCharacterDefaultInfo(dispatch);
+                getStats(dispatch);
             }
-        };
-        getStats();
+        }
+        characterHome();
+
+
     },[dispatch]);
 
-    return (
-        <div className="grid grid-cols-4 grid-rows-4">
-        <div className="col-start-1 col-end-1 row-start-1 row-end-1">
-            <div className="text-start text-7xl text-amber-400 wagon-font mt-3 ml-8 ">
-                {user.name}
+    if(rachaRefresh.racha.alive)
+        return (
+            <div className="grid grid-cols-4 grid-rows-4">
+            
+            <div className="col-start-1 col-end-1 row-start-1 row-end-1">
+                <div className="text-start text-7xl text-amber-400 wagon-font mt-3 ml-8 ">
+                    {user.name}
+                </div>
+                <div className="text-start text-4xl text-cyan-400 ml-8">
+                    Nivel: {stats.stats.level}
+                </div>
             </div>
-            <div className="text-start text-4xl text-cyan-400 ml-8">
-                Nivel: {stats.stats.level}
+            <div className="mt-12 ml-4 col-start-2 col-end-3 row-start-1 row-end-5">
+                <img src={characterDates.characterURL} alt="" className="ml-15" />
             </div>
-        </div>
-        <div className="mt-12 ml-4 col-start-2 col-end-3 row-start-1 row-end-5">
-            <img src={characterDates.characterURL} alt="" className="ml-15" />
-        </div>
-
-        <div className="col-start-4 col-end-4 row-start-1 row-end-2">
-            <img src={Bandera} alt="" className="h-6/7 w-6/7" />    
-        </div>
-
-        </div>
-        );
+    
+            <div className="col-start-4 col-end-4 row-start-1 row-end-2">
+                <img src={Bandera} alt="" className="h-6/7 w-6/7" />    
+            </div>
+    
+            </div>
+            
+    );
+    else return (
+        <div className="flex items-center justify-center w-full h-7/8">
+          <button
+          onClick={() => setShowModal(true)}
+          className="flex px-3 py-2 bg-green-600 font-bold rounded-full hover:bg-green-500 text-white items-center"
+          > 
+              Crear Personaje
+          </button>
+          {showModal && <ModalCharacterCreation onClose={() => setShowModal(false)} /> }
+        </div> 
+    );
 }
 
 export default Character;
