@@ -2,7 +2,23 @@ import React, { useRef, useState } from "react";
 
 const crearPersornaje = async(nombre : string) => {
     try{
+        const dataSend = {
+            name: nombre
+        }
+        const response = await fetch("http://localhost:3000/post_character",{
+            method: "POST", 
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token"), 
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataSend)
 
+        });
+        if(!response.ok){
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        const data = await response.json();
+        console.log(data.character_name);
     }catch(error){
         console.error("Error: ", error)
     }
@@ -23,6 +39,10 @@ export default function ModalCharacterCreation({onClose} : ModalProps) {
         }
     }
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNombre(e.target.value); 
+      };
+
     return (
         <div ref={modalRef} onClick={closeModal} 
             className="h-screen fixed inset-0 flex justify-center items-center bg-black/30 backdrop-blur-sm">
@@ -33,17 +53,19 @@ export default function ModalCharacterCreation({onClose} : ModalProps) {
                     type="text" 
                     placeholder="Ingresa el Nombre"
                     className="text-center border rounded p-1 text-gray-600"
+                    name="nombre"
+                    onChange={handleChange}
                     />
                     <div className="flex flex-row">
                         <button
                         className="mt-5 flex px-1 py-2 bg-green-600 font-bold rounded-full hover:bg-green-500 text-white items-center"
-                        onClick={() => {crearPersornaje(nombre); onClose();}}
+                        onClick={(e) => {e.preventDefault(); crearPersornaje(nombre); onClose();}}
                         > 
                             Crear Personaje
                         </button>
                         <button
                         className="ml-7 mt-5 flex px-1 py-2 bg-red-600 font-bold rounded-full hover:bg-red-500 text-white items-center"
-                        onClick={() => {setNombre("");onClose();}}
+                        onClick={(e) => {e.preventDefault();setNombre("");onClose();}}
                         > 
                             Cancelar
                         </button>
