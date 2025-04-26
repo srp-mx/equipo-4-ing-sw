@@ -1,4 +1,4 @@
-# Estudiántica
+# Estudiantica
 
 ## Tabla de contenidos
 
@@ -35,65 +35,41 @@ supuesto no todos) que se encuentre en su camino, el estudiante podrá recolecta
 distintas mejoras para su personaje, así como para su vida académica.
 
 ## Especificación
-El componente más escencial de la aplicación es una agenda escolar. El aspecto
+El componente más esencial de la aplicación es una agenda escolar. El aspecto
 de *ludificación* sirve para motivar al estudiante a interactuar con los
 sistemas de la agenda a través de incentivos y consecuencias.
 
-Para empezar a usar *Estudiántica* el usuario debe ingresar la fecha de incio y
-término de su periódo escolar actual (bimestre, cuatrimestre, semestre, etc.) y
-la carga de materias. Cada materia se puede personalizar agregándole las
-siguientes calificaciones subjetivas: el interés que tiene el estudiante por la
-materia y el grado de dificultad de esta. Opcionalmente también se pueden
-asignar porcentajes personalizados al peso total de tareas, prácticas y examenes
-en la calificación de cada materia (por defecto 50/50 entre tareas/prácticas y
-examenes).
+Para empezar a usar *Estudiantica* el usuario debe crear el personaje con el
+cual jugará. A continuación, deberá ingresar sus materias, con la fecha de
+inicio y término, así como la manera en que se evaluará sobre 100.
 
-A partir de esto, se da lugar a la interacción principal de la agenda: la carga,
-personalización y manejo de trabajos. Las tareas/prácticas y las evaluaciones no
-tienen mayor distinción fuera del peso que tienen para la calificación de cada
-materia. Para subir un trabajo se deben configurar los siguientes aspectos: la
-materia a la que pertenece el trabajo, su fecha de entrega y un tiempo aproximado
-para completarse.
+A partir de esto, se da lugar a la interacción principal de la agenda: la
+carga, personalización y manejo de trabajos. Las tareas, las prácticas y las
+evaluaciones no tienen mayor distinción fuera del peso que tienen para la
+calificación de cada materia. Para subir un trabajo se deben configurar los
+siguientes aspectos: la materia a la que pertenece el trabajo, su fecha de
+entrega y a qué grupo de trabajos pertenece, el cual llamaremos su *tag* o
+*etiqueta*.
 
 El estudiante tendrá acceso a distintas métricas respecto a su desempeño como:
-calificación promedio por materia, porcentaje de trabajos entregados y
-puntualidad en realizar tareas. Además, podrá ver una lista de todos sus
-pendientes en el orden en el que se entregan. La aplicación alertará dentro de
-un periódo configurable que el estudiante debería empezar a trabajar en una
-tarea. Para poder trabajar parcialmente en una tarea se le pueden agregar campos
-que son subtareas para realizarla, por ejemplo: escribir el borrador del
-documento, leer las notas correspondientes, contestar las primeras dos
-preguntas, etc.
+calificación por materia y porcentaje de trabajos entregados. Además, podrá ver
+una lista de todos sus pendientes en el orden en el que se entregan.
 
 En el aspecto más básico de *ludificación* tu personaje tendrá métricas como
-salud, experiencia, fuerza y habilidad. El personaje podrá subir de nivel a
-través de buen desempeño académico y buena organización al entregar trabajos.
-Por otro lado, perderá experiencia al tener calificaciones bajas o no
-aprobatorias. Como incentivo adicional, obtener una califiación perfecta en una
-evaluación tendrá una recompensa especial en el juego, como un insta-heal para
-su personaje.
-
-La aplicación contará con un componente social que permitirá a los estudiantes
-unirse a grupos de estudio (*guilds*), donde podrán compartir progreso,
-motivarse entre sí y participar en desafíos académicos en grupo. Además, cada
-estudiante podrá visualizar un resumen de su desempeño por materia.
-
-Para ayudar a la administración del tiempo y la motivación, se implementará un
-período de gracia donde si cumple con el resto de sus pendientes se anularan las
-consecuencias negativas y podrá obtener una recompensa adicional, pero si no lo
-logra, perderá aun más experiencia.
+salud, experiencia, fuerza, inteligencia, defensa y corazón. El personaje podrá
+subir de nivel a través de buen desempeño académico y buena organización al
+entregar trabajos. Por otro lado, si el jugador no tiene actividad en
+suficientes días, su personaje morirá y tendrá que crear uno nuevo. Como
+incentivo adicional, el contar con una racha prolongada le dará un aumento
+porcentual en algunas de sus métricas de juego.
 
 El progreso en el juego estará vinculado al rendimiento académico. A medida que
-el estudiante sube de nivel en la aplicación, desbloqueará perks especiales,
-como la capacidad de realizar una tarea un día antes sin recibir penalización.
-Además, el personaje del estudiante tendrá estadísticas que reflejarán su
-desempeño, tales como concentración, disciplina y gestión del tiempo, las cuales
-podrán mejorar con buenos hábitos.
-
-Por último, de manera opcional, los estudiantes podrán elegir entre diferentes
-clases dentro del juego, como el estratega, el multitarea o el metódico, cada
-una con habilidades que influirán en la manera en que interactúan con la agenda
-y los incentivos de la aplicación.
+el estudiante sube de nivel en la aplicación, se le otorgarán puntos asignables
+a sus estadísticas. Con aquellas estadísticas podrá participar en eventos
+llamados mazmorras, las cuales cuentan con distintos niveles de dificultad y
+pondrán a prueba al jugador de manera estocástica. Con base a ello, recibirá
+las recompensas que le permitirán personalizar a su personaje e incrementar
+sus estadísticas.
 
 ## Diseño
 
@@ -329,22 +305,31 @@ respectivo maquetado:
 
 Las documentación de cada ruta son las siguientes.
 
-* [/class_assignments](.repo/API/class_assignments)
-* [/class_grade](.repo/API/class_grade)
-* [/class_tags](.repo/API/class_tags)
-* [/delete_assignment](.repo/API/delete_assignment)
-* [/delete_class](.repo/API/delete_class)
-* [/get_assignment](.repo/API/get_assignment)
-* [/get_class](.repo/API/get_class)
-* [/login](.repo/API/login)
-* [/patch_assignment](.repo/API/patch_assignment)
-* [/patch_class](.repo/API/patch_class)
-* [/post_assignment](.repo/API/post_assignment)
-* [/post_class](.repo/API/post_class)
-* [/refresh_token](.repo/API/refresh_token)
-* [/register](.repo/API/register)
-* [/user_classes](.repo/API/user_classes)
-* [/verify_formula](.repo/API/verify_formula)
+* [/character_add_skills](./repo/API/character_add_skills)
+* [/character_basic_data](./repo/API/character_basic_data)
+* [/character_free_skill](./repo/API/character_free_skill)
+* [/character_next_refresh](./repo/API/character_next_refresh)
+* [/character_stats](./repo/API/character_stats)
+* [/class_assignments](./repo/API/class_assignments)
+* [/class_grade](./repo/API/class_grade)
+* [/class_tags](./repo/API/class_tags)
+* [/delete_assignment](./repo/API/delete_assignment)
+* [/delete_character](./repo/API/delete_character)
+* [/delete_class](./repo/API/delete_class)
+* [/get_assignment](./repo/API/get_assignment)
+* [/get_class](./repo/API/get_class)
+* [/login](./repo/API/login)
+* [/patch_assignment](./repo/API/patch_assignment)
+* [/patch_character](./repo/API/patch_character)
+* [/patch_class](./repo/API/patch_class)
+* [/post_assignment](./repo/API/post_assignment)
+* [/post_character](./repo/API/post_character)
+* [/post_class](./repo/API/post_class)
+* [/refresh_token](./repo/API/refresh_token)
+* [/register](./repo/API/register)
+* [/user_classes](./repo/API/user_classes)
+* [/verify_formula](./repo/API/verify_formula)
+
 
 Los errores son todos de la forma siguiente.
 ```json

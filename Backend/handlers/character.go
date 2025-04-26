@@ -240,7 +240,7 @@ func CharacterStats(c *fiber.Ctx) error {
 func CharacterNextRefresh(c *fiber.Ctx) error {
 	// Get the user requesting this with their character loaded in
 	user, err := characterGetBase(c)
-	if err != nil {
+	if err != nil || user.Character == nil {
 		return err
 	}
 
@@ -272,13 +272,14 @@ func CharacterNextRefresh(c *fiber.Ctx) error {
 		earliest = heal
 	}
 
+	now := time.Now()
 	return c.JSON(fiber.Map{
 		"alive":      true,
-		"next_check": earliest,
+		"next_check": earliest.Sub(now).Milliseconds(),
 		"timers": fiber.Map{
-			"streak_loss": streakLoss,
-			"deletion":    deletion,
-			"next_heal":   heal,
+			"streak_loss": streakLoss.Sub(now).Milliseconds(),
+			"deletion":    deletion.Sub(now).Milliseconds(),
+			"next_heal":   heal.Sub(now).Milliseconds(),
 		},
 	})
 }
