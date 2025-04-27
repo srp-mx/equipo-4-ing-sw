@@ -23,9 +23,11 @@ import (
 
 type Item struct {
 	gorm.Model
-	Rarity         int
+	OwnerID        uint   `json:"-"`
+	Name           string `json:"name"`
+	Rarity         int    `json:"rarity"`
 	DescriptionUri string `json:"description_uri" gorm:"not null"`
-	ImageUri       string `json:"image-uri" gorm:"not null"`
+	ImageUri       string `json:"image_uri" gorm:"not null"`
 	Strength       int    `json:"strength" gorm:"check:strength >= 0"`
 	Defense        int    `json:"defense" gorm:"check:defense >= 0"`
 	Intelligence   int    `json:"intelligence" gorm:"check:intelligence >= 0"`

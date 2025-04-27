@@ -51,10 +51,22 @@ func TestMain(m *testing.M) {
 		panic("failed to connect database")
 	}
 
-	db.AutoMigrate(&models.Assignment{})
-	db.AutoMigrate(&models.User{})
-	db.AutoMigrate(&models.Character{})
-	db.AutoMigrate(&models.Class{})
+	err = db.AutoMigrate(
+		&models.User{},
+		&models.Character{},
+		&models.Class{},
+		&models.Assignment{},
+		&models.Armor{},
+		&models.Weapon{},
+		&models.Pet{},
+		&models.Wears{},
+		&models.Equips{},
+		&models.Accompanies{},
+	)
+
+	if err != nil {
+		panic("failed to automigrate database")
+	}
 
 	database.DB.Db = db
 
