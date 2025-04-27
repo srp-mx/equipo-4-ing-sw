@@ -48,3 +48,9 @@ export const navItems = [
       }
     }, [navigate]);
   };
+
+  export interface ErrorResponse {
+    error? : string; 
+    message? : string; 
+    statusCode? : string;
+  }
