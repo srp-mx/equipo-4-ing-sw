@@ -1,0 +1,37 @@
+DESCRIPTION: Changes the name of a weapon.
+
+
+
+Type: POST
+
+
+
+INPUT:
+{
+    "id": ... ,
+    "name": ...
+}
+
+"id" -> uint
+"name" -> string
+
+
+
+RETURNS:
+{
+    "ok": ...
+}
+
+"ok" -> bool // False if the character is not alive
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+500 (Internal server error)
+    Cause: Internal error
