@@ -84,21 +84,21 @@ func setupMock(db *gorm.DB) {
 	// Raw data
 
 	users := make(map[string]*models.User)
-	usernames := []string{"pepito", "pedrito", "marinela"}
+	usernames := []string{"pepito", "matilda", "marinela"}
 	users[usernames[0]] = &models.User{
-		Username: "pepito",
+		Username: usernames[0],
 		Name:     "Pepe",
 		Password: "pass",
 		Email:    "pepito@pepito.com",
 	}
 	users[usernames[1]] = &models.User{
-		Username: "matilda",
+		Username: usernames[1],
 		Name:     "Matilda",
 		Password: "pass",
 		Email:    "matilda@matilda.com",
 	}
 	users[usernames[2]] = &models.User{
-		Username: "marinela",
+		Username: usernames[2],
 		Name:     "Marcela",
 		Password: "pass",
 		Email:    "marinela@marinela.com",
@@ -115,8 +115,11 @@ func setupMock(db *gorm.DB) {
 			MomentOfLatestAction: time.Now().AddDate(0, 0, -i),
 			Streak:               10,
 			Hp:                   20,
-			StrengthExtra:        0, DefenseExtra: 0, IntelligenceExtra: 0,
-			HeartExtra: 0, ExtraPoints: 0,
+			StrengthExtra:        0,
+			DefenseExtra:         0,
+			IntelligenceExtra:    0,
+			HeartExtra:           0,
+			ExtraPoints:          0,
 		}
 	}
 
