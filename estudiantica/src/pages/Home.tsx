@@ -6,13 +6,15 @@ import CalendarioImg from "@/assets/img/home/icono_calendario.png"
 import TareasImg from "@/assets/img/home/icono_tareas.png";
 import HorarioImg from "@/assets/img/home/icono_horario.png";
 import MateriaImg from "@/assets/img/home/icono_materias.png";
-import Stats from "@/components/home/Stats"
-import { Link } from "react-router-dom";
+import Stats from "@/components/Character/Stats"
+import { data, Link } from "react-router-dom";
 import { useAuth } from "@/constants";
+import { useSelector } from "react-redux";
+import { RootState } from "@/constants/store";
 
 export default function Home(){
     useAuth();
-
+    const dataCharacter = useSelector((state:RootState) => state.dataCharacter);
     return (
         <>
             <NavBar />
@@ -26,7 +28,10 @@ export default function Home(){
                 <div className="justify-center items-center text-center flex flex-row mt-6 
                 mb-6 ml-4 w-full rounded-l-2xl col-start-1 col-end-4 row-start-6 row-end-9 py-1 space-x-1 space-y-2 bg-gray-800">
                     <ItemsEquiped />
-                </div>
+                </div> 
+                {dataCharacter.dataCharacter.name !== "" && <div className="col-start-8 col-end-10 row-start-5 row-end-8 bg-gray-700/30 rounded-2xl border-4 border-black/20">
+                    <Stats />
+                </div>}
 
                 <div className="text-3xl items-center justify-center text-center flex mt-6 flex-col
                 mb-6 ml-10 mr-10 w-5/6 col-start-10 col-end-13 row-start-2 row-end-9 py-1 space-x-1 space-y-4">

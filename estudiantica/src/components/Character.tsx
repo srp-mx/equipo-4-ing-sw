@@ -54,7 +54,7 @@ const getStats = async(dispatch:any) => {
 
 const getCharacterDefaultInfo = async(dispatch:any) => {
     try{
-        const response = await fetch("http://localgost:3000/character_basic_data", {
+        const response = await fetch("http://localhost:3000/character_basic_data", {
             method: "GET", 
             headers: {
                 "Content-Type": "application/json", 
@@ -88,6 +88,7 @@ const Character = () => {
         async function characterHome(){
             getRefresh(dispatch);
             if(rachaRefresh.racha.alive){
+                console.log("hola");
                 getCharacterDefaultInfo(dispatch);
                 getStats(dispatch);
             }
@@ -102,11 +103,8 @@ const Character = () => {
             <div className="grid grid-cols-4 grid-rows-4">
             
             <div className="col-start-1 col-end-1 row-start-1 row-end-1">
-                <div className="text-start text-7xl text-amber-400 wagon-font mt-3 ml-8 ">
-                    {user.name}
-                </div>
-                <div className="text-start text-4xl text-cyan-400 ml-8">
-                    Nivel: {stats.stats.level}
+                <div className="text-start text-xl text-amber-400 wagon-font mt-3 ml-8 ">
+                    {datacharacter.dataCharacter.name}
                 </div>
             </div>
             <div className="mt-12 ml-4 col-start-2 col-end-3 row-start-1 row-end-5">
