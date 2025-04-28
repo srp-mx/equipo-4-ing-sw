@@ -323,13 +323,17 @@ func (self *CharacterController) ActivityUpdate(character *models.Character, isA
 	if err != nil {
 		return false, err
 	}
-	modified.Streak = streak
+	if isActive || streak == 0 {
+		modified.Streak = streak
+	}
 
 	heal, err := self.NextPassiveHeal(character)
 	if err != nil {
 		return false, err
 	}
-	modified.Hp = min(models.MAX_HP, character.Hp+heal)
+	if isActive {
+		modified.Hp = min(models.MAX_HP, character.Hp+heal)
+	}
 
 	shouldDelete, err := self.ShouldDelete(character)
 	if err != nil {
