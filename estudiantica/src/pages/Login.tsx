@@ -7,7 +7,7 @@ import validator from 'validator';
 //import "../../public/assets/css/index.css";
 
 const Button = ({ onClick, children, icon }: { onClick?: () => void; children: React.ReactNode; icon?: string }) => (
-  <button onClick={onClick} className="pixel-corner-button mb-4 flex bg-[#cbda3d] py-4 px-10 min-w-[300px] transition-all hover:bg-white">
+  <button onClick={onClick} className="text-black pixel-corner-button mb-4 flex bg-[#cbda3d] py-4 px-10 min-w-[300px] transition-all hover:bg-white">
     {icon && <img src={icon} className="w-6 h-6 mr-3" alt="Button Icon" />}
     {children}
   </button>
@@ -19,6 +19,13 @@ const ButtonReturn = ({ onClick }: { onClick?: () => void}) => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
     </svg>
     <span className="ml-2 text-sm">Regresar</span>
+  </button>
+);
+
+const ButtonRegister = ({ onClick } : {onClick: () => void}) => (
+  <button onClick={onClick} className="flex items-center text-[#cbda3d] hover:text-white transition-all focus:text-[#ffffff]">
+    
+    <span className="ml-2 text-sm">Registrarse</span>
   </button>
 );
 
@@ -140,13 +147,15 @@ export default function Login() {
       <div className="bg-[url(../../public/assets/img/login_bg.jpg)] h-screen bg-cover bg-center flex justify-center items-center font-[\'Pixelify Sans\']">
         <div className="relative w-full max-w-lg p-8 rounded-lg">
         <div id="notification-container" className="hidden fixed top-[calc(50vh-270px)] left-1/2 -translate-x-1/2 z-[9999] w-full max-w-md p-4"></div>
-          <h2 className="text-4xl font-semibold text-center text-white mb-6">estudiantika</h2>
+          <h2 className="text-4xl font-semibold text-center text-white mb-6">estudiantica</h2>
           
           {!showEmailForm ? (
             <div className="flex flex-col justify-center items-center mt-6">
               <p className="text-center text-xl text-white mb-6">Ingresa para comenzar tu aventura</p>
+              <ButtonReturn onClick={() => navigate("/")} />
               <Button icon="../assets/img/icono_google.png" onClick={() => showNotification("No disponible por el momento","error")}>Continua con Google</Button>
               <Button onClick={() => setShowEmailForm(true)} icon="../assets/img/icono_correo.png">Continua con correo</Button>
+              <ButtonRegister onClick={() => navigate("/register")} />
             </div>
           ) : (
             <div className="flex flex-col justify-center items-center mt-6">

@@ -50,3 +50,28 @@ export class StatsCharacter {
         this.xp_to_next_level =  StatsCharacterObj.xp_to_next_level;
     }
 }
+
+export class Timers {
+    streak_loss: string;
+    deletion: string; 
+    next_heal: string;
+    constructor(TimersObj : {streak_loss : string, deletion: string, next_heal: string})
+    {
+        this.streak_loss = TimersObj.streak_loss;
+        this.deletion = TimersObj.deletion;
+        this.next_heal = TimersObj.next_heal;
+
+    }
+}
+
+export class RachaCharacter{
+    alive: boolean;
+    next_check: string;
+    timers: Timers; 
+    constructor(RachaCHaracterObj : {alive:boolean, next_check:string, timers: Timers}){
+        this.alive = RachaCHaracterObj.alive;
+        this.next_check = RachaCHaracterObj.next_check;
+        this.timers = RachaCHaracterObj.timers;
+    }
+
+}
