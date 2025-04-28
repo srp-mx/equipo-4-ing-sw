@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { setRacha } from "@/constants/rachaSlice";
 import ModalCharacterCreation from '@/components/Character/ModalCharacterCreation'
 import { Flame } from "lucide-react";
+import { getPointSkill } from "./Character/Stats";
 
 const getRefresh = async(dispatch:any) => {
     try{
@@ -91,6 +92,7 @@ const Character = () => {
                 console.log("hola");
                 await getCharacterDefaultInfo(dispatch);
                 await getStats(dispatch);
+                await getPointSkill(dispatch);
             }
         }
         characterHome();
