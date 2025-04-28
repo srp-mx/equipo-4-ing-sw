@@ -74,6 +74,19 @@ func TestHandlers(t *testing.T) {
 	t.Run("Test for /character_next_refresh", testCharacterNextRefresh)
 	t.Run("Test for /character_free_skill", testCharacterFreeSkill)
 	t.Run("Test for /character_add_skills", testCharacterAddSkills)
+
+	t.Run("Test for /get_character_wears", testGetCharacterWears)
+	t.Run("Test for /get_character_equips", testGetCharacterEquips)
+	t.Run("Test for /get_character_accompanies", testGetCharacterAccompanies)
+	t.Run("Test for /character_armors", testCharacterArmors)
+	t.Run("Test for /character_pets", testCharacterPets)
+	t.Run("Test for /character_weapons", testCharacterWeapons)
+	t.Run("Test for /post_character_wears", testPostCharacterWears)
+	t.Run("Test for /post_character_equips", testPostCharacterEquips)
+	t.Run("Test for /post_character_accompanies", testPostCharacterAccompanies)
+	t.Run("Test for /rename_armor", testRenameArmor)
+	t.Run("Test for /rename_weapon", testRenameWeapon)
+	t.Run("Test for /rename_pet", testRenamePet)
 }
 
 // Tests the endpoint testing framework
@@ -541,6 +554,373 @@ func testCharacterAddSkills(t *testing.T) {
 	assert.Equal(t, 2, user.Character.HeartExtra)
 }
 
+// Test for the /get_character_wears route
+func testGetCharacterWears(t *testing.T) {
+	// Get the response
+	resp := getWithAuth(t, "/get_character_wears", map[string]string{})
+
+	// Make a struct for easier unwrapping
+	type Armor struct {
+		ID             uint      `json:"id"`
+		CreatedAt      time.Time `json:"created_at"`
+		Name           string    `json:"name"`
+		Rarity         int       `json:"rarity"`
+		Description    string    `json:"description"`
+		ImageUri       string    `json:"image_uri"`
+		Strength       int       `json:"strength"`
+		Defense        int       `json:"defense"`
+		Intelligence   int       `json:"intelligence"`
+		Heart          int       `json:"heart"`
+		DamageReceived int       `json:"damage_received"`
+		WornSince      time.Time `json:"worn_since"`
+	}
+	type Resp struct {
+		Alive bool   `json:"alive"`
+		Armor *Armor `json:"armor"`
+	}
+	interpResp, err := mapToStruct[Resp](resp)
+	assert.NoError(t, err)
+
+	// Since the test character has no armor, it should return nil
+	assert.True(t, interpResp.Alive)
+	assert.Nil(t, interpResp.Armor)
+}
+
+// Test for the /get_character_equips route
+func testGetCharacterEquips(t *testing.T) {
+	// Get the response
+	resp := getWithAuth(t, "/get_character_equips", map[string]string{})
+
+	// Make a struct for easier unwrapping
+	type Weapon struct {
+		ID            uint      `json:"id"`
+		CreatedAt     time.Time `json:"created_at"`
+		Name          string    `json:"name"`
+		Rarity        int       `json:"rarity"`
+		Description   string    `json:"description"`
+		ImageUri      string    `json:"image_uri"`
+		Strength      int       `json:"strength"`
+		Defense       int       `json:"defense"`
+		Intelligence  int       `json:"intelligence"`
+		Heart         int       `json:"heart"`
+		SlayCount     int       `json:"slay_count"`
+		EquippedSince time.Time `json:"equipped_since"`
+	}
+	type Resp struct {
+		Alive  bool    `json:"alive"`
+		Weapon *Weapon `json:"weapon"`
+	}
+	interpResp, err := mapToStruct[Resp](resp)
+	assert.NoError(t, err)
+
+	// Since the test character has a weapon, it should not return nil
+	assert.True(t, interpResp.Alive)
+	assert.NotNil(t, interpResp.Weapon)
+	assert.Equal(t, "weapon1", interpResp.Weapon.Name)
+}
+
+// Test for the /get_character_accompanies route
+func testGetCharacterAccompanies(t *testing.T) {
+	// Get the response
+	resp := getWithAuth(t, "/get_character_accompanies", map[string]string{})
+
+	// Make a struct for easier unwrapping
+	type Pet struct {
+		ID                uint      `json:"id"`
+		CreatedAt         time.Time `json:"created_at"`
+		Name              string    `json:"name"`
+		Rarity            int       `json:"rarity"`
+		Description       string    `json:"description"`
+		ImageUri          string    `json:"image_uri"`
+		Strength          int       `json:"strength"`
+		Defense           int       `json:"defense"`
+		Intelligence      int       `json:"intelligence"`
+		Heart             int       `json:"heart"`
+		Bond              int       `json:"bond"`
+		AccompanyingSince time.Time `json:"accompanying_since"`
+	}
+	type Resp struct {
+		Alive bool `json:"alive"`
+		Pet   *Pet `json:"pet"`
+	}
+	interpResp, err := mapToStruct[Resp](resp)
+	assert.NoError(t, err)
+
+	// Since the test character has no pet, it should return nil
+	assert.True(t, interpResp.Alive)
+	assert.Nil(t, interpResp.Pet)
+}
+
+// Test for the /character_armors route
+func testCharacterArmors(t *testing.T) {
+	// Get the response
+	resp := getWithAuth(t, "/character_armors", map[string]string{})
+
+	// Make a struct for easier unwrapping
+	type Armor struct {
+		ID             uint      `json:"id"`
+		CreatedAt      time.Time `json:"created_at"`
+		Name           string    `json:"name"`
+		Rarity         int       `json:"rarity"`
+		Description    string    `json:"description"`
+		ImageUri       string    `json:"image_uri"`
+		Strength       int       `json:"strength"`
+		Defense        int       `json:"defense"`
+		Intelligence   int       `json:"intelligence"`
+		Heart          int       `json:"heart"`
+		DamageReceived int       `json:"damage_received"`
+		Since          time.Time `json:"since"`
+	}
+	type Resp struct {
+		Alive  bool    `json:"alive"`
+		Armors []Armor `json:"armors"`
+	}
+	interpResp, err := mapToStruct[Resp](resp)
+	assert.NoError(t, err)
+
+	// The character exists and owns two armors
+	assert.True(t, interpResp.Alive)
+	assert.Len(t, interpResp.Armors, 2)
+}
+
+// Test for the /character_pets route
+func testCharacterPets(t *testing.T) {
+	// Get the response
+	resp := getWithAuth(t, "/character_pets", map[string]string{})
+
+	// Make a struct for easier unwrapping
+	type Pet struct {
+		ID           uint      `json:"id"`
+		CreatedAt    time.Time `json:"created_at"`
+		Name         string    `json:"name"`
+		Rarity       int       `json:"rarity"`
+		Description  string    `json:"description"`
+		ImageUri     string    `json:"image_uri"`
+		Strength     int       `json:"strength"`
+		Defense      int       `json:"defense"`
+		Intelligence int       `json:"intelligence"`
+		Heart        int       `json:"heart"`
+		Bond         int       `json:"bond"`
+		Since        time.Time `json:"since"`
+	}
+	type Resp struct {
+		Alive bool  `json:"alive"`
+		Pets  []Pet `json:"pets"`
+	}
+	interpResp, err := mapToStruct[Resp](resp)
+	assert.NoError(t, err)
+
+	// The test character exists and has two pets
+	assert.True(t, interpResp.Alive)
+	assert.Len(t, interpResp.Pets, 2)
+}
+
+// Test for the /character_weapons route
+func testCharacterWeapons(t *testing.T) {
+	// Get the response
+	resp := getWithAuth(t, "/character_weapons", map[string]string{})
+
+	// Make a struct for easier unwrapping
+	type Weapon struct {
+		ID           uint      `json:"id"`
+		CreatedAt    time.Time `json:"created_at"`
+		Name         string    `json:"name"`
+		Rarity       int       `json:"rarity"`
+		Description  string    `json:"description"`
+		ImageUri     string    `json:"image_uri"`
+		Strength     int       `json:"strength"`
+		Defense      int       `json:"defense"`
+		Intelligence int       `json:"intelligence"`
+		Heart        int       `json:"heart"`
+		SlayCount    int       `json:"slay_count"`
+		Since        time.Time `json:"since"`
+	}
+	type Resp struct {
+		Alive   bool     `json:"alive"`
+		Weapons []Weapon `json:"weapons"`
+	}
+	interpResp, err := mapToStruct[Resp](resp)
+	assert.NoError(t, err)
+
+	// The test character exists and has two weapons
+	assert.True(t, interpResp.Alive)
+	assert.Len(t, interpResp.Weapons, 2)
+}
+
+// Test for the /post_character_wears route
+func testPostCharacterWears(t *testing.T) {
+	// Since we modify the DB, we want to clean it up after we exit
+	defer refillDummyDb()
+
+	// Get the ID of the armor2 item
+	var armor models.Armor
+	db.Find(&armor, "name='armor2'")
+
+	// The BODY to send to the endpoint
+	payload := map[string]any{
+		"id": armor.ID,
+	}
+
+	// Get the response
+	resp := postWithAuth(t, "/post_character_wears", payload)
+	aliveAny, ok := resp["alive"]
+	assert.True(t, ok)
+	alive, ok := aliveAny.(bool)
+	assert.True(t, ok)
+	assert.True(t, alive)
+
+	// Verify modification
+	characters := controllers.NewCharacterController(db)
+	character, err := characters.FindByName("test")
+	assert.NoError(t, err)
+	assert.NoError(t, characters.LoadWearing(character))
+	assert.Equal(t, armor.Name, character.Wears.Armor.Name)
+}
+
+// Test for the /post_character_equips route
+func testPostCharacterEquips(t *testing.T) {
+	// Since we modify the DB, we want to clean it up after we exit
+	defer refillDummyDb()
+
+	// Get the ID of the weapon2 item
+	var weapon models.Weapon
+	db.Find(&weapon, "name='weapon2'")
+
+	// The BODY to send to the endpoint
+	payload := map[string]any{
+		"id": weapon.ID,
+	}
+
+	// Get the response
+	resp := postWithAuth(t, "/post_character_equips", payload)
+	aliveAny, ok := resp["alive"]
+	assert.True(t, ok)
+	alive, ok := aliveAny.(bool)
+	assert.True(t, ok)
+	assert.True(t, alive)
+
+	// Verify modification
+	characters := controllers.NewCharacterController(db)
+	character, err := characters.FindByName("test")
+	assert.NoError(t, err)
+	assert.NoError(t, characters.LoadEquipped(character))
+	assert.Equal(t, weapon.Name, character.Equips.Weapon.Name)
+}
+
+// Test for the /post_character_accompanies route
+func testPostCharacterAccompanies(t *testing.T) {
+	// Since we modify the DB, we want to clean it up after we exit
+	defer refillDummyDb()
+
+	// Get the ID of the pet2 item
+	var pet models.Pet
+	db.Find(&pet, "name='pet2'")
+
+	// The BODY to send to the endpoint
+	payload := map[string]any{
+		"id": pet.ID,
+	}
+
+	// Get the response
+	resp := postWithAuth(t, "/post_character_accompanies", payload)
+	aliveAny, ok := resp["alive"]
+	assert.True(t, ok)
+	alive, ok := aliveAny.(bool)
+	assert.True(t, ok)
+	assert.True(t, alive)
+
+	// Verify modification
+	characters := controllers.NewCharacterController(db)
+	character, err := characters.FindByName("test")
+	assert.NoError(t, err)
+	assert.NoError(t, characters.LoadAccompanying(character))
+	assert.Equal(t, pet.Name, character.Accompanies.Pet.Name)
+}
+
+// Test for the /rename_armor route
+func testRenameArmor(t *testing.T) {
+	// Since we modify the DB, we want to clean it up after we exit
+	defer refillDummyDb()
+
+	// Get the ID of the armor2 item
+	var armor models.Armor
+	db.Find(&armor, "name='armor2'")
+
+	// The BODY to send to the endpoint
+	payload := map[string]any{
+		"id":   armor.ID,
+		"name": "my armor",
+	}
+
+	// Get the response
+	resp := postWithAuth(t, "/rename_armor", payload)
+	aliveAny, ok := resp["alive"]
+	assert.True(t, ok)
+	alive, ok := aliveAny.(bool)
+	assert.True(t, ok)
+	assert.True(t, alive)
+
+	// Verify modification
+	assert.NoError(t, db.Find(&armor, "name='my armor'").Error)
+	assert.Equal(t, "my armor", armor.Name)
+}
+
+// Test for the /rename_weapon route
+func testRenameWeapon(t *testing.T) {
+	// Since we modify the DB, we want to clean it up after we exit
+	defer refillDummyDb()
+
+	// Get the ID of the weapon2 item
+	var weapon models.Weapon
+	db.Find(&weapon, "name='weapon2'")
+
+	// The BODY to send to the endpoint
+	payload := map[string]any{
+		"id":   weapon.ID,
+		"name": "my weapon",
+	}
+
+	// Get the response
+	resp := postWithAuth(t, "/rename_weapon", payload)
+	aliveAny, ok := resp["alive"]
+	assert.True(t, ok)
+	alive, ok := aliveAny.(bool)
+	assert.True(t, ok)
+	assert.True(t, alive)
+
+	// Verify modification
+	assert.NoError(t, db.Find(&weapon, "name='my weapon'").Error)
+	assert.Equal(t, "my weapon", weapon.Name)
+}
+
+// Test for the /rename_pet route
+func testRenamePet(t *testing.T) {
+	// Since we modify the DB, we want to clean it up after we exit
+	defer refillDummyDb()
+
+	// Get the ID of the pet2 item
+	var pet models.Pet
+	db.Find(&pet, "name='pet2'")
+
+	// The BODY to send to the endpoint
+	payload := map[string]any{
+		"id":   pet.ID,
+		"name": "my pet",
+	}
+
+	// Get the response
+	resp := postWithAuth(t, "/rename_pet", payload)
+	aliveAny, ok := resp["alive"]
+	assert.True(t, ok)
+	alive, ok := aliveAny.(bool)
+	assert.True(t, ok)
+	assert.True(t, alive)
+
+	// Verify modification
+	assert.NoError(t, db.Find(&pet, "name='my pet'").Error)
+	assert.Equal(t, "my pet", pet.Name)
+}
+
 // Resets the database and fills it in again
 func refillDummyDb() {
 	resetDb()
@@ -554,6 +934,7 @@ func fillDummyDb() {
 	var characters = controllers.NewCharacterController(db)
 	var classes = controllers.NewClassController(db)
 	var assignments = controllers.NewAssignmentController(db)
+	var items = controllers.NewItemController(db)
 
 	// Raw data
 
@@ -640,6 +1021,67 @@ func fillDummyDb() {
 		Progress: 1,
 		Tag:      "exams",
 	}
+	// Items
+	armor1 := models.Item{
+		Name:           "armor1",
+		Rarity:         1,
+		DescriptionUri: "",
+		ImageUri:       "",
+		Strength:       1,
+		Defense:        5,
+		Intelligence:   1,
+		Heart:          1,
+	}
+	armor2 := models.Item{
+		Name:           "armor2",
+		Rarity:         2,
+		DescriptionUri: "",
+		ImageUri:       "",
+		Strength:       2,
+		Defense:        7,
+		Intelligence:   2,
+		Heart:          2,
+	}
+	weapon1 := models.Item{
+		Name:           "weapon1",
+		Rarity:         1,
+		DescriptionUri: "",
+		ImageUri:       "",
+		Strength:       5,
+		Defense:        1,
+		Intelligence:   1,
+		Heart:          1,
+	}
+	weapon2 := models.Item{
+		Name:           "weapon2",
+		Rarity:         2,
+		DescriptionUri: "",
+		ImageUri:       "",
+		Strength:       7,
+		Defense:        2,
+		Intelligence:   2,
+		Heart:          2,
+	}
+	pet1 := models.Item{
+		Name:           "pet1",
+		Rarity:         1,
+		DescriptionUri: "",
+		ImageUri:       "",
+		Strength:       1,
+		Defense:        1,
+		Intelligence:   1,
+		Heart:          5,
+	}
+	pet2 := models.Item{
+		Name:           "pet2",
+		Rarity:         2,
+		DescriptionUri: "",
+		ImageUri:       "",
+		Strength:       2,
+		Defense:        2,
+		Intelligence:   2,
+		Heart:          7,
+	}
 
 	// Maps to easily fill-in generated IDs
 
@@ -677,8 +1119,8 @@ func fillDummyDb() {
 	if err := users.LoadCharacter(&user); err != nil {
 		panic(err)
 	}
-	// Set the character's ID properly
-	character.ID = user.Character.ID
+	// Set the character's values properly
+	character = *user.Character
 	// Create the classes
 	for _, class := range classMap {
 		if err := classes.CreateClass(class); err != nil {
@@ -710,6 +1152,29 @@ func fillDummyDb() {
 		for _, assignment := range class.Assignments {
 			assignmentMap[assignment.Name].ID = assignment.ID
 		}
+	}
+	// Create the items
+	if err := items.CreateArmor(&character, &armor1); err != nil {
+		panic(err)
+	}
+	if err := items.CreateArmor(&character, &armor2); err != nil {
+		panic(err)
+	}
+	if err := items.CreateWeapon(&character, &weapon1); err != nil {
+		panic(err)
+	}
+	if err := items.CreateWeapon(&character, &weapon2); err != nil {
+		panic(err)
+	}
+	if err := items.CreatePet(&character, &pet1); err != nil {
+		panic(err)
+	}
+	if err := items.CreatePet(&character, &pet2); err != nil {
+		panic(err)
+	}
+	// Equip a weapon
+	if err := characters.Equip(&character, &models.Weapon{Item: weapon1}); err != nil {
+		panic(err)
 	}
 }
 

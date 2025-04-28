@@ -1,0 +1,38 @@
+DESCRIPTION: Changes the pet the character is with into another one they own.
+
+
+
+Type: POST
+
+
+
+INPUT:
+{
+    "id": ...
+}
+
+"id" -> uint // The id of the pet replacing the current one
+
+
+
+RETURNS:
+{
+    "alive": ...
+}
+
+"alive" -> bool // False if the character is not alive
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: The pet was not found in the character's inventory
+
+500 (Internal server error)
+    Cause: Internal error

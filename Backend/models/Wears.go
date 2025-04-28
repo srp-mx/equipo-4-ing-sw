@@ -22,7 +22,8 @@ import (
 )
 
 type Wears struct {
-	CharacterName string
-	ArmorID       uint
-	Since         time.Time
+	ID          uint      `gorm:"primaryKey;autoIncrement" json:"-"`
+	CharacterID uint      `json:"-"`
+	Armor       *Armor    `gorm:"foreignKey:WearsID;references:ID;constraint:OnDelete:SET NULL" json:"-"`
+	Since       time.Time `gorm:"datetime;not null" json:"since"`
 }

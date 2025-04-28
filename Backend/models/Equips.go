@@ -23,7 +23,8 @@ import (
 )
 
 type Equips struct {
-	CharacterName string
-	WeaponID      uint
-	Since         time.Time
+	ID          uint      `gorm:"primaryKey;autoIncrement" json:"-"`
+	CharacterID uint      `json:"-"`
+	Weapon      *Weapon   `gorm:"foreignKey:EquipsID;references:ID;constraint:OnDelete:SET NULL" json:"-"`
+	Since       time.Time `gorm:"datetime;not null" json:"since"`
 }
