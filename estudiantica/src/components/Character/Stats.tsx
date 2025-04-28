@@ -41,7 +41,7 @@ export default function Stats(){
     const stats = useSelector((state: RootState) => state.stats);
     const dispatch = useDispatch();
     const [isEdit, setIsEdit] = useState(false);
-    const [pointLeft, setPointLeft] = useState(10);
+    const [pointLeft, setPointLeft] = useState(dataCharacter.points);
     const [tempStats, setTempStats] = useState({
         strength: stats.stats.skills.strength,
         defense: stats.stats.skills.defense,
