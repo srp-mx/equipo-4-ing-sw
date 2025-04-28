@@ -601,6 +601,10 @@ func (self *CharacterController) Wear(character *models.Character, armor *models
 	if err != nil {
 		return err
 	}
+	err = self.DB.Save(&character.Wears).Error
+	if err != nil {
+		return err
+	}
 	err = self.DB.Save(character).Error
 	if err != nil {
 		return err
@@ -627,6 +631,10 @@ func (self *CharacterController) Equip(character *models.Character, weapon *mode
 	character.Equips.Weapon = weapon
 	character.Equips.Since = time.Now()
 	err := self.DB.Save(weapon).Error
+	if err != nil {
+		return err
+	}
+	err = self.DB.Save(&character.Equips).Error
 	if err != nil {
 		return err
 	}
@@ -659,6 +667,10 @@ func (self *CharacterController) Accompany(character *models.Character, pet *mod
 	if err != nil {
 		return err
 	}
+	err = self.DB.Save(&character.Accompanies).Error
+	if err != nil {
+		return err
+	}
 	err = self.DB.Save(character).Error
 	if err != nil {
 		return err
@@ -673,6 +685,10 @@ func (self *CharacterController) LoadWearing(character *models.Character) error 
 	if err != nil {
 		return err
 	}
+	err = self.DB.Preload("Wears").First(character, "id=?", character.ID).Error
+	if err != nil {
+		return err
+	}
 	return self.DB.Preload("Armor").
 		First(&(character.Wears), "id=?", character.Wears.ID).Error
 }
@@ -683,6 +699,10 @@ func (self *CharacterController) LoadEquipped(character *models.Character) error
 	if err != nil {
 		return err
 	}
+	err = self.DB.Preload("Equips").First(character, "id=?", character.ID).Error
+	if err != nil {
+		return err
+	}
 	return self.DB.Preload("Weapon").
 		First(&(character.Equips), "id=?", character.Equips.ID).Error
 }
@@ -690,6 +710,10 @@ func (self *CharacterController) LoadEquipped(character *models.Character) error
 // Loads the pet the character is using into Accompanies.Pet.
 func (self *CharacterController) LoadAccompanying(character *models.Character) error {
 	err := self.Get(character)
+	if err != nil {
+		return err
+	}
+	err = self.DB.Preload("Accompanies").First(character, "id=?", character.ID).Error
 	if err != nil {
 		return err
 	}

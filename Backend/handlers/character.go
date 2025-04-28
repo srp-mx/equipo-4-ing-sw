@@ -352,6 +352,339 @@ func CharacterAddSkills(c *fiber.Ctx) error {
 	})
 }
 
+// Handles /get_character_wears
+func GetCharacterWears(c *fiber.Ctx) error {
+	// Get the user requesting this with their character loaded in
+	user, err := characterGetBase(c)
+	if err != nil {
+		return err
+	}
+
+	// Load the character's armor
+	characters := controllers.NewCharacterController(database.DB.Db)
+	characters.LoadWearing(user.Character)
+
+	armor := user.Character.Wears.Armor
+	if armor == nil {
+		return c.JSON(fiber.Map{
+			"alive": true,
+			"armor": nil,
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"alive": true,
+		"armor": fiber.Map{
+			"id":              armor.ID,
+			"created_at":      armor.CreatedAt,
+			"name":            armor.Name,
+			"rarity":          armor.Rarity,
+			"description":     "", // TODO: Item description files
+			"image_uri":       armor.ImageUri,
+			"strength":        armor.Strength,
+			"defense":         armor.Defense,
+			"intelligence":    armor.Intelligence,
+			"heart":           armor.Heart,
+			"damage_received": armor.DamageReceived,
+			"worn_since":      user.Character.Wears.Since,
+		},
+	})
+}
+
+// Handles /get_character_equips
+func GetCharacterEquips(c *fiber.Ctx) error {
+	// Get the user requesting this with their character loaded in
+	user, err := characterGetBase(c)
+	if err != nil {
+		return err
+	}
+
+	// Load the character's weapon
+	characters := controllers.NewCharacterController(database.DB.Db)
+	characters.LoadEquipped(user.Character)
+
+	weapon := user.Character.Equips.Weapon
+	if weapon == nil {
+		return c.JSON(fiber.Map{
+			"alive":  true,
+			"weapon": nil,
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"alive": true,
+		"weapon": fiber.Map{
+			"id":             weapon.ID,
+			"created_at":     weapon.CreatedAt,
+			"name":           weapon.Name,
+			"rarity":         weapon.Rarity,
+			"description":    "", // TODO: Item description files
+			"image_uri":      weapon.ImageUri,
+			"strength":       weapon.Strength,
+			"defense":        weapon.Defense,
+			"intelligence":   weapon.Intelligence,
+			"heart":          weapon.Heart,
+			"slay_count":     weapon.SlayCount,
+			"equipped_since": user.Character.Equips.Since,
+		},
+	})
+}
+
+// Handles /get_character_accompanies
+func GetCharacterAccompanies(c *fiber.Ctx) error {
+	// Get the user requesting this with their character loaded in
+	user, err := characterGetBase(c)
+	if err != nil {
+		return err
+	}
+
+	// Load the character's pet
+	characters := controllers.NewCharacterController(database.DB.Db)
+	characters.LoadAccompanying(user.Character)
+
+	pet := user.Character.Accompanies.Pet
+	if pet == nil {
+		return c.JSON(fiber.Map{
+			"alive": true,
+			"pet":   nil,
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"alive": true,
+		"pet": fiber.Map{
+			"id":                 pet.ID,
+			"created_at":         pet.CreatedAt,
+			"name":               pet.Name,
+			"rarity":             pet.Rarity,
+			"description":        "", // TODO: Item description files
+			"image_uri":          pet.ImageUri,
+			"strength":           pet.Strength,
+			"defense":            pet.Defense,
+			"intelligence":       pet.Intelligence,
+			"heart":              pet.Heart,
+			"bond":               pet.Bond,
+			"accompanying_since": user.Character.Accompanies.Since,
+		},
+	})
+}
+
+// Handles /character_armors
+func CharacterArmors(c *fiber.Ctx) error {
+	// Get the user requesting this with their character loaded in
+	user, err := characterGetBase(c)
+	if err != nil {
+		return err
+	}
+
+	// Load the character's armors
+	characters := controllers.NewCharacterController(database.DB.Db)
+	characters.LoadArmors(user.Character)
+
+	var armors []fiber.Map
+	for _, armor := range user.Character.Armors {
+		armors = append(armors, fiber.Map{
+			"id":              armor.ID,
+			"created_at":      armor.CreatedAt,
+			"name":            armor.Name,
+			"rarity":          armor.Rarity,
+			"description":     "", // TODO: Item description files
+			"image_uri":       armor.ImageUri,
+			"strength":        armor.Strength,
+			"defense":         armor.Defense,
+			"intelligence":    armor.Intelligence,
+			"heart":           armor.Heart,
+			"damage_received": armor.DamageReceived,
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"alive":  true,
+		"armors": armors,
+	})
+}
+
+// Handles /character_weapons
+func CharacterWeapons(c *fiber.Ctx) error {
+	// Get the user requesting this with their character loaded in
+	user, err := characterGetBase(c)
+	if err != nil {
+		return err
+	}
+
+	// Load the character's weapons
+	characters := controllers.NewCharacterController(database.DB.Db)
+	characters.LoadWeapons(user.Character)
+
+	var weapons []fiber.Map
+	for _, weapon := range user.Character.Weapons {
+		weapons = append(weapons, fiber.Map{
+			"id":           weapon.ID,
+			"created_at":   weapon.CreatedAt,
+			"name":         weapon.Name,
+			"rarity":       weapon.Rarity,
+			"description":  "", // TODO: Item description files
+			"image_uri":    weapon.ImageUri,
+			"strength":     weapon.Strength,
+			"defense":      weapon.Defense,
+			"intelligence": weapon.Intelligence,
+			"heart":        weapon.Heart,
+			"slay_count":   weapon.SlayCount,
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"alive":   true,
+		"weapons": weapons,
+	})
+}
+
+// Handles /character_pets
+func CharacterPets(c *fiber.Ctx) error {
+	// Get the user requesting this with their character loaded in
+	user, err := characterGetBase(c)
+	if err != nil {
+		return err
+	}
+
+	// Load the character's pets
+	characters := controllers.NewCharacterController(database.DB.Db)
+	characters.LoadPets(user.Character)
+
+	var pets []fiber.Map
+	for _, pet := range user.Character.Pets {
+		pets = append(pets, fiber.Map{
+			"id":           pet.ID,
+			"created_at":   pet.CreatedAt,
+			"name":         pet.Name,
+			"rarity":       pet.Rarity,
+			"description":  "", // TODO: Item description files
+			"image_uri":    pet.ImageUri,
+			"strength":     pet.Strength,
+			"defense":      pet.Defense,
+			"intelligence": pet.Intelligence,
+			"heart":        pet.Heart,
+			"bond":         pet.Bond,
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"alive": true,
+		"pets":  pets,
+	})
+}
+
+// Handles /post_character_wears
+func PostCharacterWears(c *fiber.Ctx) error {
+	// Get the user requesting this with their character loaded in
+	user, err := characterGetBase(c)
+	if err != nil {
+		return err
+	}
+
+	// How the post request object should look
+	type Req struct {
+		ID uint `json:"id"`
+	}
+
+	// Parses the request
+	body, err := parseRequestBody[Req](c)
+	if err != nil {
+		return err
+	}
+
+	// Check if the item is owned by that character
+	items := controllers.NewItemController(database.DB.Db)
+	armor := &models.Armor{Item: models.Item{ID: body.ID}}
+	if err := items.GetArmor(user.Character, armor); err != nil {
+		return getNotFound(c, "La armadura no está en el inventario del personaje")
+	}
+
+	// Assign the item to the character
+	characters := controllers.NewCharacterController(database.DB.Db)
+	if err := characters.Wear(user.Character, armor); err != nil {
+		return getServerErr(c)
+	}
+
+	return c.JSON(fiber.Map{
+		"alive": true,
+	})
+}
+
+// Handles /post_character_equips
+func PostCharacterEquips(c *fiber.Ctx) error {
+	// Get the user requesting this with their character loaded in
+	user, err := characterGetBase(c)
+	if err != nil {
+		return err
+	}
+
+	// How the post request object should look
+	type Req struct {
+		ID uint `json:"id"`
+	}
+
+	// Parses the request
+	body, err := parseRequestBody[Req](c)
+	if err != nil {
+		return err
+	}
+
+	// Check if the item is owned by that character
+	items := controllers.NewItemController(database.DB.Db)
+	weapon := &models.Weapon{Item: models.Item{ID: body.ID}}
+	if err := items.GetWeapon(user.Character, weapon); err != nil {
+		return getNotFound(c, "El arma no está en el inventario del personaje")
+	}
+
+	// Assign the item to the character
+	characters := controllers.NewCharacterController(database.DB.Db)
+	if err := characters.Equip(user.Character, weapon); err != nil {
+		return getServerErr(c)
+	}
+
+	return c.JSON(fiber.Map{
+		"alive": true,
+	})
+}
+
+// Handles /post_character_accompanies
+func PostCharacterAccompanies(c *fiber.Ctx) error {
+	// Get the user requesting this with their character loaded in
+	user, err := characterGetBase(c)
+	if err != nil {
+		return err
+	}
+
+	// How the post request object should look
+	type Req struct {
+		ID uint `json:"id"`
+	}
+
+	// Parses the request
+	body, err := parseRequestBody[Req](c)
+	if err != nil {
+		return err
+	}
+
+	// Check if the item is owned by that character
+	items := controllers.NewItemController(database.DB.Db)
+	pet := &models.Pet{Item: models.Item{ID: body.ID}}
+	if err := items.GetPet(user.Character, pet); err != nil {
+		return getNotFound(c, "La mascota no está en el inventario del personaje")
+	}
+
+	// Assign the item to the character
+	characters := controllers.NewCharacterController(database.DB.Db)
+	if err := characters.Accompany(user.Character, pet); err != nil {
+		return getServerErr(c)
+	}
+
+	return c.JSON(fiber.Map{
+		"alive": true,
+	})
+}
+
 // Utility function to load a user with their character and returns a not-alive
 // JSON if the character does not exist.
 func characterGetBase(c *fiber.Ctx) (*models.User, error) {
