@@ -39,6 +39,12 @@ func resetDb() {
 	db.Exec("DELETE from classes")
 	db.Exec("DELETE from assignments")
 	db.Exec("DELETE from characters")
+	db.Exec("DELETE from armors")
+	db.Exec("DELETE from weapons")
+	db.Exec("DELETE from pets")
+	db.Exec("DELETE from wears")
+	db.Exec("DELETE from equips")
+	db.Exec("DELETE from accompanies")
 }
 
 // Entry-point of all tests
@@ -66,6 +72,14 @@ func TestMain(m *testing.M) {
 
 	if err != nil {
 		panic("failed to automigrate database")
+	}
+
+	tables, err := db.Migrator().GetTables()
+	if err != nil {
+		panic("failed to retrieve tables")
+	}
+	for _, table := range tables {
+		log.Println("Table found:", table)
 	}
 
 	database.DB.Db = db
