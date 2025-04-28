@@ -33,9 +33,12 @@ const dataCharacterSlice = createSlice({
         setPoints(state, action: PayloadAction<number>){
             state.points = action.payload;
         },
+        setName(state, action: PayloadAction<string>){
+            state.dataCharacter.name = action.payload;
+        }
     
     }
 });
 
-export const { setDataCharacter, clearDataCharacter, setPoints} = dataCharacterSlice.actions; 
+export const { setDataCharacter, clearDataCharacter, setPoints, setName} = dataCharacterSlice.actions; 
 export default dataCharacterSlice.reducer;

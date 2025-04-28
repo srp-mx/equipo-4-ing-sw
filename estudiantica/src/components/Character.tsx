@@ -10,6 +10,7 @@ import { setRacha } from "@/constants/rachaSlice";
 import ModalCharacterCreation from '@/components/Character/ModalCharacterCreation'
 import { Flame } from "lucide-react";
 import { getPointSkill } from "./Character/Stats";
+import EditModal from '@/components/Character/EditModal'
 
 export const getRefresh = async(dispatch:any) => {
     try{
@@ -79,6 +80,7 @@ export const getCharacterDefaultInfo = async(dispatch:any) => {
 
 const Character = () => {
     const [showModal, setShowModal] = useState(false)
+    const [showModalEdit, setShowModalEdit] = useState(false);
     const user = useSelector((state: RootState) => state.user);
     const datacharacter = useSelector((state: RootState) => state.dataCharacter);
     const stats = useSelector((state: RootState) => state.stats);
@@ -100,8 +102,12 @@ const Character = () => {
 */
     if(rachaRefresh.racha.alive)
         return (
-            <div className="grid grid-cols-4 grid-rows-4">
+            <>
             
+            <div className="grid grid-cols-4 grid-rows-4">
+
+
+
             <div className="col-start-1 col-end-1 row-start-1 row-end-1">
                 <div className="text-xl text-amber-400 wagon-font mt-3 ml-8 space-x-2 space-y-1 bg-black/10 text-center rounded-full border-2 border-amber-400/30">
                     {datacharacter.dataCharacter.name}
@@ -113,14 +119,18 @@ const Character = () => {
             </div>
             <div className="mt-12 ml-4 col-start-2 col-end-3 row-start-1 row-end-5">
                 <img src={characterDates.characterURL} alt="" className="ml-15" />
+                <button onClick={() => setShowModalEdit(true)} 
+                className="bg-green-500 justify-center px-2 py-1 rounded-full mt-10 ml-27 hover:bg-green-600">Editar</button>
+                {showModalEdit && <EditModal onClose={() => setShowModalEdit(false)}/>}
             </div>
     
             <div className="col-start-4 col-end-4 row-start-1 row-end-2">
                 <img src={Bandera} alt="" className="h-6/7 w-6/7" />    
             </div>
-    
-            </div>
             
+
+            </div>
+            </>
     );
     else return (
         <div className="flex items-center justify-center w-full h-7/8">
