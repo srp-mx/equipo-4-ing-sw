@@ -26,7 +26,7 @@ RETURNS:
         "intelligence": ... ,
         "heart": ... ,
         "slay_count": ... ,
-        "since": ...
+        "equipped_since": ...
     }
 }
 
@@ -43,7 +43,7 @@ RETURNS:
 "weapon.intelligence" -> int
 "weapon.heart" -> int
 "weapon.slay_count" -> int
-"weapon.since" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"weapon.equipped_since" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
 
 
 

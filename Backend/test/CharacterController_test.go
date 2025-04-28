@@ -584,6 +584,7 @@ func TestCharacterItems(t *testing.T) {
 	assert.NoError(t, data.controller.Wear(data.character, data.armor1))
 	assert.NoError(t, data.controller.Equip(data.character, data.weapon1))
 	assert.NoError(t, data.controller.Accompany(data.character, data.pet1))
+	data.character = &models.Character{ID: data.character.ID}
 	assert.NoError(t, data.controller.LoadWearing(data.character))
 	assert.NoError(t, data.controller.LoadEquipped(data.character))
 	assert.NoError(t, data.controller.LoadAccompanying(data.character))
@@ -598,6 +599,7 @@ func TestCharacterItems(t *testing.T) {
 	assert.NoError(t, data.controller.Wear(data.character, data.armor2))
 	assert.NoError(t, data.controller.Equip(data.character, data.weapon2))
 	assert.NoError(t, data.controller.Accompany(data.character, data.pet2))
+	data.character = &models.Character{ID: data.character.ID}
 	assert.NoError(t, data.controller.LoadWearing(data.character))
 	assert.NoError(t, data.controller.LoadEquipped(data.character))
 	assert.NoError(t, data.controller.LoadAccompanying(data.character))

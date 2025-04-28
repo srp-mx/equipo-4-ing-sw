@@ -572,7 +572,7 @@ func testGetCharacterWears(t *testing.T) {
 		Intelligence   int       `json:"intelligence"`
 		Heart          int       `json:"heart"`
 		DamageReceived int       `json:"damage_received"`
-		Since          time.Time `json:"since"`
+		WornSince      time.Time `json:"worn_since"`
 	}
 	type Resp struct {
 		Alive bool   `json:"alive"`
@@ -593,18 +593,18 @@ func testGetCharacterEquips(t *testing.T) {
 
 	// Make a struct for easier unwrapping
 	type Weapon struct {
-		ID           uint      `json:"id"`
-		CreatedAt    time.Time `json:"created_at"`
-		Name         string    `json:"name"`
-		Rarity       int       `json:"rarity"`
-		Description  string    `json:"description"`
-		ImageUri     string    `json:"image_uri"`
-		Strength     int       `json:"strength"`
-		Defense      int       `json:"defense"`
-		Intelligence int       `json:"intelligence"`
-		Heart        int       `json:"heart"`
-		SlayCount    int       `json:"slay_count"`
-		Since        time.Time `json:"since"`
+		ID            uint      `json:"id"`
+		CreatedAt     time.Time `json:"created_at"`
+		Name          string    `json:"name"`
+		Rarity        int       `json:"rarity"`
+		Description   string    `json:"description"`
+		ImageUri      string    `json:"image_uri"`
+		Strength      int       `json:"strength"`
+		Defense       int       `json:"defense"`
+		Intelligence  int       `json:"intelligence"`
+		Heart         int       `json:"heart"`
+		SlayCount     int       `json:"slay_count"`
+		EquippedSince time.Time `json:"equipped_since"`
 	}
 	type Resp struct {
 		Alive  bool    `json:"alive"`
@@ -626,18 +626,18 @@ func testGetCharacterAccompanies(t *testing.T) {
 
 	// Make a struct for easier unwrapping
 	type Pet struct {
-		ID           uint      `json:"id"`
-		CreatedAt    time.Time `json:"created_at"`
-		Name         string    `json:"name"`
-		Rarity       int       `json:"rarity"`
-		Description  string    `json:"description"`
-		ImageUri     string    `json:"image_uri"`
-		Strength     int       `json:"strength"`
-		Defense      int       `json:"defense"`
-		Intelligence int       `json:"intelligence"`
-		Heart        int       `json:"heart"`
-		Bond         int       `json:"bond"`
-		Since        time.Time `json:"since"`
+		ID                uint      `json:"id"`
+		CreatedAt         time.Time `json:"created_at"`
+		Name              string    `json:"name"`
+		Rarity            int       `json:"rarity"`
+		Description       string    `json:"description"`
+		ImageUri          string    `json:"image_uri"`
+		Strength          int       `json:"strength"`
+		Defense           int       `json:"defense"`
+		Intelligence      int       `json:"intelligence"`
+		Heart             int       `json:"heart"`
+		Bond              int       `json:"bond"`
+		AccompanyingSince time.Time `json:"accompanying_since"`
 	}
 	type Resp struct {
 		Alive bool `json:"alive"`
@@ -774,7 +774,7 @@ func testPostCharacterWears(t *testing.T) {
 	character, err := characters.FindByName("test")
 	assert.NoError(t, err)
 	assert.NoError(t, characters.LoadWearing(character))
-	assert.Equal(t, armor, character.Wears.Armor)
+	assert.Equal(t, armor.Name, character.Wears.Armor.Name)
 }
 
 // Test for the /post_character_equips route
@@ -804,7 +804,7 @@ func testPostCharacterEquips(t *testing.T) {
 	character, err := characters.FindByName("test")
 	assert.NoError(t, err)
 	assert.NoError(t, characters.LoadEquipped(character))
-	assert.Equal(t, weapon, character.Equips.Weapon)
+	assert.Equal(t, weapon.Name, character.Equips.Weapon.Name)
 }
 
 // Test for the /post_character_accompanies route
@@ -834,7 +834,7 @@ func testPostCharacterAccompanies(t *testing.T) {
 	character, err := characters.FindByName("test")
 	assert.NoError(t, err)
 	assert.NoError(t, characters.LoadAccompanying(character))
-	assert.Equal(t, pet, character.Accompanies.Pet)
+	assert.Equal(t, pet.Name, character.Accompanies.Pet.Name)
 }
 
 // Test for the /rename_armor route
@@ -1119,8 +1119,8 @@ func fillDummyDb() {
 	if err := users.LoadCharacter(&user); err != nil {
 		panic(err)
 	}
-	// Set the character's ID properly
-	character.ID = user.Character.ID
+	// Set the character's values properly
+	character = *user.Character
 	// Create the classes
 	for _, class := range classMap {
 		if err := classes.CreateClass(class); err != nil {

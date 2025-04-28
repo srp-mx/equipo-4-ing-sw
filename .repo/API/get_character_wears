@@ -26,7 +26,7 @@ RETURNS:
         "intelligence": ... ,
         "heart": ... ,
         "damage_received": ... ,
-        "since": ...
+        "worn_since": ...
     }
 }
 
@@ -43,7 +43,7 @@ RETURNS:
 "armor.intelligence" -> int
 "armor.heart" -> int
 "armor.damage_received" -> int
-"armor.since" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"armor.worn_since" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
 
 
 
