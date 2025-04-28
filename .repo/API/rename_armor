@@ -1,0 +1,40 @@
+DESCRIPTION: Changes the name of an armor.
+
+
+
+Type: POST
+
+
+
+INPUT:
+{
+    "id": ... ,
+    "name": ...
+}
+
+"id" -> uint
+"name" -> string
+
+
+
+RETURNS:
+{
+    "alive": ...
+}
+
+"alive" -> bool // False if the character is not alive
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: The armor was not found in the character's inventory
+
+500 (Internal server error)
+    Cause: Internal error

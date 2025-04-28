@@ -2,9 +2,18 @@ import React, { SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Button = ({ onClick, children, icon }: { onClick?: () => void; children: React.ReactNode; icon?: string }) => (
-  <button onClick={onClick} className="pixel-corner-button mb-4 flex bg-[#cbda3d] py-4 px-10 min-w-[300px] transition-all hover:bg-white">
+  <button onClick={onClick} className="text-black pixel-corner-button mb-4 flex bg-[#cbda3d] py-4 px-10 min-w-[300px] transition-all hover:bg-white">
     {icon && <img src={icon} className="w-6 h-6 mr-3" alt="Button Icon" />}
     {children}
+  </button>
+);
+
+const ButtonReturn = ({ onClick }: { onClick?: () => void}) => (
+  <button onClick={onClick} className="absolute -top-3 left-0 flex items-center text-[#cbda3d] hover:text-white transition-all focus:text-[#ffffff]">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">  
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+    <span className="ml-2 text-sm">Regresar</span>
   </button>
 );
 
@@ -119,6 +128,7 @@ export default function Register() {
                       }
                     }}
                     onSubmit={(e) => {e.preventDefault(); submit(email, password, userName, name, navigate)}}>
+                        <ButtonReturn onClick={() => navigate("/")} />
                         <div className="relative flex flex-col mb-4">
                             <input 
                                 type="email"

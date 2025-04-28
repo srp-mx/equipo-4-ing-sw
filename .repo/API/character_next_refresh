@@ -24,11 +24,11 @@ RETURNS:
 }
 
 "alive" -> boolean // Everything after is undefined if this is false
-"next_check" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
-"timers" // Datetimes of the next character data refresh by cause
-"timers.streak_loss" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
-"timers.deletion" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
-"timers.next_heal" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"next_check" -> int // Milliseconds until next refresh
+"timers" // Milliseconds until the next character data refresh by cause
+"timers.streak_loss" -> int // Milliseconds until next refresh
+"timers.deletion -> int // Milliseconds until next refresh>
+"timers.next_heal" -> int // Milliseconds until next refresh>
 
 
 

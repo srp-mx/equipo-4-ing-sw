@@ -12,6 +12,7 @@ import { clearClases } from "@/constants/classSlice";
 import { clearAssignments } from "@/constants/assignmentSlice";
 import { clearDataCharacter } from "@/constants/dataCharacterSlice";
 import { clearStats } from "@/constants/StatsSlice";
+import { clearRacha } from "@/constants/rachaSlice";
 
 const handleLogout = (dispatch : any, navigate : any) => {
     dispatch(clearUser());
@@ -19,6 +20,7 @@ const handleLogout = (dispatch : any, navigate : any) => {
     dispatch(clearAssignments());
     dispatch(clearStats());
     dispatch(clearDataCharacter());
+    dispatch(clearRacha());
     localStorage.removeItem("token");
 
     navigate("/");

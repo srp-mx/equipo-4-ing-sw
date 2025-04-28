@@ -34,27 +34,35 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
     const [editedAssigment, setEditedAssigment] = useState({ ... assigment});
     const [className, setClassName] = useState("");
     const modalRef = useRef<HTMLDivElement>(null);
-    
-    const getClass = async() => {
-        try{
-            const response = await fetch(`http://localhost:3000/get_class?id=${assigment.class_id}`,{
-                method: "GET",
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("token"),
-                    "Content-Type": "application/json"
+
+
+    useEffect(() => {
+
+        const getClass = async() => {
+            try{
+                const response = await fetch(`http://localhost:3000/get_class?id=${assigment.class_id}`,{
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem("token"),
+                        "Content-Type": "application/json"
+                    }
+                });
+                if(!response.ok){
+                    const error = await response.json();
+                    console.error("El error es ", error);
+                    throw new Error(`Error: ${response.status} ${response.statusText}`);
                 }
-            });
-            if(!response.ok){
-                const error = await response.json();
-                console.error("El error es ", error);
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
+                const data = await response.json();
+                setClassName(data.name);
+            }catch(error){
+                console.error(error);
             }
-            const data = await response.json();
-            setClassName(data.name);
-        }catch(error){
-            console.error(error);
         }
-    }
+    
+    
+        getClass();    
+
+    },[dispatch]);
     
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -89,6 +97,9 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                 },
                 body: JSON.stringify(dataSend),
             });
+    
+            const rawResponse = await response.text(); // Primero lee como texto
+            console.log("Respuesta cruda:", rawResponse); // Inspecciona qué devuelve
 
             if(!response.ok){
                 const error = await response.json();
@@ -96,7 +107,6 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
 
-            const data = await response.json();
             dispatch(updateAssignment(dataSend.new_assignment));
             setIsEdit(false);
         }catch(error){
@@ -110,7 +120,6 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
         setIsEdit(false);
     };
 
-    getClass();
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent){
@@ -129,7 +138,7 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
           }, [isOpen, onClose]);
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-10">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/10">
             <div ref={modalRef} 
             className="p-6 w-1/3 shadow-lg items-center border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
                 <div className="flex mb-2 mr-4 space-x-2 justify-end">

@@ -1,4 +1,4 @@
-# Estudiántica
+# Estudiantica
 
 ## Tabla de contenidos
 
@@ -35,65 +35,41 @@ supuesto no todos) que se encuentre en su camino, el estudiante podrá recolecta
 distintas mejoras para su personaje, así como para su vida académica.
 
 ## Especificación
-El componente más escencial de la aplicación es una agenda escolar. El aspecto
+El componente más esencial de la aplicación es una agenda escolar. El aspecto
 de *ludificación* sirve para motivar al estudiante a interactuar con los
 sistemas de la agenda a través de incentivos y consecuencias.
 
-Para empezar a usar *Estudiántica* el usuario debe ingresar la fecha de incio y
-término de su periódo escolar actual (bimestre, cuatrimestre, semestre, etc.) y
-la carga de materias. Cada materia se puede personalizar agregándole las
-siguientes calificaciones subjetivas: el interés que tiene el estudiante por la
-materia y el grado de dificultad de esta. Opcionalmente también se pueden
-asignar porcentajes personalizados al peso total de tareas, prácticas y examenes
-en la calificación de cada materia (por defecto 50/50 entre tareas/prácticas y
-examenes).
+Para empezar a usar *Estudiantica* el usuario debe crear el personaje con el
+cual jugará. A continuación, deberá ingresar sus materias, con la fecha de
+inicio y término, así como la manera en que se evaluará sobre 100.
 
-A partir de esto, se da lugar a la interacción principal de la agenda: la carga,
-personalización y manejo de trabajos. Las tareas/prácticas y las evaluaciones no
-tienen mayor distinción fuera del peso que tienen para la calificación de cada
-materia. Para subir un trabajo se deben configurar los siguientes aspectos: la
-materia a la que pertenece el trabajo, su fecha de entrega y un tiempo aproximado
-para completarse.
+A partir de esto, se da lugar a la interacción principal de la agenda: la
+carga, personalización y manejo de trabajos. Las tareas, las prácticas y las
+evaluaciones no tienen mayor distinción fuera del peso que tienen para la
+calificación de cada materia. Para subir un trabajo se deben configurar los
+siguientes aspectos: la materia a la que pertenece el trabajo, su fecha de
+entrega y a qué grupo de trabajos pertenece, el cual llamaremos su *tag* o
+*etiqueta*.
 
 El estudiante tendrá acceso a distintas métricas respecto a su desempeño como:
-calificación promedio por materia, porcentaje de trabajos entregados y
-puntualidad en realizar tareas. Además, podrá ver una lista de todos sus
-pendientes en el orden en el que se entregan. La aplicación alertará dentro de
-un periódo configurable que el estudiante debería empezar a trabajar en una
-tarea. Para poder trabajar parcialmente en una tarea se le pueden agregar campos
-que son subtareas para realizarla, por ejemplo: escribir el borrador del
-documento, leer las notas correspondientes, contestar las primeras dos
-preguntas, etc.
+calificación por materia y porcentaje de trabajos entregados. Además, podrá ver
+una lista de todos sus pendientes en el orden en el que se entregan.
 
 En el aspecto más básico de *ludificación* tu personaje tendrá métricas como
-salud, experiencia, fuerza y habilidad. El personaje podrá subir de nivel a
-través de buen desempeño académico y buena organización al entregar trabajos.
-Por otro lado, perderá experiencia al tener calificaciones bajas o no
-aprobatorias. Como incentivo adicional, obtener una califiación perfecta en una
-evaluación tendrá una recompensa especial en el juego, como un insta-heal para
-su personaje.
-
-La aplicación contará con un componente social que permitirá a los estudiantes
-unirse a grupos de estudio (*guilds*), donde podrán compartir progreso,
-motivarse entre sí y participar en desafíos académicos en grupo. Además, cada
-estudiante podrá visualizar un resumen de su desempeño por materia.
-
-Para ayudar a la administración del tiempo y la motivación, se implementará un
-período de gracia donde si cumple con el resto de sus pendientes se anularan las
-consecuencias negativas y podrá obtener una recompensa adicional, pero si no lo
-logra, perderá aun más experiencia.
+salud, experiencia, fuerza, inteligencia, defensa y corazón. El personaje podrá
+subir de nivel a través de buen desempeño académico y buena organización al
+entregar trabajos. Por otro lado, si el jugador no tiene actividad en
+suficientes días, su personaje morirá y tendrá que crear uno nuevo. Como
+incentivo adicional, el contar con una racha prolongada le dará un aumento
+porcentual en algunas de sus métricas de juego.
 
 El progreso en el juego estará vinculado al rendimiento académico. A medida que
-el estudiante sube de nivel en la aplicación, desbloqueará perks especiales,
-como la capacidad de realizar una tarea un día antes sin recibir penalización.
-Además, el personaje del estudiante tendrá estadísticas que reflejarán su
-desempeño, tales como concentración, disciplina y gestión del tiempo, las cuales
-podrán mejorar con buenos hábitos.
-
-Por último, de manera opcional, los estudiantes podrán elegir entre diferentes
-clases dentro del juego, como el estratega, el multitarea o el metódico, cada
-una con habilidades que influirán en la manera en que interactúan con la agenda
-y los incentivos de la aplicación.
+el estudiante sube de nivel en la aplicación, se le otorgarán puntos asignables
+a sus estadísticas. Con aquellas estadísticas podrá participar en eventos
+llamados mazmorras, las cuales cuentan con distintos niveles de dificultad y
+pondrán a prueba al jugador de manera estocástica. Con base a ello, recibirá
+las recompensas que le permitirán personalizar a su personaje e incrementar
+sus estadísticas.
 
 ## Diseño
 
@@ -329,22 +305,71 @@ respectivo maquetado:
 
 Las documentación de cada ruta son las siguientes.
 
-* [/class_assignments](.repo/API/class_assignments)
-* [/class_grade](.repo/API/class_grade)
-* [/class_tags](.repo/API/class_tags)
-* [/delete_assignment](.repo/API/delete_assignment)
-* [/delete_class](.repo/API/delete_class)
-* [/get_assignment](.repo/API/get_assignment)
-* [/get_class](.repo/API/get_class)
-* [/login](.repo/API/login)
-* [/patch_assignment](.repo/API/patch_assignment)
-* [/patch_class](.repo/API/patch_class)
-* [/post_assignment](.repo/API/post_assignment)
-* [/post_class](.repo/API/post_class)
-* [/refresh_token](.repo/API/refresh_token)
-* [/register](.repo/API/register)
-* [/user_classes](.repo/API/user_classes)
-* [/verify_formula](.repo/API/verify_formula)
+* [/character_add_skills](./.repo/API/character_add_skills): Tries to assign
+  skill points to a character. The input is the skill points to add into each
+  attribute.
+* [/character_armors](./.repo/API/character_armors): Gets the armors the
+  character owns.
+* [/character_basic_data](./.repo/API/character_basic_data): Gets the user's
+  character's basic data.
+* [/character_free_skill](./.repo/API/character_free_skill): Gets the user's
+  character's free (unassigned) skill points.
+* [/character_next_refresh](./.repo/API/character_next_refresh): Gets the
+  user's character's next automatic data update, or indicates if there is none.
+* [/character_pets](./.repo/API/character_pets): Gets the pets the character
+  owns.
+* [/character_stats](./.repo/API/character_stats): Gets the user's character's
+  stats, or indicates if there is none.
+* [/character_weapons](./.repo/API/character_weapons): Gets the weapons the
+  character owns.
+* [/class_assignments](./.repo/API/class_assignments): Gets all assignments
+  from a class.
+* [/class_grade](./.repo/API/class_grade): Calculates a class' grade.
+* [/class_tags](./.repo/API/class_tags): Gets all tags from a class'
+  assignments.
+* [/delete_assignment](./.repo/API/delete_assignment): Removes an assignment.
+* [/delete_character](./.repo/API/delete_character): Deletes the user's
+  character.
+* [/delete_class](./.repo/API/delete_class): Deletes a class.
+* [/get_assignment](./.repo/API/get_assignment): Gets an assignment.
+* [/get_character_accompanies](./.repo/API/get_character_accompanies): Gets the
+  pet which accompanies the character.
+* [/get_character_equips](./.repo/API/get_character_equips): Gets the weapon
+  the character has equipped
+* [/get_character_wears](./.repo/API/get_character_wears): Gets the armor the
+  character is wearing
+* [/get_class](./.repo/API/get_class): Gets a class.
+* [/login](./.repo/API/login): Receives tentative credentials and returns a
+  login token valid for an hour if it succeeds.
+* [/patch_assignment](./.repo/API/patch_assignment): Updates the fields of the
+  assignment passed into it.
+* [/patch_character](./.repo/API/patch_character): Updates the fields of the
+  character passed into it.
+* [/patch_class](./.repo/API/patch_class): Updates the fields of the class
+  passed into it.
+* [/post_assignment](./.repo/API/post_assignment): Creates an assignment.
+* [/post_character](./.repo/API/post_character): Creates a character associated
+  with the user.
+* [/post_character_accompanies](./.repo/API/post_character_accompanies):
+  Changes the pet the character is with into another one they own.
+* [/post_character_equips](./.repo/API/post_character_equips): Changes the
+  weapon the character is using into another one they own.
+* [/post_character_wears](./.repo/API/post_character_wears): Changes the armor
+  the character is using into another one they own.
+* [/post_class](./.repo/API/post_class): Creates a class.
+* [/refresh_token](./.repo/API/refresh_token): Given a valid token, it
+  generates a new one.
+* [/register](./.repo/API/register): Receives register data, creates the user
+  if possible, and returns the data created as confirmation.
+* [/rename_armor](./.repo/API/rename_armor): Changes the name of an armor.
+* [/rename_pet](./.repo/API/rename_pet): Changes the name of a pet.
+* [/rename_weapon](./.repo/API/rename_weapon): Changes the name of a weapon.
+* [/user_classes](./.repo/API/user_classes): Gets all classes a user is
+  enrolled in.
+* [/verify_formula](./.repo/API/verify_formula): Receives a formula and checks
+  if the syntax is valid.
+
+
 
 Los errores son todos de la forma siguiente.
 ```json

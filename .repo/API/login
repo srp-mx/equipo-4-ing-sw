@@ -21,11 +21,20 @@ INPUT:
 RETURNS:
 {
     "token": ... ,
-    "user": ...
+    "user": {
+        "character": null ,
+        "email": ... ,
+        "name": ... ,
+        "username": ...
+    }
 }
 
 "token" -> string
-"user" -> string
+"user"
+"user.character" // null
+"user.email" -> string
+"user.name" -> string
+"user.username" -> string
 
 
 
