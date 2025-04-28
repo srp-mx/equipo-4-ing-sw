@@ -31,7 +31,7 @@ RETURNS:
 }
 
 "alive" -> boolean // Everything after is undefined if this is false
-"armor"
+"armor" // May be null if none equipped
 "armor.id" -> uint
 "armor.created_at" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
 "armor.name" -> string

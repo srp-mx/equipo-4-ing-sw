@@ -19,10 +19,10 @@ INPUT:
 
 RETURNS:
 {
-    "ok": ...
+    "alive": ...
 }
 
-"ok" -> bool // False if the character is not alive
+"alive" -> bool // False if the character is not alive
 
 
 
