@@ -43,10 +43,10 @@ type Character struct {
 	HeartExtra int `json:"-"`
 	// Extra XP gained from events
 	ExtraPoints uint64      `json:"-"`
-	Accompanies Accompanies `gorm:"foreignKey:CharacterID;references:ID" json:"-"`
-	Wears       Wears       `gorm:"foreignKey:CharacterID;references:ID" json:"-"`
-	Equips      Equips      `gorm:"foreignKey:CharacterID;references:ID" json:"-"`
-	Armors      []Armor     `gorm:"foreignKey:OwnerID;references:Name;constraint:OnDelete:CASCADE" json:"armors,omitempty"`
-	Pets        []Pet       `gorm:"foreignKey:OwnerID;references:Name;constraint:OnDelete:CASCADE" json:"pets,omitempty"`
-	Weapons     []Weapon    `gorm:"foreignKey:OwnerID;references:Name;constraint:OnDelete:CASCADE" json:"weapons,omitempty"`
+	Wears       Wears       `gorm:"foreignKey:CharacterID;references:ID;constraint:OnDelete:CASCADE" json:"-"`
+	Equips      Equips      `gorm:"foreignKey:CharacterID;references:ID;constraint:OnDelete:CASCADE" json:"-"`
+	Accompanies Accompanies `gorm:"foreignKey:CharacterID;references:ID;constraint:OnDelete:CASCADE" json:"-"`
+	Armors      []Armor     `gorm:"foreignKey:OwnerID;references:ID;constraint:OnDelete:CASCADE" json:"armors,omitempty"`
+	Pets        []Pet       `gorm:"foreignKey:OwnerID;references:ID;constraint:OnDelete:CASCADE" json:"pets,omitempty"`
+	Weapons     []Weapon    `gorm:"foreignKey:OwnerID;references:ID;constraint:OnDelete:CASCADE" json:"weapons,omitempty"`
 }

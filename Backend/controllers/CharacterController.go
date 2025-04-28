@@ -47,7 +47,46 @@ func NewCharacterController(db *gorm.DB) *CharacterController {
 
 // Creates a new character on the database
 func (self *CharacterController) CreateCharacter(character *models.Character) error {
-	return self.DB.Create(character).Error
+	err := self.DB.Create(character).Error
+	if err != nil {
+		return err
+	}
+
+	now := time.Now()
+
+	wears := &models.Wears{
+		CharacterID: character.ID,
+		Armor:       nil,
+		Since:       now,
+	}
+	equips := &models.Equips{
+		CharacterID: character.ID,
+		Weapon:      nil,
+		Since:       now,
+	}
+	accompanies := &models.Accompanies{
+		CharacterID: character.ID,
+		Pet:         nil,
+		Since:       now,
+	}
+
+	err = self.DB.Create(wears).Error
+	if err != nil {
+		self.DB.Delete(character)
+		return err
+	}
+	err = self.DB.Create(equips).Error
+	if err != nil {
+		self.DB.Delete(character)
+		return err
+	}
+	err = self.DB.Create(accompanies).Error
+	if err != nil {
+		self.DB.Delete(character)
+		return err
+	}
+
+	return nil
 }
 
 // Updates an existing character on the database
@@ -539,4 +578,136 @@ func (self *CharacterController) NextPassiveHeal(character *models.Character) (i
 	activeHour := character.MomentOfLatestAction.Truncate(time.Hour)
 	hoursDelta := int(currentHour.Sub(activeHour).Hours())
 	return max(0, min(HP_PER_HOUR*hoursDelta, models.MAX_HP)), nil
+}
+
+// Assigns what armor the character is using now.
+func (self *CharacterController) Wear(character *models.Character, armor *models.Armor) error {
+	items := NewItemController(self.DB)
+	if err := items.GetArmor(character, armor); err != nil {
+		return err
+	}
+	oldArmor := character.Wears.Armor
+	if oldArmor != nil {
+		oldArmor.WearsID = nil
+		err := self.DB.Save(oldArmor).Error
+		if err != nil {
+			return err
+		}
+	}
+	armor.WearsID = &character.Wears.ID
+	character.Wears.Armor = armor
+	character.Wears.Since = time.Now()
+	err := self.DB.Save(armor).Error
+	if err != nil {
+		return err
+	}
+	err = self.DB.Save(character).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Assigns what weapon the character is using now.
+func (self *CharacterController) Equip(character *models.Character, weapon *models.Weapon) error {
+	items := NewItemController(self.DB)
+	if err := items.GetWeapon(character, weapon); err != nil {
+		return err
+	}
+	oldWeapon := character.Equips.Weapon
+	if oldWeapon != nil {
+		oldWeapon.EquipsID = nil
+		err := self.DB.Save(oldWeapon).Error
+		if err != nil {
+			return err
+		}
+	}
+	weapon.EquipsID = &character.Equips.ID
+	character.Equips.Weapon = weapon
+	character.Equips.Since = time.Now()
+	err := self.DB.Save(weapon).Error
+	if err != nil {
+		return err
+	}
+	err = self.DB.Save(character).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Assigns what pet the character is using now.
+func (self *CharacterController) Accompany(character *models.Character, pet *models.Pet) error {
+	items := NewItemController(self.DB)
+	if err := items.GetPet(character, pet); err != nil {
+		return err
+	}
+	oldPet := character.Accompanies.Pet
+	if oldPet != nil {
+		oldPet.AccompaniesID = nil
+		err := self.DB.Save(oldPet).Error
+		if err != nil {
+			return err
+		}
+	}
+	pet.AccompaniesID = &character.Accompanies.ID
+	character.Accompanies.Pet = pet
+	character.Accompanies.Since = time.Now()
+	err := self.DB.Save(pet).Error
+	if err != nil {
+		return err
+	}
+	err = self.DB.Save(character).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Loads the armor the character is using into Wears.Armor.
+func (self *CharacterController) LoadWearing(character *models.Character) error {
+	err := self.Get(character)
+	if err != nil {
+		return err
+	}
+	return self.DB.Preload("Armor").
+		First(&(character.Wears), "id=?", character.Wears.ID).Error
+}
+
+// Loads the weapon the character is using into Equips.Weapon.
+func (self *CharacterController) LoadEquipped(character *models.Character) error {
+	err := self.Get(character)
+	if err != nil {
+		return err
+	}
+	return self.DB.Preload("Weapon").
+		First(&(character.Equips), "id=?", character.Equips.ID).Error
+}
+
+// Loads the pet the character is using into Accompanies.Pet.
+func (self *CharacterController) LoadAccompanying(character *models.Character) error {
+	err := self.Get(character)
+	if err != nil {
+		return err
+	}
+	return self.DB.Preload("Pet").
+		First(&(character.Accompanies), "id=?", character.Accompanies.ID).Error
+}
+
+// Loads the armors the character owns into Armors.
+func (self *CharacterController) LoadArmors(character *models.Character) error {
+	return self.DB.Preload("Armors").First(character, "id=?", character.ID).Error
+}
+
+// Loads the weapons the character owns into Weapons.
+func (self *CharacterController) LoadWeapons(character *models.Character) error {
+	return self.DB.Preload("Weapons").First(character, "id=?", character.ID).Error
+}
+
+// Loads the pets the character owns into Pets.
+func (self *CharacterController) LoadPets(character *models.Character) error {
+	return self.DB.Preload("Pets").First(character, "id=?", character.ID).Error
 }

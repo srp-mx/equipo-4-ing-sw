@@ -21,7 +21,6 @@ import _ "gorm.io/gorm"
 
 type Pet struct {
 	Item
-	AccompaniesID *uint  `json:"-" gorm:"unique"`
-	Bond          int    `json:"bond"`
-	Name          string `json:"name" gorm:"not null"`
+	AccompaniesID *uint `json:"-" gorm:"unique"`
+	Bond          int   `json:"bond"`
 }
