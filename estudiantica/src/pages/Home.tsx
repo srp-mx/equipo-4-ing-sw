@@ -1,20 +1,36 @@
 import NavBar from "../components/home/Navbar";
-import Character from "../components/Character";
+import Character, { getCharacterDefaultInfo, getRefresh, getStats } from "../components/Character";
 import SideBar from "../components/SideBar";
 import ItemsEquiped from "../components/ItemsEquiped";
 import CalendarioImg from "@/assets/img/home/icono_calendario.png"
 import TareasImg from "@/assets/img/home/icono_tareas.png";
 import HorarioImg from "@/assets/img/home/icono_horario.png";
 import MateriaImg from "@/assets/img/home/icono_materias.png";
-import Stats from "@/components/Character/Stats"
-import { data, Link } from "react-router-dom";
+import Stats, { getPointSkill } from "@/components/Character/Stats"
+import { Link } from "react-router-dom";
 import { useAuth } from "@/constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/constants/store";
+import { useEffect } from "react";
+
 
 export default function Home(){
     useAuth();
+    const dispatch = useDispatch();
     const dataCharacter = useSelector((state:RootState) => state.dataCharacter);
+    const rachaRefresh = useSelector((state: RootState) => state.racha);
+    useEffect(() => {
+        async function characterHome(){
+            await getRefresh(dispatch);
+            if(rachaRefresh.racha.alive){
+                console.log("hola");
+                await getCharacterDefaultInfo(dispatch);
+                await getStats(dispatch);
+                await getPointSkill(dispatch);
+            }
+        }
+        characterHome();
+    },[dispatch, rachaRefresh.racha.alive]);
     return (
         <>
             <NavBar />
@@ -29,9 +45,11 @@ export default function Home(){
                 mb-6 ml-4 w-full rounded-l-2xl col-start-1 col-end-4 row-start-6 row-end-9 py-1 space-x-1 space-y-2 bg-gray-800">
                     <ItemsEquiped />
                 </div> 
-                {dataCharacter.dataCharacter.name !== "" && <div className="col-start-8 col-end-10 row-start-5 row-end-8 bg-gray-700/30 rounded-2xl border-4 border-black/20">
-                    <Stats />
-                </div>}
+                {dataCharacter.dataCharacter.name !== "" && 
+                    <div className="col-start-8 col-end-10 row-start-5 row-end-8 ">
+                        <Stats />
+                    </div>
+                }
 
                 <div className="text-3xl items-center justify-center text-center flex mt-6 flex-col
                 mb-6 ml-10 mr-10 w-5/6 col-start-10 col-end-13 row-start-2 row-end-9 py-1 space-x-1 space-y-4">
