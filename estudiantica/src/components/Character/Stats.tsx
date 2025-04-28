@@ -3,7 +3,7 @@ import { setSkills } from "@/constants/StatsSlice";
 import { RootState } from "@/constants/store";
 import { Skills } from "@/Object/Character";
 import { ArrowBigUpDash, BicepsFlexed, Brain, Cat, Heart, Shield } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { json } from "stream/consumers";
 
@@ -41,13 +41,26 @@ export default function Stats(){
     const stats = useSelector((state: RootState) => state.stats);
     const dispatch = useDispatch();
     const [isEdit, setIsEdit] = useState(false);
-    const [pointLeft, setPointLeft] = useState(dataCharacter.points);
-    const [tempStats, setTempStats] = useState({
-        strength: stats.stats.skills.strength,
-        defense: stats.stats.skills.defense,
-        heart: stats.stats.skills.heart,
-        intelligence: stats.stats.skills.intelligence
+    const [pointLeft, setPointLeft] = useState(0);
+    const [tempStats, setTempStats] = useState<Skills>({
+        strength: 0,
+        defense: 0,
+        heart: 0,
+        intelligence: 0
     }); 
+
+    useEffect(() => {
+        if (stats.stats.skills && dataCharacter.points !== undefined) {
+            setTempStats({
+                strength: stats.stats.skills.strength,
+                defense: stats.stats.skills.defense,
+                heart: stats.stats.skills.heart,
+                intelligence: stats.stats.skills.intelligence
+            });
+            setPointLeft(dataCharacter.points);
+        }
+    } , [stats.stats.skills, dataCharacter.points]);
+
     const increaseStat = (stat: keyof typeof tempStats) => {
         if (pointLeft > 0){
             setTempStats(prev => ({
@@ -59,7 +72,7 @@ export default function Stats(){
     };
 
     const decreaseStat = (stat : keyof typeof tempStats) => {
-        if(tempStats[stat] > 0){
+        if(tempStats[stat] > stats.stats.skills[stat]){
             setTempStats(prev => ({
                 ...prev, 
                 [stat]: prev[stat] - 1,
@@ -68,15 +81,22 @@ export default function Stats(){
         }
     };
 
+
     const saveSkills = async(dispatch : any, click: () => void) => {
         try{
+            const dataSend = {
+               strength: tempStats.strength - stats.stats.skills.strength,
+               defense: tempStats.defense - stats.stats.skills.defense, 
+               heart: tempStats.heart - stats.stats.skills.heart, 
+               intelligence: tempStats.intelligence - stats.stats.skills.intelligence 
+            };
             const response = await fetch ("http://localhost:3000/character_add_skills", {
                 method: "POST", 
                 headers: {
                     "Content-Type": "application/json", 
                     "Authorization": "Bearer " + localStorage.getItem("token"),
                 },
-                body: JSON.stringify(tempStats),
+                body: JSON.stringify(dataSend),
             });
             if(!response.ok){
                 switch(response.status){
@@ -92,7 +112,9 @@ export default function Stats(){
             }
             const data = await response.json();
             const nuevasSkills : Skills = tempStats;
-            dispatch(setSkills(nuevasSkills));
+            console.log("Nuevas Skills ", nuevasSkills)
+            dispatch(setSkills(nuevasSkills)); 
+            dispatch(setPoints(pointLeft));           
             click();
         }catch(error){
             console.error("Error: ", error);
@@ -100,11 +122,10 @@ export default function Stats(){
         
     }
 
-
     if (isEdit){
         return (
             <div className="flex flex-col space-y-1.5 bg-gray-700/30 border-4 border-black/20 rounded-2xl" >
-                <p className="text-center"> Puntos: {dataCharacter.points} </p>
+                <p className="text-center"> Puntos: {pointLeft} </p>
     
                 <div className="flex flex-row justify-between ml-3 mr-3">
                         <div className="flex flex-row">
@@ -131,7 +152,7 @@ export default function Stats(){
                         <div className="flex items-center gap-1">
                             <button onClick={() => decreaseStat("strength")}
                                 className="bg-red-500 hover:bg-red-600 text-xs text-white px-1.5 rounded-full"
-                                disabled={tempStats.strength <= 0}>
+                                disabled={tempStats.strength <= stats.stats.skills.strength}>
                                 -
                             </button>
                             <span>{tempStats.strength}</span>
@@ -151,7 +172,7 @@ export default function Stats(){
                         <div className="flex items-center gap-1">
                             <button onClick={() => decreaseStat("defense")}
                                 className="bg-red-500 hover:bg-red-600 text-xs text-white px-1.5 rounded-full"
-                                disabled={tempStats.defense <= 0}>
+                                disabled={tempStats.defense <= stats.stats.skills.defense}>
                                 -
                             </button>
                             <span>{tempStats.defense}</span>
@@ -171,7 +192,7 @@ export default function Stats(){
                         <div className="flex items-center gap-1">
                             <button onClick={() => decreaseStat("intelligence")}
                                 className="bg-red-500 hover:bg-red-600 text-xs text-white px-1.5 rounded-full"
-                                disabled={tempStats.intelligence <= 0}>
+                                disabled={tempStats.intelligence <= stats.stats.skills.intelligence}>
                                 -
                             </button>
                             <span>{tempStats.intelligence}</span>
@@ -192,7 +213,7 @@ export default function Stats(){
                         <div className="flex items-center gap-1">
                             <button onClick={() => decreaseStat("heart")}
                                 className="bg-red-500 hover:bg-red-600 text-xs text-white px-1.5 rounded-full"
-                                disabled={tempStats.heart <= 0}>
+                                disabled={tempStats.heart <= stats.stats.skills.heart}>
                                 -
                             </button>
                             <span>{tempStats.heart}</span>

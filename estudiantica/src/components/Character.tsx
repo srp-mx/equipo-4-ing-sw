@@ -11,7 +11,7 @@ import ModalCharacterCreation from '@/components/Character/ModalCharacterCreatio
 import { Flame } from "lucide-react";
 import { getPointSkill } from "./Character/Stats";
 
-const getRefresh = async(dispatch:any) => {
+export const getRefresh = async(dispatch:any) => {
     try{
         const response = await fetch("http://localhost:3000/character_next_refresh", {
             method: "GET", 
@@ -32,7 +32,7 @@ const getRefresh = async(dispatch:any) => {
 }
 
 
-const getStats = async(dispatch:any) => {
+export const getStats = async(dispatch:any) => {
     try{
         const response = await fetch("http://localhost:3000/character_stats", {
             method: "GET", 
@@ -54,7 +54,7 @@ const getStats = async(dispatch:any) => {
     }
 }
 
-const getCharacterDefaultInfo = async(dispatch:any) => {
+export const getCharacterDefaultInfo = async(dispatch:any) => {
     try{
         const response = await fetch("http://localhost:3000/character_basic_data", {
             method: "GET", 
@@ -84,7 +84,7 @@ const Character = () => {
     const stats = useSelector((state: RootState) => state.stats);
     const rachaRefresh = useSelector((state: RootState) => state.racha);
     const dispatch = useDispatch();
-    
+    /*
     useEffect(() => {
         async function characterHome(){
             await getRefresh(dispatch);
@@ -97,7 +97,7 @@ const Character = () => {
         }
         characterHome();
     },[dispatch, rachaRefresh.racha.alive]);
-
+*/
     if(rachaRefresh.racha.alive)
         return (
             <div className="grid grid-cols-4 grid-rows-4">

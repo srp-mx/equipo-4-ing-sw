@@ -32,7 +32,12 @@ const StatsSlice = createSlice({
             state.stats = initialState.stats;
         },
         setSkills(state, action: PayloadAction<Skills>){
-            state.stats.skills = action.payload;
+            state.stats.skills = {
+                strength: action.payload.strength, 
+                defense: action.payload.defense, 
+                intelligence: action.payload.intelligence, 
+                heart: action.payload.heart,
+            };
         }
     }
 }); 

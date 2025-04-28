@@ -1,22 +1,36 @@
 import NavBar from "../components/home/Navbar";
-import Character from "../components/Character";
+import Character, { getCharacterDefaultInfo, getRefresh, getStats } from "../components/Character";
 import SideBar from "../components/SideBar";
 import ItemsEquiped from "../components/ItemsEquiped";
 import CalendarioImg from "@/assets/img/home/icono_calendario.png"
 import TareasImg from "@/assets/img/home/icono_tareas.png";
 import HorarioImg from "@/assets/img/home/icono_horario.png";
 import MateriaImg from "@/assets/img/home/icono_materias.png";
-import Stats from "@/components/Character/Stats"
+import Stats, { getPointSkill } from "@/components/Character/Stats"
 import { Link } from "react-router-dom";
 import { useAuth } from "@/constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/constants/store";
+import { useEffect } from "react";
 
 
 export default function Home(){
     useAuth();
+    const dispatch = useDispatch();
     const dataCharacter = useSelector((state:RootState) => state.dataCharacter);
-
+    const rachaRefresh = useSelector((state: RootState) => state.racha);
+    useEffect(() => {
+        async function characterHome(){
+            await getRefresh(dispatch);
+            if(rachaRefresh.racha.alive){
+                console.log("hola");
+                await getCharacterDefaultInfo(dispatch);
+                await getStats(dispatch);
+                await getPointSkill(dispatch);
+            }
+        }
+        characterHome();
+    },[dispatch, rachaRefresh.racha.alive]);
     return (
         <>
             <NavBar />
