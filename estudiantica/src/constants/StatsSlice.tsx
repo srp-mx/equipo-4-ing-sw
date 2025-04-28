@@ -1,4 +1,4 @@
-import { StatsCharacter } from "@/Object/Character";
+import { Skills, StatsCharacter } from "@/Object/Character";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface StatsState {
@@ -30,9 +30,12 @@ const StatsSlice = createSlice({
         },
         clearStats(state) {
             state.stats = initialState.stats;
+        },
+        setSkills(state, action: PayloadAction<Skills>){
+            state.stats.skills = action.payload;
         }
     }
 }); 
 
-export const { setStats, clearStats } = StatsSlice.actions; 
+export const { setStats, clearStats,setSkills } = StatsSlice.actions; 
 export default StatsSlice.reducer;

@@ -8,6 +8,7 @@ import { setStats } from "@/constants/StatsSlice";
 import { useEffect, useState } from "react";
 import { setRacha } from "@/constants/rachaSlice";
 import ModalCharacterCreation from '@/components/Character/ModalCharacterCreation'
+import { Flame } from "lucide-react";
 
 const getRefresh = async(dispatch:any) => {
     try{
@@ -82,29 +83,30 @@ const Character = () => {
     const stats = useSelector((state: RootState) => state.stats);
     const rachaRefresh = useSelector((state: RootState) => state.racha);
     const dispatch = useDispatch();
-
     
     useEffect(() => {
         async function characterHome(){
-            getRefresh(dispatch);
+            await getRefresh(dispatch);
             if(rachaRefresh.racha.alive){
                 console.log("hola");
-                getCharacterDefaultInfo(dispatch);
-                getStats(dispatch);
+                await getCharacterDefaultInfo(dispatch);
+                await getStats(dispatch);
             }
         }
         characterHome();
-
-
-    },[dispatch]);
+    },[dispatch, rachaRefresh.racha.alive]);
 
     if(rachaRefresh.racha.alive)
         return (
             <div className="grid grid-cols-4 grid-rows-4">
             
             <div className="col-start-1 col-end-1 row-start-1 row-end-1">
-                <div className="text-start text-xl text-amber-400 wagon-font mt-3 ml-8 ">
+                <div className="text-xl text-amber-400 wagon-font mt-3 ml-8 space-x-2 space-y-1 bg-black/10 text-center rounded-full border-2 border-amber-400/30">
                     {datacharacter.dataCharacter.name}
+                </div>
+                <div className="flex flex-row justify-items-start text-xl text-red-500 wagon-font mt-3 ml-8 py-1 bg-black/10 text-center rounded-full border-2 border-red-500/30 w-2/5">
+                    <Flame className="ml-1 mr-1"/>
+                    {datacharacter.dataCharacter.streak}
                 </div>
             </div>
             <div className="mt-12 ml-4 col-start-2 col-end-3 row-start-1 row-end-5">
