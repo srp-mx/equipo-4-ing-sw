@@ -58,4 +58,17 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/character_next_refresh", jwt, handlers.CharacterNextRefresh)
 	app.Get("/character_free_skill", jwt, handlers.CharacterFreeSkill)
 	app.Post("/character_add_skills", jwt, handlers.CharacterAddSkills)
+
+	app.Get("/get_character_wears", jwt, handlers.GetCharacterWears)
+	app.Get("/get_character_equips", jwt, handlers.GetCharacterEquips)
+	app.Get("/get_character_accompanies", jwt, handlers.GetCharacterAccompanies)
+	app.Get("/character_armors", jwt, handlers.CharacterArmors)
+	app.Get("/character_pets", jwt, handlers.CharacterPets)
+	app.Get("/character_weapons", jwt, handlers.CharacterWeapons)
+	app.Post("/post_character_wears", jwt, handlers.PostCharacterWears)
+	app.Post("/post_character_equips", jwt, handlers.PostCharacterEquips)
+	app.Post("/post_character_accompanies", jwt, handlers.PostCharacterAccompanies)
+	app.Post("/rename_armor", jwt, handlers.RenameArmor)
+	app.Post("/rename_weapon", jwt, handlers.RenameWeapon)
+	app.Post("/rename_pet", jwt, handlers.RenamePet)
 }

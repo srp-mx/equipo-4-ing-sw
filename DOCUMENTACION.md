@@ -305,30 +305,70 @@ respectivo maquetado:
 
 Las documentación de cada ruta son las siguientes.
 
-* [/character_add_skills](./repo/API/character_add_skills)
-* [/character_basic_data](./repo/API/character_basic_data)
-* [/character_free_skill](./repo/API/character_free_skill)
-* [/character_next_refresh](./repo/API/character_next_refresh)
-* [/character_stats](./repo/API/character_stats)
-* [/class_assignments](./repo/API/class_assignments)
-* [/class_grade](./repo/API/class_grade)
-* [/class_tags](./repo/API/class_tags)
-* [/delete_assignment](./repo/API/delete_assignment)
-* [/delete_character](./repo/API/delete_character)
-* [/delete_class](./repo/API/delete_class)
-* [/get_assignment](./repo/API/get_assignment)
-* [/get_class](./repo/API/get_class)
-* [/login](./repo/API/login)
-* [/patch_assignment](./repo/API/patch_assignment)
-* [/patch_character](./repo/API/patch_character)
-* [/patch_class](./repo/API/patch_class)
-* [/post_assignment](./repo/API/post_assignment)
-* [/post_character](./repo/API/post_character)
-* [/post_class](./repo/API/post_class)
-* [/refresh_token](./repo/API/refresh_token)
-* [/register](./repo/API/register)
-* [/user_classes](./repo/API/user_classes)
-* [/verify_formula](./repo/API/verify_formula)
+* [/character_add_skills](./.repo/API/character_add_skills): Tries to assign
+  skill points to a character. The input is the skill points to add into each
+  attribute.
+* [/character_armors](./.repo/API/character_armors): Gets the armors the
+  character owns.
+* [/character_basic_data](./.repo/API/character_basic_data): Gets the user's
+  character's basic data.
+* [/character_free_skill](./.repo/API/character_free_skill): Gets the user's
+  character's free (unassigned) skill points.
+* [/character_next_refresh](./.repo/API/character_next_refresh): Gets the
+  user's character's next automatic data update, or indicates if there is none.
+* [/character_pets](./.repo/API/character_pets): Gets the pets the character
+  owns.
+* [/character_stats](./.repo/API/character_stats): Gets the user's character's
+  stats, or indicates if there is none.
+* [/character_weapons](./.repo/API/character_weapons): Gets the weapons the
+  character owns.
+* [/class_assignments](./.repo/API/class_assignments): Gets all assignments
+  from a class.
+* [/class_grade](./.repo/API/class_grade): Calculates a class' grade.
+* [/class_tags](./.repo/API/class_tags): Gets all tags from a class'
+  assignments.
+* [/delete_assignment](./.repo/API/delete_assignment): Removes an assignment.
+* [/delete_character](./.repo/API/delete_character): Deletes the user's
+  character.
+* [/delete_class](./.repo/API/delete_class): Deletes a class.
+* [/get_assignment](./.repo/API/get_assignment): Gets an assignment.
+* [/get_character_accompanies](./.repo/API/get_character_accompanies): Gets the
+  pet which accompanies the character.
+* [/get_character_equips](./.repo/API/get_character_equips): Gets the weapon
+  the character has equipped
+* [/get_character_wears](./.repo/API/get_character_wears): Gets the armor the
+  character is wearing
+* [/get_class](./.repo/API/get_class): Gets a class.
+* [/login](./.repo/API/login): Receives tentative credentials and returns a
+  login token valid for an hour if it succeeds.
+* [/patch_assignment](./.repo/API/patch_assignment): Updates the fields of the
+  assignment passed into it.
+* [/patch_character](./.repo/API/patch_character): Updates the fields of the
+  character passed into it.
+* [/patch_class](./.repo/API/patch_class): Updates the fields of the class
+  passed into it.
+* [/post_assignment](./.repo/API/post_assignment): Creates an assignment.
+* [/post_character](./.repo/API/post_character): Creates a character associated
+  with the user.
+* [/post_character_accompanies](./.repo/API/post_character_accompanies):
+  Changes the pet the character is with into another one they own.
+* [/post_character_equips](./.repo/API/post_character_equips): Changes the
+  weapon the character is using into another one they own.
+* [/post_character_wears](./.repo/API/post_character_wears): Changes the armor
+  the character is using into another one they own.
+* [/post_class](./.repo/API/post_class): Creates a class.
+* [/refresh_token](./.repo/API/refresh_token): Given a valid token, it
+  generates a new one.
+* [/register](./.repo/API/register): Receives register data, creates the user
+  if possible, and returns the data created as confirmation.
+* [/rename_armor](./.repo/API/rename_armor): Changes the name of an armor.
+* [/rename_pet](./.repo/API/rename_pet): Changes the name of a pet.
+* [/rename_weapon](./.repo/API/rename_weapon): Changes the name of a weapon.
+* [/user_classes](./.repo/API/user_classes): Gets all classes a user is
+  enrolled in.
+* [/verify_formula](./.repo/API/verify_formula): Receives a formula and checks
+  if the syntax is valid.
+
 
 
 Los errores son todos de la forma siguiente.

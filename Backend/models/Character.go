@@ -42,11 +42,11 @@ type Character struct {
 	// Points dedicated to Heart
 	HeartExtra int `json:"-"`
 	// Extra XP gained from events
-	ExtraPoints uint64 `json:"-"`
-	//Accompanies          Accompanies
-	//Wears                Wears
-	//Equips               Equips
-	//OwnsArmor            []OwnsArmor
-	//OwnsPet              []OwnsPet
-	//OwnsWeapon           []OwnsWeapon
+	ExtraPoints uint64      `json:"-"`
+	Wears       Wears       `gorm:"foreignKey:CharacterID;references:ID;constraint:OnDelete:CASCADE" json:"-"`
+	Equips      Equips      `gorm:"foreignKey:CharacterID;references:ID;constraint:OnDelete:CASCADE" json:"-"`
+	Accompanies Accompanies `gorm:"foreignKey:CharacterID;references:ID;constraint:OnDelete:CASCADE" json:"-"`
+	Armors      []Armor     `gorm:"foreignKey:OwnerID;references:ID;constraint:OnDelete:CASCADE" json:"armors,omitempty"`
+	Pets        []Pet       `gorm:"foreignKey:OwnerID;references:ID;constraint:OnDelete:CASCADE" json:"pets,omitempty"`
+	Weapons     []Weapon    `gorm:"foreignKey:OwnerID;references:ID;constraint:OnDelete:CASCADE" json:"weapons,omitempty"`
 }

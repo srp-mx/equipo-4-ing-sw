@@ -39,6 +39,12 @@ func resetDb() {
 	db.Exec("DELETE from classes")
 	db.Exec("DELETE from assignments")
 	db.Exec("DELETE from characters")
+	db.Exec("DELETE from armors")
+	db.Exec("DELETE from weapons")
+	db.Exec("DELETE from pets")
+	db.Exec("DELETE from wears")
+	db.Exec("DELETE from equips")
+	db.Exec("DELETE from accompanies")
 }
 
 // Entry-point of all tests
@@ -51,10 +57,30 @@ func TestMain(m *testing.M) {
 		panic("failed to connect database")
 	}
 
-	db.AutoMigrate(&models.Assignment{})
-	db.AutoMigrate(&models.User{})
-	db.AutoMigrate(&models.Character{})
-	db.AutoMigrate(&models.Class{})
+	err = db.AutoMigrate(
+		&models.User{},
+		&models.Character{},
+		&models.Class{},
+		&models.Assignment{},
+		&models.Armor{},
+		&models.Weapon{},
+		&models.Pet{},
+		&models.Wears{},
+		&models.Equips{},
+		&models.Accompanies{},
+	)
+
+	if err != nil {
+		panic("failed to automigrate database")
+	}
+
+	tables, err := db.Migrator().GetTables()
+	if err != nil {
+		panic("failed to retrieve tables")
+	}
+	for _, table := range tables {
+		log.Println("Table found:", table)
+	}
 
 	database.DB.Db = db
 
