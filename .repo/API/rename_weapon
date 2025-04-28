@@ -33,5 +33,8 @@ ERRORS:
 401 (Unauthorized)
     Cause: Bad credentials
 
+404 (Not found)
+    Cause: The weapon was not found in the character's inventory
+
 500 (Internal server error)
     Cause: Internal error
