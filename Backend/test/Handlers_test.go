@@ -126,8 +126,30 @@ func testLogin(t *testing.T) {
 
 // Test for the /register route
 func testRegister(t *testing.T) {
-	// TODO
-	assert.True(t, true)
+	// The BODY to send to the endpoint
+	payload := map[string]any{
+		"username": "user",
+		"email":    "user@user.com",
+		"password": "user",
+		"name":     "user",
+	}
+
+	// Get and parse the response
+	resp := postWithoutAuth(t, "/register", payload)
+	okAny, ok := resp["ok"]
+	assert.True(t, ok)
+	okk, ok := okAny.(bool)
+	assert.True(t, ok)
+	assert.True(t, okk)
+
+	// Check if the user is registered
+	users := controllers.NewUserController(db)
+	user, err := users.FindByCredentials("user@user.com", "user")
+	assert.NoError(t, err)
+	assert.Equal(t, payload["username"], user.Username)
+	assert.Equal(t, payload["email"], user.Email)
+	assert.Equal(t, payload["password"], user.Password)
+	assert.Equal(t, payload["name"], user.Name)
 }
 
 // Test for the /verify_formula route
