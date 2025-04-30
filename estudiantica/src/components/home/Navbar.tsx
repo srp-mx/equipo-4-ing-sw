@@ -13,7 +13,7 @@ import { clearAssignments } from "@/constants/assignmentSlice";
 import { clearDataCharacter } from "@/constants/dataCharacterSlice";
 import { clearStats } from "@/constants/StatsSlice";
 import { clearRacha } from "@/constants/rachaSlice";
-import { getRefresh } from "../Character";
+import { getCharacterDefaultInfo, getRefresh } from "../Character";
 import { clearInterval } from "timers";
 
 const handleLogout = (dispatch : any, navigate : any) => {
@@ -60,6 +60,7 @@ const NavBar = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             getRefresh(dispatch);
+            getCharacterDefaultInfo(dispatch);
         }, racha.racha.next_check);
         return () => clearInterval(interval);
     },[racha.racha.next_check, dispatch]);
