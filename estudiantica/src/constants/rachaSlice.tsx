@@ -8,11 +8,11 @@ interface RachaState {
 const initialState : RachaState = {
     racha : {
         alive : false,
-        next_check: "", 
+        next_check: Number.MAX_VALUE, 
         timers: {
-            streak_loss: "",
-            deletion: "",
-            next_heal: "",
+            streak_loss: Number.MAX_VALUE,
+            deletion: Number.MAX_VALUE,
+            next_heal: Number.MAX_VALUE,
         } ,
     }
 }

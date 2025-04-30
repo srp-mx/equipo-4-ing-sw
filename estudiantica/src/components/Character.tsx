@@ -22,8 +22,9 @@ export const getRefresh = async(dispatch:any) => {
             }
         });
         if(!response.ok)
-            throw new Error(`Error: ${response.status} ${response.statusText}`)
+            throw new Error(`Error: ${response.status} ${response.statusText} ${response.body}`)
 
+        console.log("Ya hice refresh del timer");
         const data = await response.json();
         const rachaCharacter : RachaCharacter = data; 
         dispatch(setRacha(rachaCharacter));

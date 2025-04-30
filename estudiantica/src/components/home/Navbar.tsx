@@ -1,5 +1,5 @@
 import {Menu, X} from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "@/assets/Logo.png";
 import '@/index.css'
 import { navItems } from "@/constants";
@@ -13,6 +13,8 @@ import { clearAssignments } from "@/constants/assignmentSlice";
 import { clearDataCharacter } from "@/constants/dataCharacterSlice";
 import { clearStats } from "@/constants/StatsSlice";
 import { clearRacha } from "@/constants/rachaSlice";
+import { getRefresh } from "../Character";
+import { clearInterval } from "timers";
 
 const handleLogout = (dispatch : any, navigate : any) => {
     dispatch(clearUser());
@@ -26,6 +28,25 @@ const handleLogout = (dispatch : any, navigate : any) => {
     navigate("/");
 } 
 
+const refreshToken = async(dispatch:any) => {
+    try{
+        const response = await fetch("http://localhost:3000/refresh_token", {
+            method: "GET", 
+            headers: {
+                "Content-Type": "application/json", 
+                "Authorization": "Bearer " + localStorage.getItem("token"), 
+            }
+        });
+        if(!response.ok){
+            throw new Error(`E: ${response.status} ${response.body}`)
+        }
+        const data = await response.json();
+        localStorage.setItem("token", data.token);
+    }catch(error){
+        console.error("Error ", error);
+    }
+}
+
 const NavBar = () => {
     const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
     const user = useSelector((state: RootState) => state.user);
@@ -34,6 +55,22 @@ const NavBar = () => {
     };
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const racha = useSelector((state : RootState ) => state.racha);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            getRefresh(dispatch);
+        }, racha.racha.next_check);
+        return () => clearInterval(interval);
+    },[racha.racha.next_check, dispatch]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            refreshToken(dispatch);
+        }, 60*60*1000);
+        return () => clearInterval(interval);
+    },[dispatch]);
+
     return (
         <nav className="sticky top-0 z-50 py-3 backdrop-blur-lg border-b
         border-neutral-700 opacity-80">
