@@ -26,9 +26,15 @@ const RachaSlice = createSlice({
         },
         clearRacha(state){
             state.racha = initialState.racha;
+        },
+        setAlive(state, action: PayloadAction<boolean>){
+            state.racha = {
+                ...state.racha, 
+                alive: action.payload,
+            };
         }
     }
 });
 
-export const {setRacha, clearRacha } = RachaSlice.actions; 
+export const {setRacha, clearRacha, setAlive } = RachaSlice.actions; 
 export default RachaSlice.reducer;

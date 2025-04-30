@@ -57,21 +57,6 @@ const NavBar = () => {
     const navigate = useNavigate();
     const racha = useSelector((state : RootState ) => state.racha);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            getRefresh(dispatch);
-            getCharacterDefaultInfo(dispatch);
-        }, racha.racha.next_check);
-        return () => clearInterval(interval);
-    },[racha.racha.next_check, dispatch]);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            refreshToken(dispatch);
-        }, 60*60*1000);
-        return () => clearInterval(interval);
-    },[dispatch]);
-
     return (
         <nav className="sticky top-0 z-50 py-3 backdrop-blur-lg border-b
         border-neutral-700 opacity-80">
