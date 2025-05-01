@@ -101,14 +101,55 @@ func testEndpoint(t *testing.T) {
 
 // Test for the /login route
 func testLogin(t *testing.T) {
-	// TODO
-	assert.True(t, true)
+	// The BODY to send to the endpoint
+	payload := map[string]any{
+		"email":    "test@test.com",
+		"password": "test",
+	}
+
+	// Get and parse the response
+	resp := postWithoutAuth(t, "/login", payload)
+	type User struct {
+		Character *string `json:"character"`
+		Email     string  `json:"email"`
+		Name      string  `json:"name"`
+		Username  string  `json:"username"`
+	}
+	type Resp struct {
+		Token string `json:"token"`
+		User  User   `json:"user"`
+	}
+	interpResp, err := mapToStruct[Resp](resp)
+	assert.NoError(t, err)
+	assert.Equal(t, "test", interpResp.User.Username)
 }
 
 // Test for the /register route
 func testRegister(t *testing.T) {
-	// TODO
-	assert.True(t, true)
+	// The BODY to send to the endpoint
+	payload := map[string]any{
+		"username": "user",
+		"email":    "user@user.com",
+		"password": "user",
+		"name":     "user",
+	}
+
+	// Get and parse the response
+	resp := postWithoutAuth(t, "/register", payload)
+	okAny, ok := resp["ok"]
+	assert.True(t, ok)
+	okk, ok := okAny.(bool)
+	assert.True(t, ok)
+	assert.True(t, okk)
+
+	// Check if the user is registered
+	users := controllers.NewUserController(db)
+	user, err := users.FindByCredentials("user@user.com", "user")
+	assert.NoError(t, err)
+	assert.Equal(t, payload["username"], user.Username)
+	assert.Equal(t, payload["email"], user.Email)
+	assert.Equal(t, payload["password"], user.Password)
+	assert.Equal(t, payload["name"], user.Name)
 }
 
 // Test for the /verify_formula route
@@ -1208,6 +1249,24 @@ func postWithAuth(t *testing.T, route string, payload map[string]any) map[string
 	tok := getToken(t)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+tok)
+
+	resp, err := app.Test(req)
+	assert.NoError(t, err)
+	bytes, err := io.ReadAll(resp.Body)
+	assert.NoError(t, err)
+	body := utils.CopyBytes(bytes)
+	var resultMap map[string]any
+	err = json.Unmarshal(body, &resultMap)
+
+	assert.Equal(t, fiber.StatusOK, resp.StatusCode, string(body))
+	return resultMap
+}
+
+// Sends a POST payload without credentials
+func postWithoutAuth(t *testing.T, route string, payload map[string]any) map[string]any {
+	jsonContent, _ := json.Marshal(payload)
+	req := httptest.NewRequest("POST", route, bytes.NewBuffer(jsonContent))
+	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := app.Test(req)
 	assert.NoError(t, err)
