@@ -6,7 +6,7 @@ import { DataCharacter, RachaCharacter, StatsCharacter } from "@/Object/Characte
 import { setDataCharacter } from "@/constants/dataCharacterSlice";
 import { setStats } from "@/constants/StatsSlice";
 import { useEffect, useState } from "react";
-import { setRacha } from "@/constants/rachaSlice";
+import { setAlive, setRacha } from "@/constants/rachaSlice";
 import ModalCharacterCreation from '@/components/Character/ModalCharacterCreation'
 import { Flame } from "lucide-react";
 import { getPointSkill } from "./Character/Stats";
@@ -22,8 +22,9 @@ export const getRefresh = async(dispatch:any) => {
             }
         });
         if(!response.ok)
-            throw new Error(`Error: ${response.status} ${response.statusText}`)
+            throw new Error(`Error: ${response.status} ${response.statusText} ${response.body}`)
 
+        console.log("Ya hice refresh del timer");
         const data = await response.json();
         const rachaCharacter : RachaCharacter = data; 
         dispatch(setRacha(rachaCharacter));
@@ -70,6 +71,7 @@ export const getCharacterDefaultInfo = async(dispatch:any) => {
 
         const data = await response.json();
         const character : DataCharacter = data.data;
+        dispatch(setAlive(data.alive));
         dispatch(setDataCharacter(character));
 
     }catch(error){

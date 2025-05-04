@@ -59,7 +59,7 @@ export default function Stats(){
             });
             setPointLeft(dataCharacter.points);
         }
-    } , [stats.stats.skills, dataCharacter.points]);
+    } , [stats.stats.skills, dataCharacter.points, dispatch]);
 
     const increaseStat = (stat: keyof typeof tempStats) => {
         if (pointLeft > 0){
