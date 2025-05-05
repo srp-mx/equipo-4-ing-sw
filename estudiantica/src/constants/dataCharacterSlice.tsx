@@ -105,7 +105,11 @@ const dataCharacterSlice = createSlice({
             state.itemEquiped.pet = initialState.itemEquiped.pet;
         },
         clearItemEquiped(state){
-            state.itemEquiped = initialState.itemEquiped
+            state.itemEquiped = {
+                pet: initialState.itemEquiped.pet, 
+                weapon: initialState.itemEquiped.weapon, 
+                armor: initialState.itemEquiped.armor,
+            }
         }
     }
 });
