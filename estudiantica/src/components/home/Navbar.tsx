@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { clearUser } from "@/constants/userSlice";
 import { clearClases } from "@/constants/classSlice";
 import { clearAssignments } from "@/constants/assignmentSlice";
-import { clearDataCharacter } from "@/constants/dataCharacterSlice";
+import { clearArmor, clearDataCharacter, clearItemEquiped, clearPet, clearWeapon } from "@/constants/dataCharacterSlice";
 import { clearStats } from "@/constants/StatsSlice";
 import { clearRacha, setRacha } from "@/constants/rachaSlice";
 import { getCharacterDefaultInfo, getRefresh } from "../Character";
@@ -23,6 +23,9 @@ const handleLogout = (dispatch : any, navigate : any) => {
     dispatch(clearStats());
     dispatch(clearDataCharacter());
     dispatch(clearRacha());
+    dispatch(clearArmor());
+    dispatch(clearWeapon());
+    dispatch(clearPet());
     localStorage.removeItem("token");
 
     navigate("/");
