@@ -66,7 +66,7 @@ export default function SearchbarClass(){
     useEffect(() => {
         async function fetchTasks() {
             setLoading(true);
-            const data = await getClass(); // Cambia por el usuario real
+            const data = await getClass();
             dispatch(setClases(data));
             setLoading(false);
         }
