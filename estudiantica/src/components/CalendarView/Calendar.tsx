@@ -7,14 +7,60 @@ import { Assigment } from '@/Object/Assigment';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/constants/store';
 import { setAssignments } from '@/constants/assignmentSlice';
+let date = dayjs();
 
+let pruebas = [
+  {
+    id: 1,
+    class_id: 1,
+    due_date: date.format('YYYY-MM-DD'),
+    notes: 'Nota de ejemplo',
+    grade: 90,
+    name: 'Tarea 1: ejemplo dee una tarea larhshcvhsvch ',
+    optional: false,
+    progress: 50,
+    tag: 'tag1'
+  },
+  {
+    id: 2,
+    class_id: 2,
+    due_date: date.format('YYYY-MM-DD'),
+    notes: 'Nota de ejemplo',
+    grade: 85,
+    name: 'Tarea 2',
+    optional: true,
+    progress: 30,
+    tag: 'tag2' 
+  },
+  {
+    id: 1,
+    class_id: 1,
+    due_date: date.format('YYYY-MM-DD'),
+    notes: 'Nota de ejemplo',
+    grade: 90,
+    name: 'Tarea 1: ejemplo dee una tarea larhshcvhsvch ',
+    optional: false,
+    progress: 50,
+    tag: 'tag1'
+  },
+  {
+    id: 2,
+    class_id: 2,
+    due_date: date.format('YYYY-MM-DD'),
+    notes: 'Nota de ejemplo',
+    grade: 85,
+    name: 'Tarea 2',
+    optional: true,
+    progress: 30,
+    tag: 'tag2' 
+  }
+]
 
 dayjs.extend(weekday);
 dayjs.extend(isoWeek);
 dayjs.locale('es');
 
-async function getWorks(username : string) : Promise<Assigment[]>{
-    // Ejemplo de salida
+async function getWorks() : Promise<Assigment[]>{
     try{
         const response = await fetch("http://localhost:3000/all_assignment",{
             method: "GET", 
@@ -39,6 +85,39 @@ async function getWorks(username : string) : Promise<Assigment[]>{
     }
 }
 
+function getWorksByDate(date: dayjs.Dayjs, assigments : Assigment[]) : Assigment[]{
+    return assigments.filter((assigment) => {
+        const assigmentDate = dayjs(assigment.due_date);
+        return assigmentDate.month() === date.month() && assigmentDate.year() === date.year() && date.date() === assigmentDate.date();
+    });
+}
+
+function viewAssigmentDay(assigments : Assigment[]) {
+  let view = assigments.length > 2 ? assigments.slice(0, 2) : assigments;
+  return (
+    <div className='flex-col items-center'>
+      {view.map((assigment) => (
+        <div key={assigment.id}
+          className='flex items-center my-1 px-2 py-1'
+        >
+          {
+            assigment.optional ? (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="Interface-Essential-Alert-Triangle-2--Streamline-Pixel" height="24" width="24"><desc>Interface Essential Alert Triangle 2 Streamline Icon: https://streamlinehq.com</desc><title>interface-essential-alert-triangle-2</title><g><path d="M22.86 18.285h-1.1475v-2.2874999999999996h-1.1400000000000001v-2.2800000000000002H19.424999999999997v-2.2874999999999996h-1.1400000000000001v-2.2874999999999996h-1.1400000000000001V6.855h-1.1475V4.5675h-1.1400000000000001V2.2874999999999996h-1.1400000000000001V1.1400000000000001h-1.1475V0h-1.1400000000000001v1.1400000000000001h-1.1475v1.1475h-1.1400000000000001v2.2800000000000002h-1.1400000000000001v2.2874999999999996H6.855v2.2874999999999996H5.715v2.2874999999999996H4.5675v2.2874999999999996H3.4275v2.2800000000000002H2.2874999999999996v2.2874999999999996H1.1400000000000001v2.2874999999999996H0v2.2874999999999996h1.1400000000000001V24h21.72v-1.1400000000000001H24v-2.2874999999999996h-1.1400000000000001Zm-8.0025 2.2874999999999996h-1.1400000000000001v1.1400000000000001h-3.435v-1.1400000000000001h-1.1400000000000001v-3.4275h1.1400000000000001v-1.1475h3.435v1.1475h1.1400000000000001Zm0 -8.0025h-1.1400000000000001v2.2874999999999996h-3.435v-2.2874999999999996h-1.1400000000000001v-4.5675h1.1400000000000001V6.855h3.435v1.1475h1.1400000000000001Z" fill="#bf3939" stroke-width="0.75"></path><path d="M12.57 9.1425h1.1475v2.2874999999999996h-1.1475Z" fill="#bf3939" stroke-width="0.75"></path><path d="M11.43 8.0025h1.1400000000000001v1.1400000000000001h-1.1400000000000001Z" fill="#bf3939" stroke-width="0.75"></path></g></svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="Interface-Essential-Bookmark_1--Streamline-Pixel" height="24" width="24"><desc>Interface Essential Bookmark_1 Streamline Icon: https://streamlinehq.com</desc><title>interface-essential-bookmark_1</title><g><path d="m14.857499999999998 8.0025 0 -4.5675 -1.1400000000000001 0 0 19.424999999999997 1.1400000000000001 0 0 -13.71 6.855 0 0 -6.862500000000001 -1.1400000000000001 0 0 5.715 -5.715 0z" fill="#000000" stroke-width="0.75"></path><path d="M19.4325 1.1475h1.1400000000000001v1.1400000000000001h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="M14.857499999999998 2.2874999999999996h1.1400000000000001v1.1475h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="M12.57 22.86h1.1475V24h-1.1475Z" fill="#000000" stroke-width="0.75"></path><path d="M11.43 21.72h1.1400000000000001v1.1400000000000001h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="M10.290000000000001 20.572499999999998h1.1400000000000001v1.1475h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="m11.43 6.862500000000001 -2.2874999999999996 0 0 1.1400000000000001 -1.1400000000000001 0 0 -1.1400000000000001 -2.2874999999999996 0 0 1.1400000000000001 -1.1400000000000001 0 0 2.2874999999999996 1.1400000000000001 0 0 1.1400000000000001 1.1400000000000001 0 0 1.1475 1.1475 0 0 1.1400000000000001 1.1400000000000001 0 0 -1.1400000000000001 1.1475 0 0 -1.1475 1.1400000000000001 0 0 -1.1400000000000001 1.1400000000000001 0 0 -2.2874999999999996 -1.1400000000000001 0 0 -1.1400000000000001z" fill="#000000" stroke-width="0.75"></path><path d="M9.1425 19.4325h1.1475v1.1400000000000001h-1.1475Z" fill="#000000" stroke-width="0.75"></path><path d="M8.0025 18.2925h1.1400000000000001v1.1400000000000001h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="M6.855 19.4325h1.1475v1.1400000000000001H6.855Z" fill="#000000" stroke-width="0.75"></path><path d="m5.715 1.1475 10.2825 0 0 1.1400000000000001 1.1475 0 0 -1.1400000000000001 2.2874999999999996 0 0 -1.1475L5.715 0l0 1.1475z" fill="#000000" stroke-width="0.75"></path><path d="M5.715 20.572499999999998h1.1400000000000001v1.1475H5.715Z" fill="#000000" stroke-width="0.75"></path><path d="M4.574999999999999 21.72h1.1400000000000001v1.1400000000000001H4.574999999999999Z" fill="#000000" stroke-width="0.75"></path><path d="M4.574999999999999 1.1475h1.1400000000000001v1.1400000000000001H4.574999999999999Z" fill="#000000" stroke-width="0.75"></path><path d="M3.4275 22.86H4.574999999999999V24H3.4275Z" fill="#000000" stroke-width="0.75"></path><path d="M3.4275 2.2874999999999996H4.574999999999999v1.1475H3.4275Z" fill="#000000" stroke-width="0.75"></path><path d="M2.2874999999999996 3.435h1.1400000000000001v19.424999999999997H2.2874999999999996Z" fill="#000000" stroke-width="0.75"></path></g></svg>
+            )
+          }
+          <span className="w-7/8 truncate">{assigment.name}</span>
+        </div>
+      ))}
+      {assigments.length > 2 && (
+        <div className="flex items-center my-1 px-2 py-1">
+          <span className="w-7/8 truncate text-gray-400">+{assigments.length - 2} más</span>
+        </div>
+      )}
+    </div>
+  );
+}
 
 
 const daysShort = ['DOM', 'LUN', 'MAR', 'MIR', 'JUE', 'VIE', 'SAB'];
@@ -46,7 +125,7 @@ const daysShort = ['DOM', 'LUN', 'MAR', 'MIR', 'JUE', 'VIE', 'SAB'];
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [viewMode, setViewMode] = useState<'month' | 'year'>('month');
-  let currentDay = dayjs().date();
+  let actualDate = dayjs();
 
   const startDay = currentDate.startOf('month').weekday();
   const daysInMonth = currentDate.daysInMonth();
@@ -75,14 +154,13 @@ const Calendar = () => {
   };
 
   const [loading, setLoading] = useState(true);
-  const user = useSelector((state: RootState) => state.user);
   const tasks = useSelector((state: RootState) => state.assignments.assignments);
   const dispatch = useDispatch();
 
   useEffect(() => {
       async function fetchTasks() {
           setLoading(true);
-          const data = await getWorks(user.name);
+          const data = await getWorks();
           dispatch(setAssignments(data));
           setLoading(false);
       }
@@ -141,11 +219,18 @@ const Calendar = () => {
                 {calendarDays.map(({ day, currentMonth }, idx) => (
                   <div
                     key={idx}
-                    className={`flex items-center justify-center py-1 text-xs font-medium ${
+                    className={`relative inline-block text-center py-2 px-1 text-xs font-medium ${
                       currentMonth ? 'text-gray-900' : 'text-gray-400'
                     }`}
                   >
-                    {day}
+                    <span className={`text-xs ${month.month() === actualDate.month() && day === actualDate.date()? 
+                      'sm:text-white rounded-full sm:flex items-center justify-center sm:bg-[#364153]' : 
+                      ''}`}>{day}</span>
+                    {currentMonth && (getWorksByDate(month.date(day),pruebas).length > 0) && <div className="mt-0.5 flex justify-center">
+                      <span className="w-1 h-1 bg-black rounded-full"></span>
+                      <span className="w-1 h-1 bg-black rounded-full"></span>
+                      <span className="w-1 h-1 bg-black rounded-full"></span>
+                    </div>}
                   </div>
                 ))}
               </div>
@@ -197,11 +282,17 @@ const Calendar = () => {
           {calendarDays.map(({ day, currentMonth }, idx) => (
             <div
               key={idx}
-              className={`flex aspect-square p-3.5 border-r border-b border-[#364153] transition-all duration-300 ${
-                currentMonth ? 'bg-[#ffffe6] text-gray-900 hover:-translate-y-1 hover:scale-100' : 'bg-[#F7F7BE] text-gray-600'
+              className={`flex-col aspect-square p-3.5 border-r border-b border-[#364153] transition-all duration-300 ${
+                currentMonth ? 'cursor-pointer bg-[#ffffff] text-gray-900 hover:-translate-y-1 hover:scale-100' : 'bg-[#ffffe6] text-gray-600'
               } ${idx % 7 === 6 ? 'border-r-0' : ''}`}
             >
-              <span className={`text-xs ${day === currentDay ? 'sm:text-black sm:w-6 sm:h-6 rounded-full sm:flex items-center justify-center sm:bg-[#CBDA3D]' : ''}`}>{day}</span>
+              <span className={`text-xs ${day === actualDate.date() ? 
+                'sm:text-white sm:w-6 sm:h-6 rounded-full sm:flex items-center justify-center sm:bg-[#364153]' : ''}`}>{day}</span>
+              <div className="flex-row justify-center h-1/2">
+                {
+                  currentMonth && viewAssigmentDay(getWorksByDate(currentDate.date(day), pruebas))
+                }
+              </div>
             </div>
           ))}
         </div>
@@ -243,9 +334,7 @@ const Calendar = () => {
                 className='py-2 px-5 ml-5 font-medium flex pixel-corner-button2 bg-[#cbda3d] text-[#37123B]'
                 style={{ "--pixel-bg": "#364153", "--pixel-hover-bg" : "#FFFFFF", "--size-pixel" : "10px"} as React.CSSProperties}
             >
-              <svg className="pointer-events-none" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16" fill="none">
-                  <path d="M11.3333 3L11.3333 3.65L11.3333 3ZM4.66666 3.00002L4.66666 2.35002L4.66666 3.00002ZM5.36719 9.98333C5.72617 9.98333 6.01719 9.69232 6.01719 9.33333C6.01719 8.97435 5.72617 8.68333 5.36719 8.68333V9.98333ZM5.33385 8.68333C4.97487 8.68333 4.68385 8.97435 4.68385 9.33333C4.68385 9.69232 4.97487 9.98333 5.33385 9.98333V8.68333ZM5.36719 11.9833C5.72617 11.9833 6.01719 11.6923 6.01719 11.3333C6.01719 10.9743 5.72617 10.6833 5.36719 10.6833V11.9833ZM5.33385 10.6833C4.97487 10.6833 4.68385 10.9743 4.68385 11.3333C4.68385 11.6923 4.97487 11.9833 5.33385 11.9833V10.6833ZM8.03385 9.98333C8.39284 9.98333 8.68385 9.69232 8.68385 9.33333C8.68385 8.97435 8.39284 8.68333 8.03385 8.68333V9.98333ZM8.00052 8.68333C7.64154 8.68333 7.35052 8.97435 7.35052 9.33333C7.35052 9.69232 7.64154 9.98333 8.00052 9.98333V8.68333ZM8.03385 11.9833C8.39284 11.9833 8.68385 11.6923 8.68385 11.3333C8.68385 10.9743 8.39284 10.6833 8.03385 10.6833V11.9833ZM8.00052 10.6833C7.64154 10.6833 7.35052 10.9743 7.35052 11.3333C7.35052 11.6923 7.64154 11.9833 8.00052 11.9833V10.6833ZM10.7005 9.98333C11.0595 9.98333 11.3505 9.69232 11.3505 9.33333C11.3505 8.97435 11.0595 8.68333 10.7005 8.68333V9.98333ZM10.6672 8.68333C10.3082 8.68333 10.0172 8.97435 10.0172 9.33333C10.0172 9.69232 10.3082 9.98333 10.6672 9.98333V8.68333ZM10.7005 11.9833C11.0595 11.9833 11.3505 11.6923 11.3505 11.3333C11.3505 10.9743 11.0595 10.6833 10.7005 10.6833V11.9833ZM10.6672 10.6833C10.3082 10.6833 10.0172 10.9743 10.0172 11.3333C10.0172 11.6923 10.3082 11.9833 10.6672 11.9833V10.6833ZM5.98333 2C5.98333 1.64101 5.69232 1.35 5.33333 1.35C4.97435 1.35 4.68333 1.64101 4.68333 2H5.98333ZM4.68333 4C4.68333 4.35898 4.97435 4.65 5.33333 4.65C5.69232 4.65 5.98333 4.35898 5.98333 4H4.68333ZM11.3167 2C11.3167 1.64101 11.0257 1.35 10.6667 1.35C10.3077 1.35 10.0167 1.64101 10.0167 2H11.3167ZM10.0167 4C10.0167 4.35898 10.3077 4.65 10.6667 4.65C11.0257 4.65 11.3167 4.35898 11.3167 4H10.0167ZM4.66666 3.65002L11.3333 3.65L11.3333 2.35L4.66666 2.35002L4.66666 3.65002ZM13.35 5.66667V11.3334H14.65V5.66667H13.35ZM11.3333 13.35H4.66667V14.65H11.3333V13.35ZM2.65 11.3334V5.66668H1.35V11.3334H2.65ZM4.66667 13.35C4.01975 13.35 3.59995 13.3486 3.29025 13.307C2.99924 13.2679 2.90451 13.2042 2.85014 13.1499L1.9309 14.0691C2.26707 14.4053 2.68186 14.5369 3.11703 14.5954C3.53349 14.6514 4.0565 14.65 4.66667 14.65V13.35ZM1.35 11.3334C1.35 11.9435 1.34862 12.4665 1.40461 12.883C1.46312 13.3182 1.59474 13.733 1.9309 14.0691L2.85014 13.1499C2.79578 13.0955 2.73214 13.0008 2.69302 12.7098C2.65138 12.4001 2.65 11.9803 2.65 11.3334H1.35ZM13.35 11.3334C13.35 11.9803 13.3486 12.4001 13.307 12.7098C13.2679 13.0008 13.2042 13.0955 13.1499 13.1499L14.0691 14.0691C14.4053 13.733 14.5369 13.3182 14.5954 12.883C14.6514 12.4665 14.65 11.9435 14.65 11.3334H13.35ZM11.3333 14.65C11.9435 14.65 12.4665 14.6514 12.883 14.5954C13.3181 14.5369 13.7329 14.4053 14.0691 14.0691L13.1499 13.1499C13.0955 13.2042 13.0008 13.2679 12.7098 13.307C12.4 13.3486 11.9802 13.35 11.3333 13.35V14.65ZM11.3333 3.65C11.9802 3.65 12.4 3.65138 12.7098 3.69302C13.0008 3.73215 13.0955 3.79578 13.1499 3.85015L14.0691 2.93091C13.7329 2.59474 13.3181 2.46312 12.883 2.40461C12.4665 2.34862 11.9435 2.35 11.3333 2.35L11.3333 3.65ZM14.65 5.66667C14.65 5.05651 14.6514 4.53349 14.5954 4.11703C14.5369 3.68187 14.4053 3.26707 14.0691 2.93091L13.1499 3.85015C13.2042 3.90451 13.2679 3.99924 13.307 4.29025C13.3486 4.59996 13.35 5.01976 13.35 5.66667H14.65ZM4.66666 2.35002C4.0565 2.35002 3.53349 2.34864 3.11702 2.40463C2.68186 2.46314 2.26707 2.59476 1.9309 2.93092L2.85014 3.85016C2.90451 3.7958 2.99924 3.73216 3.29025 3.69304C3.59995 3.6514 4.01975 3.65002 4.66666 3.65002L4.66666 2.35002ZM2.65 5.66668C2.65 5.01977 2.65138 4.59997 2.69302 4.29027C2.73214 3.99926 2.79578 3.90452 2.85014 3.85016L1.9309 2.93092C1.59474 3.26709 1.46312 3.68188 1.40461 4.11704C1.34862 4.53351 1.35 5.05652 1.35 5.66668H2.65ZM2 7.31667H14V6.01667H2V7.31667ZM5.36719 8.68333H5.33385V9.98333H5.36719V8.68333ZM5.36719 10.6833H5.33385V11.9833H5.36719V10.6833ZM8.03385 8.68333H8.00052V9.98333H8.03385V8.68333ZM8.03385 10.6833H8.00052V11.9833H8.03385V10.6833ZM10.7005 8.68333H10.6672V9.98333H10.7005V8.68333ZM10.7005 10.6833H10.6672V11.9833H10.7005V10.6833ZM4.68333 2V4H5.98333V2H4.68333ZM10.0167 2V4H11.3167V2H10.0167Z" fill="#37123B"></path>
-                </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" id="Interface-Essential-Calendar-Appointment--Streamline-Pixel" height="20" width="20"><desc>Interface Essential Calendar Appointment Streamline Icon: https://streamlinehq.com</desc><title>interface-essential-calendar-appointment</title><g><path d="m1.428125 6.66875 17.14375 0 0 12.38125 0.95 0 0 -15.237499999999999 -0.95 0 0 1.9 -17.14375 0 0 -1.9 -0.95 0 0 15.237499999999999 0.95 0 0 -12.38125z" fill="#37123b" stroke-width="0.625"></path><path d="M17.621875 2.85625h0.95V3.8125h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="M1.428125 19.05h17.14375V20H1.428125Z" fill="#37123b" stroke-width="0.625"></path><path d="m15.715625 11.431249999999999 -1.90625 0 0 0.95 -0.95 0 0 -0.95 -1.90625 0 0 0.95 -0.95 0 0 1.90625 0.95 0 0 0.95 0.95 0 0 0.95 0.95625 0 0 0.95625 0.95 0 0 -0.95625 0.95 0 0 -0.95 0.95625 0 0 -0.95 0.95 0 0 -1.90625 -0.95 0 0 -0.95z" fill="#37123b" stroke-width="0.625"></path><path d="M14.759374999999999 8.568750000000001h0.95625v0.95625h-0.95625Z" fill="#37123b" stroke-width="0.625"></path><path d="M10.953125 8.568750000000001h0.95v0.95625h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="M7.140625 16.1875h0.95625v0.95625h-0.95625Z" fill="#37123b" stroke-width="0.625"></path><path d="M7.140625 12.38125h0.95625v0.95h-0.95625Z" fill="#37123b" stroke-width="0.625"></path><path d="M7.140625 8.568750000000001h0.95625v0.95625h-0.95625Z" fill="#37123b" stroke-width="0.625"></path><path d="M3.334375 16.1875h0.95v0.95625h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="M3.334375 12.38125h0.95v0.95h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="M3.334375 8.568750000000001h0.95v0.95625h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="m5.240625 2.85625 0 0.95625 0.95 0 0 -0.95625 7.6187499999999995 0 0 0.95625 0.95 0 0 -0.95625 2.8625 0 0 -0.95 -2.8625 0 0 -1.90625 -0.95 0 0 1.90625 -7.6187499999999995 0 0 -1.90625 -0.95 0 0 1.90625 -2.85625 0 0 0.95 2.85625 0z" fill="#37123b" stroke-width="0.625"></path><path d="M1.428125 2.85625h0.95625V3.8125h-0.95625Z" fill="#37123b" stroke-width="0.625"></path></g></svg>
                 <span className="ml-2">Hoy</span>
             </button>
           </div>
@@ -287,6 +376,3 @@ const Calendar = () => {
 };
 
 export default Calendar;
-
-
-
