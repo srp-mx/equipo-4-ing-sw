@@ -7,54 +7,7 @@ import { Assigment } from '@/Object/Assigment';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/constants/store';
 import { setAssignments } from '@/constants/assignmentSlice';
-let date = dayjs();
-
-let pruebas = [
-  {
-    id: 1,
-    class_id: 1,
-    due_date: date.format('YYYY-MM-DD'),
-    notes: 'Nota de ejemplo',
-    grade: 90,
-    name: 'Tarea 1: ejemplo dee una tarea larhshcvhsvch ',
-    optional: false,
-    progress: 50,
-    tag: 'tag1'
-  },
-  {
-    id: 2,
-    class_id: 2,
-    due_date: date.format('YYYY-MM-DD'),
-    notes: 'Nota de ejemplo',
-    grade: 85,
-    name: 'Tarea 2',
-    optional: true,
-    progress: 30,
-    tag: 'tag2' 
-  },
-  {
-    id: 1,
-    class_id: 1,
-    due_date: date.format('YYYY-MM-DD'),
-    notes: 'Nota de ejemplo',
-    grade: 90,
-    name: 'Tarea 1: ejemplo dee una tarea larhshcvhsvch ',
-    optional: false,
-    progress: 50,
-    tag: 'tag1'
-  },
-  {
-    id: 2,
-    class_id: 2,
-    due_date: date.format('YYYY-MM-DD'),
-    notes: 'Nota de ejemplo',
-    grade: 85,
-    name: 'Tarea 2',
-    optional: true,
-    progress: 30,
-    tag: 'tag2' 
-  }
-]
+import AssigmentCard from '../AssigmentView/AssigmentCard';
 
 dayjs.extend(weekday);
 dayjs.extend(isoWeek);
@@ -81,7 +34,7 @@ async function getWorks() : Promise<Assigment[]>{
         return assignments; 
     }catch(error){
         console.error("Error ", error); 
-        return [];
+        throw error;
     }
 }
 
@@ -124,7 +77,7 @@ const daysShort = ['DOM', 'LUN', 'MAR', 'MIR', 'JUE', 'VIE', 'SAB'];
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(dayjs());
-  const [viewMode, setViewMode] = useState<'month' | 'year'>('month');
+  const [viewMode, setViewMode] = useState<'day'|'month' | 'year'>('month');
   let actualDate = dayjs();
 
   const startDay = currentDate.startOf('month').weekday();
@@ -133,6 +86,9 @@ const Calendar = () => {
 
   const handlePrev = () => {
     switch (viewMode) {
+      case 'day':
+        setCurrentDate(currentDate.subtract(1, 'day'));
+        break;
       case 'month':
         setCurrentDate(currentDate.subtract(1, 'month'));
         break;
@@ -144,6 +100,9 @@ const Calendar = () => {
 
   const handleNext = () => {
     switch (viewMode) {
+      case 'day':
+        setCurrentDate(currentDate.add(1, 'day'));
+        break;
       case 'month':
         setCurrentDate(currentDate.add(1, 'month'));
         break;
@@ -160,11 +119,15 @@ const Calendar = () => {
   useEffect(() => {
       async function fetchTasks() {
           setLoading(true);
-          const data = await getWorks();
-          dispatch(setAssignments(data));
-          setLoading(false);
+          try {
+            const data = await getWorks();
+            dispatch(setAssignments(data));
+            setLoading(false);
+          } catch (error) {
+            console.error("Error fetching tasks: ", error);
+            window.alert("Error fetching tasks");
+          }
       }
-
       fetchTasks();
   }, []);
 
@@ -226,7 +189,7 @@ const Calendar = () => {
                     <span className={`text-xs ${month.month() === actualDate.month() && day === actualDate.date()? 
                       'sm:text-white rounded-full sm:flex items-center justify-center sm:bg-[#364153]' : 
                       ''}`}>{day}</span>
-                    {currentMonth && (getWorksByDate(month.date(day),pruebas).length > 0) && <div className="mt-0.5 flex justify-center">
+                    {currentMonth && (getWorksByDate(month.date(day),tasks).length > 0) && <div className="mt-0.5 flex justify-center">
                       <span className="w-1 h-1 bg-black rounded-full"></span>
                       <span className="w-1 h-1 bg-black rounded-full"></span>
                       <span className="w-1 h-1 bg-black rounded-full"></span>
@@ -242,7 +205,6 @@ const Calendar = () => {
   };
 
   const renderMonthView = () => {
-
     const calendarDays = [];
 
     for (let i = startDay - 1; i >= 0; i--) {
@@ -285,12 +247,18 @@ const Calendar = () => {
               className={`flex-col aspect-square p-3.5 border-r border-b border-[#364153] transition-all duration-300 ${
                 currentMonth ? 'cursor-pointer bg-[#ffffff] text-gray-900 hover:-translate-y-1 hover:scale-100' : 'bg-[#ffffe6] text-gray-600'
               } ${idx % 7 === 6 ? 'border-r-0' : ''}`}
+              onClick={() => {
+                if (currentMonth) {
+                  setCurrentDate(currentDate.date(day));
+                  setViewMode('day');
+                }
+              }}
             >
               <span className={`text-xs ${day === actualDate.date() ? 
                 'sm:text-white sm:w-6 sm:h-6 rounded-full sm:flex items-center justify-center sm:bg-[#364153]' : ''}`}>{day}</span>
               <div className="flex-row justify-center h-1/2">
                 {
-                  currentMonth && viewAssigmentDay(getWorksByDate(currentDate.date(day), pruebas))
+                  currentMonth && viewAssigmentDay(getWorksByDate(currentDate.date(day), tasks))
                 }
               </div>
             </div>
@@ -299,6 +267,27 @@ const Calendar = () => {
       </>
     );
   };
+
+  const renderDayView = () => {
+    let assigments = getWorksByDate(currentDate, tasks);
+    return (
+      <div className="mt-2 mb-3">
+          {assigments.length > 0 ? (
+              <ul id="results-list" className="space-y-4">
+                  {assigments.map((task) => (
+                      <li key={task.id} className="p-3 rounded flex items-center transition space-x-5">                     
+                          <AssigmentCard assigment={task} onOpen={() => undefined} />
+                      </li>
+                  ))}
+              </ul>
+          ) : (
+              <div className="w-full rounded-lg bg-gray-700 rounded flex justify-between items-center p-3 border border-gray-600">
+                  <span className="text-white text-lg font-semibold">No hay tareas</span>
+              </div>
+          )}
+      </div>
+    );
+  }
 
 
   return (
@@ -309,7 +298,9 @@ const Calendar = () => {
           <h5 className="text-xl leading-8 font-semibold title-section">
             {viewMode === 'year'
               ? currentDate.format('YYYY')
-              : currentDate.format('MMMM YYYY')}
+              : viewMode === 'month' 
+              ? currentDate.format('MMMM YYYY')
+              : currentDate.format('DD MMMM YYYY')}
           </h5>
           <div className={`flex items-center ${loading ? 'hidden' : ''}`}>
             <button 
@@ -340,7 +331,7 @@ const Calendar = () => {
           </div>
         </div>
         <div className={`flex items-center p-1 gap-px text-[#37123B] ${loading ? 'hidden' : ''}`}>
-          {['month', 'year'].map((mode) => (
+          {['day','month', 'year'].map((mode) => (
             <button
               key={mode}
               onClick={() => setViewMode(mode as typeof viewMode)}
@@ -369,6 +360,7 @@ const Calendar = () => {
         <div className="h-16/20 overflow-y-auto">
           {viewMode === 'year' && renderYearView()}
           {viewMode === 'month' && renderMonthView()}
+          {viewMode === 'day' && renderDayView()}
         </div>
       )}
     </div>
