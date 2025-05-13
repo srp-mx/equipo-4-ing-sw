@@ -1,0 +1,56 @@
+DESCRIPTION: Gets the weapons the character owns.
+
+
+
+Type: GET
+
+
+
+INPUT:
+None, the user is inferred from the credentials.
+
+
+
+RETURNS:
+{
+    "alive": ... ,
+    "weapons": [
+        "id": ... ,
+        "created_at": ... ,
+        "name": ... ,
+        "rarity": ... ,
+        "description": ... ,
+        "image_uri": ... ,
+        "strength": ... ,
+        "defense": ... ,
+        "intelligence": ... ,
+        "heart": ... ,
+        "slay_count": ...
+    ]
+}
+
+"alive" -> boolean // Everything after is undefined if this is false
+"weapons[i]"
+"weapons[i].id" -> uint
+"weapons[i].created_at" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"weapons[i].name" -> string
+"weapons[i].rarity" -> int
+"weapons[i].description" -> string
+"weapons[i].image_uri" -> string // Has the resource path of the image
+"weapons[i].strength" -> int
+"weapons[i].defense" -> int
+"weapons[i].intelligence" -> int
+"weapons[i].heart" -> int
+"weapons[i].slay_count" -> int
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+500 (Internal server error)
+    Cause: Internal error

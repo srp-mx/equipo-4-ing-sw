@@ -31,6 +31,7 @@ type characterTestData struct {
 	userController       *controllers.UserController
 	classController      *controllers.ClassController
 	assignmentController *controllers.AssignmentController
+	itemController       *controllers.ItemController
 	controller           *controllers.CharacterController
 	user                 *models.User
 	character            *models.Character
@@ -41,6 +42,12 @@ type characterTestData struct {
 	assignment2_1        *models.Assignment
 	assignment2_2        *models.Assignment
 	assignment2_3        *models.Assignment
+	pet1                 *models.Pet
+	weapon1              *models.Weapon
+	armor1               *models.Armor
+	pet2                 *models.Pet
+	weapon2              *models.Weapon
+	armor2               *models.Armor
 }
 
 // Creates test data
@@ -49,6 +56,7 @@ func newCharacterTestData() (result characterTestData) {
 	result.userController = controllers.NewUserController(db)
 	result.classController = controllers.NewClassController(db)
 	result.assignmentController = controllers.NewAssignmentController(db)
+	result.itemController = controllers.NewItemController(db)
 	result.controller = controllers.NewCharacterController(db)
 
 	result.user = &models.User{
@@ -70,6 +78,24 @@ func newCharacterTestData() (result characterTestData) {
 		IntelligenceExtra:    3,
 		HeartExtra:           4,
 		ExtraPoints:          5,
+		Wears: models.Wears{
+			ID:          0,
+			CharacterID: 0,
+			Armor:       nil,
+			Since:       time.Now(),
+		},
+		Equips: models.Equips{
+			ID:          0,
+			CharacterID: 0,
+			Weapon:      nil,
+			Since:       time.Now(),
+		},
+		Accompanies: models.Accompanies{
+			ID:          0,
+			CharacterID: 0,
+			Pet:         nil,
+			Since:       time.Now(),
+		},
 	}
 
 	result.class1 = &models.Class{
@@ -150,6 +176,114 @@ func newCharacterTestData() (result characterTestData) {
 		Optional: false,
 		Progress: 0,
 		Tag:      "exam",
+	}
+
+	result.pet1 = &models.Pet{
+		Item: models.Item{
+			ID:             0,
+			CreatedAt:      time.Now(),
+			OwnerID:        result.character.ID,
+			Name:           "froggy",
+			Rarity:         3,
+			DescriptionUri: "froggy",
+			ImageUri:       "froggy",
+			Strength:       1,
+			Defense:        0,
+			Intelligence:   0,
+			Heart:          6,
+		},
+		Bond:          5,
+		AccompaniesID: nil,
+	}
+
+	result.weapon1 = &models.Weapon{
+		Item: models.Item{
+			ID:             1,
+			CreatedAt:      time.Now(),
+			OwnerID:        result.character.ID,
+			Name:           "sword",
+			Rarity:         2,
+			DescriptionUri: "sword",
+			ImageUri:       "sword",
+			Strength:       5,
+			Defense:        1,
+			Intelligence:   0,
+			Heart:          0,
+		},
+		SlayCount: 500,
+		EquipsID:  nil,
+	}
+
+	result.armor1 = &models.Armor{
+		Item: models.Item{
+			ID:             2,
+			CreatedAt:      time.Now(),
+			OwnerID:        result.character.ID,
+			Name:           "chainmail",
+			Rarity:         1,
+			DescriptionUri: "chainmail",
+			ImageUri:       "chainmail",
+			Strength:       1,
+			Defense:        3,
+			Intelligence:   0,
+			Heart:          1,
+		},
+		DamageReceived: 70,
+		WearsID:        nil,
+	}
+
+	result.pet2 = &models.Pet{
+		Item: models.Item{
+			ID:             3,
+			CreatedAt:      time.Now(),
+			OwnerID:        result.character.ID,
+			Name:           "fishy",
+			Rarity:         3,
+			DescriptionUri: "fishy",
+			ImageUri:       "fishy",
+			Strength:       1,
+			Defense:        0,
+			Intelligence:   0,
+			Heart:          6,
+		},
+		Bond:          5,
+		AccompaniesID: nil,
+	}
+
+	result.weapon2 = &models.Weapon{
+		Item: models.Item{
+			ID:             4,
+			CreatedAt:      time.Now(),
+			OwnerID:        result.character.ID,
+			Name:           "axe",
+			Rarity:         2,
+			DescriptionUri: "axe",
+			ImageUri:       "axe",
+			Strength:       5,
+			Defense:        1,
+			Intelligence:   0,
+			Heart:          0,
+		},
+		SlayCount: 500,
+		EquipsID:  nil,
+	}
+
+	result.armor2 = &models.Armor{
+		Item: models.Item{
+			ID:             5,
+			CreatedAt:      time.Now(),
+			OwnerID:        result.character.ID,
+			Name:           "cardboard",
+			Rarity:         1,
+			DescriptionUri: "cardboard",
+			ImageUri:       "cardboard",
+			Strength:       1,
+			Defense:        3,
+			Intelligence:   0,
+			Heart:          1,
+		},
+		DamageReceived: 70,
+		WearsID:        nil,
 	}
 
 	return result
@@ -404,4 +538,72 @@ func TestCharacterActivityUpdate(t *testing.T) {
 	updated = models.Character{}
 	db.First(&updated, "name = ?", "quijote_4")
 	assert.Equal(t, 10, updated.Streak)
+}
+
+// Tests the character's items
+func TestCharacterItems(t *testing.T) {
+	resetDb()
+	data := newCharacterTestData()
+
+	// Create the data in the database
+	assert.NoError(t, db.Create(data.user).Error)
+	assert.NoError(t, db.Create(data.character).Error)
+	data.pet1.OwnerID = data.character.ID
+	data.weapon1.OwnerID = data.character.ID
+	data.armor1.OwnerID = data.character.ID
+	data.pet2.OwnerID = data.character.ID
+	data.weapon2.OwnerID = data.character.ID
+	data.armor2.OwnerID = data.character.ID
+	assert.NoError(t, db.Create(data.pet1).Error)
+	assert.NoError(t, db.Create(data.weapon1).Error)
+	assert.NoError(t, db.Create(data.armor1).Error)
+	assert.NoError(t, db.Create(data.pet2).Error)
+	assert.NoError(t, db.Create(data.weapon2).Error)
+	assert.NoError(t, db.Create(data.armor2).Error)
+
+	// Check for loading inventory
+	assert.Empty(t, data.character.Armors)
+	assert.Empty(t, data.character.Weapons)
+	assert.Empty(t, data.character.Pets)
+	assert.NoError(t, data.controller.LoadArmors(data.character))
+	assert.NoError(t, data.controller.LoadWeapons(data.character))
+	assert.NoError(t, data.controller.LoadPets(data.character))
+	assert.NotEmpty(t, data.character.Armors)
+	assert.NotEmpty(t, data.character.Weapons)
+	assert.NotEmpty(t, data.character.Pets)
+
+	// Check for unequipped items
+	assert.NoError(t, data.controller.LoadWearing(data.character))
+	assert.NoError(t, data.controller.LoadEquipped(data.character))
+	assert.NoError(t, data.controller.LoadAccompanying(data.character))
+	assert.Nil(t, data.character.Wears.Armor)
+	assert.Nil(t, data.character.Equips.Weapon)
+	assert.Nil(t, data.character.Accompanies.Pet)
+
+	// Check for equipping items
+	assert.NoError(t, data.controller.Wear(data.character, data.armor1))
+	assert.NoError(t, data.controller.Equip(data.character, data.weapon1))
+	assert.NoError(t, data.controller.Accompany(data.character, data.pet1))
+	data.character = &models.Character{ID: data.character.ID}
+	assert.NoError(t, data.controller.LoadWearing(data.character))
+	assert.NoError(t, data.controller.LoadEquipped(data.character))
+	assert.NoError(t, data.controller.LoadAccompanying(data.character))
+	assert.NotNil(t, data.character.Wears.Armor)
+	assert.NotNil(t, data.character.Equips.Weapon)
+	assert.NotNil(t, data.character.Accompanies.Pet)
+	assert.Equal(t, data.armor1, data.character.Wears.Armor)
+	assert.Equal(t, data.weapon1, data.character.Equips.Weapon)
+	assert.Equal(t, data.pet1, data.character.Accompanies.Pet)
+
+	// Check for swapping items
+	assert.NoError(t, data.controller.Wear(data.character, data.armor2))
+	assert.NoError(t, data.controller.Equip(data.character, data.weapon2))
+	assert.NoError(t, data.controller.Accompany(data.character, data.pet2))
+	data.character = &models.Character{ID: data.character.ID}
+	assert.NoError(t, data.controller.LoadWearing(data.character))
+	assert.NoError(t, data.controller.LoadEquipped(data.character))
+	assert.NoError(t, data.controller.LoadAccompanying(data.character))
+	assert.Equal(t, data.armor2, data.character.Wears.Armor)
+	assert.Equal(t, data.weapon2, data.character.Equips.Weapon)
+	assert.Equal(t, data.pet2, data.character.Accompanies.Pet)
 }

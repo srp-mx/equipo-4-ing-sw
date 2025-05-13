@@ -62,10 +62,23 @@ func ConnectDb() {
 
 	log.Println("running migrations")
 
-	db.AutoMigrate(&models.Assignment{})
-	db.AutoMigrate(&models.User{})
-	db.AutoMigrate(&models.Character{})
-	db.AutoMigrate(&models.Class{})
+	err = db.AutoMigrate(
+		&models.User{},
+		&models.Character{},
+		&models.Class{},
+		&models.Assignment{},
+		&models.Armor{},
+		&models.Weapon{},
+		&models.Pet{},
+		&models.Wears{},
+		&models.Equips{},
+		&models.Accompanies{},
+	)
+
+	if err != nil {
+		log.Fatal("Failed to automigrate the database. \n", err)
+		os.Exit(2)
+	}
 
 	setupMock(db)
 	DB = Dbinstance{

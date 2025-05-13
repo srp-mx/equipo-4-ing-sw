@@ -1,0 +1,56 @@
+DESCRIPTION: Gets the armors the character owns.
+
+
+
+Type: GET
+
+
+
+INPUT:
+None, the user is inferred from the credentials.
+
+
+
+RETURNS:
+{
+    "alive": ... ,
+    "armors": [
+        "id": ... ,
+        "created_at": ... ,
+        "name": ... ,
+        "rarity": ... ,
+        "description": ... ,
+        "image_uri": ... ,
+        "strength": ... ,
+        "defense": ... ,
+        "intelligence": ... ,
+        "heart": ... ,
+        "damage_received": ...
+    ]
+}
+
+"alive" -> boolean // Everything after is undefined if this is false
+"armors[i]"
+"armors[i].id" -> uint
+"armors[i].created_at" -> string // RFC 3339 format, i.e. "2025-03-29T15:47:00Z"
+"armors[i].name" -> string
+"armors[i].rarity" -> int
+"armors[i].description" -> string
+"armors[i].image_uri" -> string // Has the resource path of the image
+"armors[i].strength" -> int
+"armors[i].defense" -> int
+"armors[i].intelligence" -> int
+"armors[i].heart" -> int
+"armors[i].damage_received" -> int
+
+
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+500 (Internal server error)
+    Cause: Internal error

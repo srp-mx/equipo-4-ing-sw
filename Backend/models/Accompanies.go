@@ -23,7 +23,8 @@ import (
 )
 
 type Accompanies struct {
-	CharacterName string
-	PetID         uint
-	since         time.Time `gorm:"type:datetime;autoUpdateTime"`
+	ID          uint      `gorm:"primaryKey;autoIncrement" json:"-"`
+	CharacterID uint      `json:"-"`
+	Pet         *Pet      `gorm:"foreignKey:AccompaniesID;references:ID;constraint:OnDelete:SET NULL" json:"-"`
+	Since       time.Time `gorm:"datetime;not null" json:"since"`
 }

@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface DataCharacterState {
     dataCharacter : DataCharacter;
+    points: number;
 }; 
 
 const initialState : DataCharacterState = {
@@ -13,7 +14,9 @@ const initialState : DataCharacterState = {
         moment_of_last_action: '', 
         streak: 0, 
         hp: 0,
-    }
+    },
+    points: 0,
+    
 };
 
 const dataCharacterSlice = createSlice({
@@ -25,9 +28,17 @@ const dataCharacterSlice = createSlice({
         },
         clearDataCharacter(state) {
             state.dataCharacter = initialState.dataCharacter;
+            state.points = initialState.points;
+        },
+        setPoints(state, action: PayloadAction<number>){
+            state.points = action.payload;
+        },
+        setName(state, action: PayloadAction<string>){
+            state.dataCharacter.name = action.payload;
         }
+    
     }
 });
 
-export const { setDataCharacter, clearDataCharacter} = dataCharacterSlice.actions; 
+export const { setDataCharacter, clearDataCharacter, setPoints, setName} = dataCharacterSlice.actions; 
 export default dataCharacterSlice.reducer;

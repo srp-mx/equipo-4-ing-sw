@@ -98,7 +98,6 @@ func (self *UserController) LoadCharacter(user *models.User) error {
 
 // Loads the related classes to the user passed in
 func (self *UserController) LoadClasses(user *models.User) error {
-	//return self.DB.Model(user).Association("Classes").Find(user.Classes)
 	return self.DB.Preload("Classes").First(user, "username=?", user.Username).Error
 }
 
