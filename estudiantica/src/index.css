@@ -36,3 +36,44 @@
   font-weight: 400;
   font-style: normal;
 }
+
+
+.pixel-corner-button2 {
+position: relative;
+border: 2px solid transparent; /* Transparent border for styling purposes */
+cursor: pointer;
+outline: none;
+transition: all 0.3s ease;
+}
+
+.pixel-corner-button2::before,
+.pixel-corner-button2::after {
+content: '';
+position: absolute;
+width: var(--size-pixel);
+height: var(--size-pixel);
+background: var(--pixel-bg); /* Color for the pixel effect */
+z-index: 1;
+transition: all 0.3s ease;
+}
+
+.pixel-corner-button2::before {
+top: -4px;
+left: -4px;
+}
+
+.pixel-corner-button2::after {
+bottom: -4px;
+right: -4px;
+}
+
+.pixel-corner-button2:hover {
+background-color: var(--pixel-hover-bg); /* Hover effect to change the background */
+}
+
+
+.pixel-corner-button2:hover::before,
+.pixel-corner-button2:hover::after {
+transform: scale(1.5);
+}
+

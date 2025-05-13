@@ -103,7 +103,7 @@ export default function SearchbarWorks(){
     useEffect(() => {
         async function fetchTasks() {
             setLoading(true);
-            const data = await getWorks(user.name); // Cambia por el usuario real
+            const data = await getWorks(user.name);
             dispatch(setAssignments(data));
             setLoading(false);
         }
