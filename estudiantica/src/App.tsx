@@ -1,16 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect} from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Login from './pages/Login';
-import Inicio from './pages/Inicio';
 import CalendarPage from './pages/CalendarPage'
 import WorkPage from './pages/WorkPage';
 import ClassPage from './pages/ClassPage';
 import LandingPage from "./pages/LandingPage/LandingPage";
 import Home from "./pages/Home";
 import Register from './pages/Register';
+
+const DynamicBackground = () => {
+  const location = useLocation(); // Obtiene la ruta actual
+
+  useEffect(() => {
+    const body = document.body;
+    
+    const backgrounds: Record<string, string> = {
+      "/": "bg-[url(./public/assets/img/login_bg.jpg)]",   // LandingPage
+      "/home": "bg-[#0B090F]",  // Home
+      "/login": "bg-gray-800",  // Login
+    };
+
+    body.className = backgrounds[location.pathname] || "bg-black";
+
+  }, [location.pathname]);
+
+  return null;
+};
+
 const App = () => {
   return (
     <Router>
+      <DynamicBackground/>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<Home />} />
