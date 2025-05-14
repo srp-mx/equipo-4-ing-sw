@@ -16,8 +16,6 @@ type response = {
   type : "success" | "error" | "warning"
 }
 
-
-
 const PasswordInput = ({ value, onChange }: { value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => {
   const [showPassword, setShowPassword] = useState(false);
 

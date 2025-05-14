@@ -2,14 +2,15 @@ type contenButton = {
   onClick? : () => void,
   children : React.ReactNode,
   icon?: string,
-  type? : "submit" | "reset" | "button"
+  type? : "submit" | "reset" | "button",
+  style? : React.CSSProperties
 }
 
-export const Button = ({ onClick, children, icon, type }: contenButton) => (
+export const Button = ({ onClick, children, icon, type, style }: contenButton) => (
   <button onClick={onClick}
     type={type} 
     className="pixel-corner-button mb-4 flex bg-[#cbda3d] text-[#0D0828] py-4 px-10 min-w-[300px] transition-all hover:bg-white"
-    style={{ "--pixel-bg": "#2D304F", "--pixel-hover-bg" : "#FFFFFF", "--size-pixel" : "10px"} as React.CSSProperties}
+    style={style || { "--pixel-bg": "#2D304F", "--pixel-hover-bg" : "#FFFFFF", "--size-pixel" : "10px"} as React.CSSProperties}
   >
     {icon && <img src={icon} className="w-6 h-6 mr-3" />}
     {children}
