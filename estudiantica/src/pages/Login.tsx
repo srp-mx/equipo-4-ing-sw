@@ -5,29 +5,18 @@ import { setUser } from '@/constants/userSlice'
 import validator from 'validator';
 import { useNotification } from '@/components/NotificationProvider';
 
+import iconoRegister from '@assets/img/icono_register.png'
+import iconoCorreo from '@assets/img/icono_correo.png'
+import bgImage from '@assets/img/background-default.jpg';
+import { Button, ButtonReturn } from '@/components/Button';
+
+
 type response = {
   message : string,
   type : "success" | "error" | "warning"
 }
 
-const Button = ({ onClick, children, icon }: { onClick?: () => void; children: React.ReactNode; icon?: string }) => (
-  <button onClick={onClick} 
-    className="pixel-corner-button mb-4 flex bg-[#cbda3d] text-[#0D0828] py-4 px-10 min-w-[300px] transition-all hover:bg-white"
-    style={{ "--pixel-bg": "#2D304F", "--pixel-hover-bg" : "#FFFFFF", "--size-pixel" : "10px"} as React.CSSProperties}
-  >
-    {icon && <img src={icon} className="w-6 h-6 mr-3" alt="Button Icon" />}
-    {children}
-  </button>
-);
 
-const ButtonReturn = ({ onClick }: { onClick?: () => void}) => (
-  <button onClick={onClick} className="absolute -top-3 left-0 flex items-center text-[#cbda3d] hover:text-white transition-all focus:text-[#ffffff]">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">  
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-    </svg>
-    <span className="ml-2 text-sm">Regresar</span>
-  </button>
-);
 
 const PasswordInput = ({ value, onChange }: { value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -106,41 +95,43 @@ export default function Login() {
     }
   }, []); 
     return (
-      <div className="bg-[url(../../public/assets/img/login_bg.jpg)] w-screen h-screen bg-cover bg-center flex justify-center items-center font-[\'Pixelify Sans\']">
+      <div 
+      className="w-screen h-screen bg-cover bg-center flex justify-center items-center font-[\'Pixelify Sans\']"
+      style={{backgroundImage : `url(${bgImage})`}}>
         <div className="relative w-full max-w-lg p-8 rounded-lg">
           <h2 className="text-4xl font-semibold text-center text-white mb-6">estudiantika</h2>
           
           {!showEmailForm ? (
             <div className="flex flex-col justify-center items-center mt-6">
+              <ButtonReturn onClick={() => navigate('/')}/>
               <p className="text-center text-xl text-white mb-6">Ingresa para comenzar tu aventura</p>
               <Button 
-                icon="../assets/img/icono_google.png" 
-                onClick={() => showNotification("No disponible por el momento","error")}>Continua con Google</Button>
-              <Button onClick={() => setShowEmailForm(true)} icon="../assets/img/icono_correo.png">Continua con correo</Button>
+                onClick={() => setShowEmailForm(true)} 
+                icon={iconoCorreo}>
+                Continua con Correo
+              </Button>
+              <Button 
+                icon={iconoRegister}
+                onClick={() => navigate('/register')}>
+                Registrarse
+              </Button>
             </div>
           ) : (
             <div className="flex flex-col justify-center items-center mt-6">
             <div className="relative mb-2">
-              <form className="max-w-lg mx-auto mt-4 p-4 bg-[#2d314f] rounded-lg"
-                onKeyDown={(e) => {
-                    if(e.key === 'Enter'){
-                      e.preventDefault();
-                      fetchAuthentication(email, password, dispatch).then(response => {
-                        if(response.type === 'success'){
-                          navigate('/home')
-                        }
-
-                        showNotification(response.message,response.type)
-                      })
-                    }
-                  }}
-                onSubmit={(e) => { e.preventDefault(); fetchAuthentication(email, password, dispatch).then(response => {
+              <ButtonReturn onClick={() => { setShowEmailForm(false); setEmail(""); setPassword("");}} />
+              <form 
+                className="max-w-lg mx-auto mt-4 p-4 bg-[#2d314f] rounded-lg"
+                onSubmit={async (e) => { 
+                  e.preventDefault(); 
+                  const response = await fetchAuthentication(email, password, dispatch);
+                  console.log(response)
                   if(response.type === 'success'){
                     navigate('/home')
                   }
-                  showNotification(response.message,response.type)
-                }); }}>
-                <ButtonReturn onClick={() => { setShowEmailForm(false); setEmail(""); setPassword("");}} />
+                  showNotification(response.message,response.type); 
+                  }}>
+                
                 <div className="relative flex mb-4">
                   <input
                     type="email"
@@ -154,7 +145,7 @@ export default function Login() {
                 </div>
   
                 <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
-                <Button>Ingresar</Button>
+                <Button type='submit'>Ingresar</Button>
               </form>
             </div>
             </div>
@@ -163,3 +154,18 @@ export default function Login() {
       </div>
     );
 }
+
+/*
+onKeyDown={(e) => {
+                    if(e.key === 'Enter'){
+                      e.preventDefault();
+                      fetchAuthentication(email, password, dispatch).then(response => {
+                        if(response.type === 'success'){
+                          navigate('/home')
+                        }
+
+                        showNotification(response.message,response.type)
+                      })
+                    }
+                  }}
+*/

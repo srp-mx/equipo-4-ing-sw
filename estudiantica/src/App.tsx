@@ -4,7 +4,7 @@ import Login from './pages/Login';
 import CalendarPage from './pages/CalendarPage'
 import WorkPage from './pages/WorkPage';
 import ClassPage from './pages/ClassPage';
-import LandingPage from "./pages/LandingPage/LandingPage";
+import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
 import Register from './pages/Register';
 
@@ -15,7 +15,7 @@ const DynamicBackground = () => {
     const body = document.body;
     
     const backgrounds: Record<string, string> = {
-      "/": "bg-[url(./public/assets/img/login_bg.jpg)]",   // LandingPage
+      "/": "bg-[#0B090F]",   // LandingPage
       "/home": "bg-[#0B090F]",  // Home
       "/login": "bg-gray-800",  // Login
     };
