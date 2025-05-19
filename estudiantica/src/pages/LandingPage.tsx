@@ -1,6 +1,6 @@
 import HeroSection from "@/components/HeroSection";
 import NavBar from "../components/Navbar";
-import bgImage from '@assets/img/background-default.jpg';
+import bgImage from '@/assets/img/background-default.jpg';
 
 export default function LandingPage() {
     return(

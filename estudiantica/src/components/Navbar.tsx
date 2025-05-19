@@ -1,11 +1,11 @@
 import { useState } from "react";
 import logo from "@/assets/Logo.png";
-import iconoInicio from "@/assets/img/sidebar/icono_inicio.png";
 import { navItems } from "@/constants";
 import MenuProfile from "./MenuProfle";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/constants/store";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+
 
 export default function NavBar({ isLoggedIn }: { isLoggedIn: boolean }) {
     const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
@@ -13,17 +13,18 @@ export default function NavBar({ isLoggedIn }: { isLoggedIn: boolean }) {
     const toggleNavBar = () => {
         setMobileDrawerOpen(!mobileDrawerOpen);
     };
-
+    const navigate = useNavigate();
 
     return (
         <nav className="bg-[#0B090F] sticky top-0 z-50 py-3 backdrop-blur-lg  flex justify-between items-center p-4">
-            <div className="flex ml-4 justify-between items-center text-2xl font-bold text-white ml-2">
+            <div
+            onClick={() => navigate("/")}
+            className="flex ml-4 justify-between items-center text-2xl font-bold text-white ml-2 cursor-pointer">
                 <img className="h-10 w-10 mr-4" src={logo} alt="logo" />
                 <span className="text-2xl tracking-tight">Estudiantica</span>
             </div>
             {isLoggedIn ? (
-                 
-             <MenuProfile user={{name : user.name,email : user.email}}/>
+                <MenuProfile user={{name : user.name,email : user.email}}/>
             ) : (
                 <div className="flex justify-center space-x-12 items-center">
                     <Link to="/register" 

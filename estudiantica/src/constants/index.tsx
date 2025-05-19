@@ -22,8 +22,7 @@ export const navItems = [
     {label: "Inicio", href: "/home", imagen: iconoInicio },
     {label: "Clanes", href: "#", imagen: iconoClanes },
     {label: "Mazmorras", href: "#", imagen: iconoMazmorras},
-    {label: "Otros", href: "#", imagen: iconoOtros},
-    {label: "Configuración", href: "#", imagen: iconoConfiguracion}
+    {label: "Otros", href: "#", imagen: iconoOtros}
   ];
 
   export const itemEquiped = [

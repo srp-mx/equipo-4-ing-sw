@@ -2,13 +2,23 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import iconoConfiguracion from "@/assets/img/sidebar/icono_configuracion.png";
 import { clearUser } from "@/constants/userSlice";
-import { useDispatch } from "react-redux";
+import { clearClases } from "@/constants/classSlice";
+import { clearAssignments } from "@/constants/assignmentSlice";
+import { clearDataCharacter } from "@/constants/dataCharacterSlice";
+import { clearStats } from "@/constants/StatsSlice";
+import { clearRacha, setRacha } from "@/constants/rachaSlice";import { useDispatch } from "react-redux";
 import iconoUser from "@/assets/img/icono_user.svg";
+import iconoInicio from "@/assets/img/sidebar/icono_inicio.png";
 
 
 
 const handleLogout = (dispatch : any, navigate : any) => {
     dispatch(clearUser());
+    dispatch(clearClases());
+    dispatch(clearAssignments());
+    dispatch(clearStats());
+    dispatch(clearDataCharacter());
+    dispatch(clearRacha());
     localStorage.removeItem("token");
 
     navigate("/");
@@ -17,9 +27,7 @@ const handleLogout = (dispatch : any, navigate : any) => {
 export default function MenuProfile({user} : {user: {name: string, email: string}}) {
     const [viewMenu, setViewMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
-    const [buttonWidth, setButtonWidth] = useState(60);
     const buttonRef = useRef<HTMLButtonElement>(null);
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -36,16 +44,10 @@ export default function MenuProfile({user} : {user: {name: string, email: string
         };
       }, []);
 
-    useEffect(() => {
-        if (buttonRef.current) {
-            setButtonWidth(buttonRef.current.offsetWidth);
-        }
-    }, []);
-
     return (
-        <div className="flex items-center" ref={menuRef}>
+        <div className="flex items-center mr-10" ref={menuRef}>
             <button type="button" 
-                className="flex text-lg py-2 px-3 border rounded-full bg-[#cbda3d] mr-4 transition-all hover:bg-white text-black" 
+                className="flex text-lg ml-3 py-2 px-3 border rounded-full bg-[#cbda3d] mr-4 transition-all hover:bg-white text-black" 
                 id="user-menu-button" aria-expanded="false" 
                 data-dropdown-toggle="user-dropdown" 
                 data-dropdown-placement="bottom"
@@ -59,11 +61,14 @@ export default function MenuProfile({user} : {user: {name: string, email: string
             </button>
             {viewMenu && (
                 <div 
-                    className="absolute px-3 py-4 top-15 z-50 my-4 text-base list-none bg-[#1A1538] divide-y divide-gray-100 rounded-2xl shadow-sm" 
+                    className="absolute px-3 py-4 top-15  my-2 text-base list-none bg-[#1A1538] divide-y divide-gray-100 rounded-2xl shadow-sm" 
                     id="user-dropdown"
-                    style ={{ width: buttonWidth }}
                 >
                 <ul className="text-white space-y-4" aria-labelledby="user-menu-button">
+                    <Link to='/home' className="block flex items-center p-2 rounded-lg transition hover:-translate-y-1 hover:scale-100 group">
+                        <img src={iconoInicio} className="mr-3"/>
+                        Inicio
+                    </Link>
                     <Link to="/setting" className="block flex items-center p-2 rounded-lg transition hover:-translate-y-1 hover:scale-100 group">
                         <img src={iconoConfiguracion} className="mr-3"/>
                         Configuración
