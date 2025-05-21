@@ -86,7 +86,7 @@ export default function CreateAssignmentModal({ isOpen, onClose }: ModalProps) {
           }, [isOpen, onClose]);    
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-md flex items-center justify-center ${isOpen ? 'visible' : 'invisible'">
+        <div className="h-screen fixed inset-0 bg-opacity-30 backdrop-blur-md flex items-center justify-center z-2">
             <div ref={modalRef} 
             className="p-6 w-1/3 shadow-lg border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
                 <h2 className="text-2xl font-semibold">Nueva Tarea</h2>

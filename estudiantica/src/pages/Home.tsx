@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/constants/store";
 import { useEffect } from "react";
 import bgImage from '@/assets/img/background-default.jpg';
-import { Sidebar2 } from "@/components/Sidebar2";
+import { Sidebar } from "@/components/Sidebar";
 
 
 export default function Home(){
@@ -30,7 +30,7 @@ export default function Home(){
         <div className="bg-[#0B090F] items-justify h-screen w-screen bg-cover bg-center">
             <NavBar isLoggedIn={true}/>
             <div className="grid grid-cols-5 grid-rows-4 gap-2 h-17/20 w-full">
-                <Sidebar2/>
+                <Sidebar/>
 
                 <div 
                 className="col-span-3 row-span-4 h-full p-4 ml-2 rounded-2xl"

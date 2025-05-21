@@ -27,7 +27,7 @@ export default function AssigmentCard({ assigment, onOpen } : AssigmentCardProps
         <div 
             key={assigment.id}
             onClick = {onOpen}
-            className="grid grid-cols-6 grid-rows-3 items-center border-gray-400 rounded-lg w-4/5 bg-[#ffffe6] shadow-md"
+            className="grid grid-cols-6 grid-rows-3 items-center border-gray-400 rounded-lg w-4/5 bg-[#ffffe6] shadow-md "
         >
             <div className="row-span-3 flex w-30 h-30 items-center justify-center">
                 <img src="assets/img/bandera.png"/>
