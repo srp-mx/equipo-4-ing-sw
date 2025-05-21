@@ -6,6 +6,7 @@ import { ArrowBigUpDash, BicepsFlexed, Brain, Cat, Heart, Shield } from "lucide-
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { json } from "stream/consumers";
+import { Button } from "../Button";
 
 export const getPointSkill = async(dispatch:any) => {
     try{
@@ -124,7 +125,9 @@ export default function Stats(){
 
     if (isEdit){
         return (
-            <div className="flex flex-col space-y-1.5 bg-gray-700/30 border-4 border-black/20 rounded-2xl" >
+            <div className="flex flex-col justify-end mr-3 h-full" >
+                <div className="pixel-corner-button bg-[#1B1539] text-white p-4 space-y-2.5 justify-center flex flex-col"
+            style={{ "--pixel-bg": "#0B090F", "--pixel-hover-bg" : "#1B1539" ,"--size-pixel" : "20px"} as React.CSSProperties}>
                 <p className="text-center"> Puntos: {pointLeft} </p>
     
                 <div className="flex flex-row justify-between ml-3 mr-3">
@@ -225,25 +228,42 @@ export default function Stats(){
                         </div>
                 </div>
                 
-                <div className="flex flex-row justify-between text-xs ml-5 mr-5 mb-2 space-x-1">
-                    <button onClick={() => saveSkills(dispatch, () => setIsEdit(false))} 
-                    className="mb-2 self-center px-4 rounded-2xl bg-green-400 hover:bg-green-600 items-center">
-                        Guardar                    
-                    </button> 
-                    <button onClick={() => setIsEdit(false)} 
-                        className="mb-2 self-center px-4 rounded-2xl bg-red-400 hover:bg-red-600 items-center">
-                            Cancelar
-                        </button> 
+                <div className="flex flex-col justify-between text-xs space-y-2">
+                    <button
+                        onClick={() => saveSkills(dispatch, () => setIsEdit(false))}
+                        className="pixel-corner-button mt-2 px-4 bg-[#39BF48]"
+                        style={{
+                        "--pixel-bg": "#1B1539",
+                        "--pixel-hover-bg": "#39BF48",
+                        "--size-pixel": "10px"
+                        } as React.CSSProperties}
+                    >
+                        Guardar
+                    </button>
+                    <button
+                        onClick={() => setIsEdit(false)}
+                        className="pixel-corner-button mt-2 px-4 bg-[#BF3939]"
+                        style={{
+                        "--pixel-bg": "#1B1539",
+                        "--pixel-hover-bg": "#BF3939",
+                        "--size-pixel": "10px"
+                        } as React.CSSProperties}
+                    >
+                        Cancelar
+                    </button>
                 </div>
           
     
+            </div>
             </div>
         );
     }
     else{
     return (
-        <div className="flex flex-col space-y-1.5 bg-gray-700/30 border-4 border-black/20 rounded-2xl" >
-            <p className="text-center"> Estadisticas </p>
+        <div className="flex flex-col justify-end mr-3 h-full" >
+            <div className="pixel-corner-button bg-[#1B1539] text-white p-4 space-y-2.5 justify-center flex flex-col"
+            style={{ "--pixel-bg": "#0B090F", "--pixel-hover-bg" : "#1B1539" ,"--size-pixel" : "20px"} as React.CSSProperties}>
+                <p className="text-center"> Estadisticas </p>
 
             <div className="flex flex-row justify-between ml-3 mr-3">
                     <div className="flex flex-row">
@@ -296,13 +316,20 @@ export default function Stats(){
                     {stats.stats.skills.heart}
             </div>
             
-            {dataCharacter.points > 0 && 
-            <button onClick={() => setIsEdit(true)} 
-            className="mb-2 self-center px-4 rounded-2xl bg-green-400 hover:bg-green-600 items-center">
-                Añadir
-            </button> 
-            }            
-
+            {(dataCharacter?.points > 0) && (
+                <button
+                    onClick={() => setIsEdit(true)}
+                    className="pixel-corner-button mt-2 px-4 bg-[#39BF48]"
+                    style={{
+                    "--pixel-bg": "#1B1539",
+                    "--pixel-hover-bg": "#39BF48",
+                    "--size-pixel": "10px"
+                    } as React.CSSProperties}
+                >
+                    Añadir
+                </button>
+            )}
+            </div>            
         </div>
     );
     }

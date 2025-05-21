@@ -16,7 +16,7 @@ export default function NavBar({ isLoggedIn }: { isLoggedIn: boolean }) {
     const navigate = useNavigate();
 
     return (
-        <nav className="bg-[#0B090F] sticky top-0 z-50 py-3 backdrop-blur-lg  flex justify-between items-center p-4">
+        <nav className="bg-[#0B090F] sticky top-0 z-2 py-3 backdrop-blur-lg  flex justify-between items-center p-4">
             <div
             onClick={() => navigate("/")}
             className="flex ml-4 justify-between items-center text-2xl font-bold text-white ml-2 cursor-pointer">

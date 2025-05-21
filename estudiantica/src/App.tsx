@@ -7,6 +7,7 @@ import ClassPage from './pages/ClassPage';
 import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
 import Register from './pages/Register';
+import Inicio from './pages/Inicio';
 
 const DynamicBackground = () => {
   const location = useLocation(); // Obtiene la ruta actual
@@ -39,7 +40,8 @@ const App = () => {
         <Route path='/work' element={<WorkPage/>} />
         <Route path='/class' element={<ClassPage/>} />
         <Route path="/calendar" element={<CalendarPage/>}/>
-      </Routes>
+        <Route path="/prueba" element={<Inicio/>}/>
+      </Routes> 
     </Router>
   );
 };
