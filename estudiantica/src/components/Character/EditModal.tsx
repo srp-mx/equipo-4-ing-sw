@@ -61,7 +61,7 @@ export default function ModalCharacterCreation({onClose} : ModalProps) {
 
     return (
         <div ref={modalRef} onClick={closeModal} 
-            className="h-screen fixed inset-0 flex justify-center items-center bg-black/30 backdrop-blur-sm">
+            className="h-screen fixed inset-0 z-2 flex justify-center items-center bg-black/30 backdrop-blur-sm">
             <div className="flex text-center items-center flex-col p-6 w-1/3 border-gray-400 rounded-lg bg-[#ffffe6] text-black">
                 <h1> Ingresa el nombre del personaje</h1>
                 <form className="flex flex-col items-center "action="">

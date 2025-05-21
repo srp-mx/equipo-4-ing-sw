@@ -13,6 +13,7 @@ import { useAuth } from "@/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/constants/store";
 import { useEffect } from "react";
+import bgImage from '@/assets/img/background-default.jpg';
 
 
 export default function Home(){
@@ -35,44 +36,49 @@ export default function Home(){
     return (
         <div className="bg-[#0B090F] items-justify h-screen w-screen bg-cover bg-center">
             <NavBar isLoggedIn={true}/>
-            <SideBar/>
-            <div className="grid grid-cols-4 grid-rows-4 gap-2 h-17/20">
-                <div className="col-span-3 row-span-4 p-4 sm:ml-56 bg-[url(assets/img/login_bg.jpg)] sm:mr-4 rounded-2xl">
-                    <Character />
-                    
-                </div>
-                <div className="row-span-4 col-start-4 text-3xl items-center justify-center text-center flex mt-6 flex-col
-                mb-6 mr-10 py-1 space-x-1 space-y-4">
+            <div className="grid grid-cols-5 grid-rows-4 gap-2 h-17/20 w-full">
+                <div
+                className="ml-5 row-span-4 text-white ml-4 text-3xl items-center justify-center text-center flex mt-6 flex-col
+                mb-6 py-1 space-x-1 space-y-4">
                     <img src={Decoracion}/>
                     <Link to="/work" // bg-gradient-to-r bg-red-500 to-red-600 hover:bg-red-800
-                        className="pixel-corner-button bg-[#BF3939] flex items-center text-center w-full h-1/4 px-4 py-4 transition hover:-translate-y-1 hover:scale-100 group"
-                        style={{ "--pixel-bg": "#0B090F", "--pixel-hover-bg" : "#BF3939" ,"--size-pixel" : "20px"} as React.CSSProperties}
-                    >
-                        <img src={TareasImg} alt="" className="w-10 h-10 mr-4 ml-4" />
-                        <label className="text-white ml-4">Tareas</label>
-                    </Link>
-                    <Link to="/home" 
                         className="pixel-corner-button bg-[#3992BF] flex items-center text-center w-full h-1/4 px-4 py-4 transition hover:-translate-y-1 hover:scale-100 group"
                         style={{ "--pixel-bg": "#0B090F", "--pixel-hover-bg" : "#3992BF" ,"--size-pixel" : "20px"} as React.CSSProperties}
                     >
-                        <img src={HorarioImg} alt="" className="w-10 h-10 mr-4 ml-4" />
-                        <label className="text-white ml-4">Horario</label>
+                        <img src={TareasImg} className="w-10 h-10 mr-4 ml-4" />
+                        <label className="text-2xl ml-4">Tareas</label>
+                    </Link>
+                    <Link to="/home" 
+                        className="pixel-corner-button bg-[#BF3939] flex items-center text-center w-full h-1/4 px-4 py-4 transition hover:-translate-y-1 hover:scale-100 group"
+                        style={{ "--pixel-bg": "#0B090F", "--pixel-hover-bg" : "#BF3939" ,"--size-pixel" : "20px"} as React.CSSProperties}
+                    >
+                        <img src={HorarioImg} className="w-10 h-10 mr-4 ml-4" />
+                        <label className="text-2xl ml-4">Horario</label>
                     </Link>
                     <Link to="/class" 
                         className="pixel-corner-button bg-[#39BF48] flex items-center text-center w-full h-1/4 px-4 py-4 transition hover:-translate-y-1 hover:scale-100 group"
                         style={{ "--pixel-bg": "#0B090F", "--pixel-hover-bg" : "#39BF48" ,"--size-pixel" : "20px"} as React.CSSProperties}
                     >
-                        <img src={MateriaImg} alt="" className="w-10 h-10 mr-4 ml-4" />
-                        <label className="text-white ml-4">Materias</label>
+                        <img src={MateriaImg} className="w-10 h-10 mr-4 ml-4" />
+                        <label className="text-2xl ml-4">Materias</label>
                     </Link>
-                    <Link to="/home" 
+                    <Link to="/calendar" 
                         className="pixel-corner-button bg-[#BF7739] flex items-center text-center w-full h-1/4 px-4 py-4 transition hover:-translate-y-1 hover:scale-100 group" 
                         style={{ "--pixel-bg": "#0B090F", "--pixel-hover-bg" : "#BF7739" ,"--size-pixel" : "20px"} as React.CSSProperties}
                     >   
-                        <img src={CalendarioImg} alt="" className="w-10 h-10 mr-4 ml-4" />      
-                        <label className="text-white ml-4">Calendario</label>
+                        <img src={CalendarioImg} className="w-10 h-10 mr-4 ml-4" />      
+                        <label className="text-2xl ml-4">Calendario</label>
                     </Link>
                     <img src={Decoracion}/>
+                </div>
+
+                <div 
+                className="col-span-3 row-span-4 h-full w-full p-4 ml-4 rounded-2xl"
+                style ={{ backgroundImage: `url(${bgImage}) `}}>
+                    <Character />
+                </div>
+                <div className="row-span-4 col-start-5 ml-4">
+
                 </div>
             </div>
         </div>

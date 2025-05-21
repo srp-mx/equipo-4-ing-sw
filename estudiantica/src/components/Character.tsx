@@ -11,6 +11,8 @@ import ModalCharacterCreation from '@/components/Character/ModalCharacterCreatio
 import { Flame } from "lucide-react";
 import { getPointSkill } from "./Character/Stats";
 import EditModal from '@/components/Character/EditModal'
+import ItemsEquiped from "./ItemsEquiped";
+import rachaIcon from "@/assets/img/racha.png";
 
 export const getRefresh = async(dispatch:any) => {
     try{
@@ -102,7 +104,7 @@ const Character = () => {
         characterHome();
     },[dispatch, rachaRefresh.racha.alive]);
 */
-    if(rachaRefresh.racha.alive)
+    /*if(rachaRefresh.racha.alive)
         return (
             <>
             
@@ -144,7 +146,34 @@ const Character = () => {
           </button>
           {showModal && <ModalCharacterCreation onClose={() => setShowModal(false)} /> }
         </div> 
-    );
+    );*/
+    return (
+        <div className="grid grid-cols-4 grid-rows-4 gap-4 justify-items-center h-full">
+            <div className="col-span-3 row-span-4 h-full">
+                <div className="h-1/15 text-left">
+                    <div className="title-section text-start text-5xl mt-3 ml-8 ">
+                        {user.name || "Nombre de Usuario"}
+                    </div>
+                    <div className="text-start text-4xl text-red-400 ml-8">
+                        <img src={rachaIcon} alt="" className="h-10 w-10 inline-block mr-2" />
+                        Racha: 
+                    </div>
+                </div>
+                <div className="flex flex-col items-center justify-center h-full">
+                    <img src={characterDates.characterURL} alt="" className="h-2/3 mb-5" />
+                    <button onClick={() => setShowModalEdit(true)}
+                        className="pixel-corner-button py-2 px-3 border transition-all bg-[#cbda3d]"
+                        style={{ "--pixel-bg": "#2D304F", "--pixel-hover-bg": "#FFFFFF", "--size-pixel" : "10px"} as React.CSSProperties}
+                    >Editar</button>
+                    {showModalEdit && <EditModal onClose={() => setShowModalEdit(false)}/>}
+                </div>
+            </div>
+            <div className="row-span-4 col-start-4 mt-4 items-center justify-center h-full">
+                <img src={Bandera} alt="" className="mb-2 h-1/3"/>
+                <ItemsEquiped />
+            </div>
+        </div>
+    )
 }
 
 export default Character;
