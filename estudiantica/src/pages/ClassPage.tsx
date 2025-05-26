@@ -18,9 +18,9 @@ export default function ClassPage(){
                 className="col-span-9 row-span-4 h-full p-4 ml-2 mr-6 rounded-2xl"
                 style ={{ backgroundImage: `url(${bgImage}) `, backgroundSize: 'cover' }}>
                     <h1 className="title-section text-[60px]">
-                    Clases
-                </h1>
-                <SearchbarClass/>
+                        Clases
+                    </h1>
+                    <SearchbarClass/>
                 </div>
             </div>
         </div>

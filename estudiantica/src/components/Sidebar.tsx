@@ -53,7 +53,7 @@ export const Sidebar = ({ incomplete }: { incomplete?: boolean }) => {
                 >
                     <img src={TareasImg} className="w-10 h-10" />
                 </Link>
-                <Link to="/mazmorra"
+                <Link to="/dungeon"
                     className="pixel-corner-button bg-[#BF3939] flex items-center text-center  h-1/4 px-4 py-4 transition hover:-translate-y-1 hover:scale-100 group"
                     style={{ "--pixel-bg": "#0B090F", "--pixel-hover-bg": "#BF3939", "--size-pixel": "20px" } as React.CSSProperties}
                 >

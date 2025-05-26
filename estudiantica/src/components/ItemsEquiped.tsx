@@ -14,8 +14,8 @@ const ItemsEquiped = () => {
         <div className="flex flex-col text-white justify-center items-center h-2/3">
         {itemEquiped.map((item) => (
             <div 
-                className="pixel-corner-button bg-[#152442] m-2 items-center h-1/4 w-2/3 text-center"
-                style={{ "--pixel-bg": "#1B1539", "--pixel-hover-bg" : "#152442" ,"--size-pixel" : "10px"} as React.CSSProperties}>
+                className="bg-[#152442] m-2 items-center h-1/4 w-2/3 rounded-xl text-center"
+             >
                 <img src={item.url} alt={item.label} />
             </div>
         ))}

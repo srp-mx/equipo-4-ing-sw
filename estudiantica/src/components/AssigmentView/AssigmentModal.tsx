@@ -138,7 +138,7 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
           }, [isOpen, onClose]);
 
     return (
-        <div className="fixed h-screen inset-0 flex items-center justify-center bg-black/10 z-2">
+        <div className="fixed h-screen inset-0 flex items-center justify-center backdrop-blur-sm z-2">
             <div ref={modalRef} 
             className="p-6 w-1/3 shadow-lg items-center border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
                 <div className="flex mb-2 mr-4 space-x-2 justify-end">

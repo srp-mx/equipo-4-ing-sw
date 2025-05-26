@@ -1,5 +1,6 @@
 import { Assigment } from '../../Object/Assigment';
 import React from 'react'
+import bandera from '@/assets/img/bandera.png'
 
 const getProgressStatus = (progress: number) => {
     let progressStatus = { text : "En progreso", bgColor : "bg-gray-600"};
@@ -30,7 +31,7 @@ export default function AssigmentCard({ assigment, onOpen } : AssigmentCardProps
             className="grid grid-cols-6 grid-rows-3 items-center border-gray-400 rounded-lg w-4/5 bg-[#ffffe6] shadow-md "
         >
             <div className="row-span-3 flex w-30 h-30 items-center justify-center">
-                <img src="assets/img/bandera.png"/>
+                <img src={bandera}/>
             </div>
             <div className="ml-3 col-span-5 row-span-3">
                 <div className="flex mb-2 mr-4 space-x-2 justify-end">

@@ -38,18 +38,29 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
                 start_date: new Date(newClass.start_date).toISOString(), 
                 end_date: new Date(newClass.end_date).toISOString(),
             }
+
             const response = await fetch("http://localhost:3000/post_class",{
                 method: "POST", 
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`,
                     "Content-Type": "application/json"
 
                 },
                 body: JSON.stringify(dataSend)
             });
+
+            const rawText = await response.text()
+            let json;
+            try {
+                json = JSON.parse(rawText)
+            } catch (error) {
+                console.error('No se pudo parsear JSON:', rawText)
+                throw error
+            }
+
             if(!response.ok) {
                 const error = await response.json();
-                console.error("EL error es ", error);
+                console.error("El error es ", JSON.stringify(error,null,2));
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
             const data = await response.json();

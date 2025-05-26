@@ -254,7 +254,7 @@ const Calendar = () => {
                 }
               }}
             >
-              <span className={`text-xs ${day === actualDate.date() ? 
+              <span className={`text-xs ${day === actualDate.date() && actualDate.month() === currentDate.month()? 
                 'sm:text-white sm:w-6 sm:h-6 rounded-full sm:flex items-center justify-center sm:bg-[#364153]' : ''}`}>{day}</span>
               <div className="flex-row justify-center h-1/2">
                 {
@@ -322,7 +322,7 @@ const Calendar = () => {
                     setViewMode('month')
                     setCurrentDate(dayjs())
                 }}
-                className='py-2 px-5 ml-5 font-medium flex pixel-corner-button2 bg-[#cbda3d] text-[#37123B]'
+                className='py-2 px-5 ml-5 font-medium flex pixel-corner-button bg-[#cbda3d] text-[#37123B]'
                 style={{ "--pixel-bg": "#364153", "--pixel-hover-bg" : "#FFFFFF", "--size-pixel" : "10px"} as React.CSSProperties}
             >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" id="Interface-Essential-Calendar-Appointment--Streamline-Pixel" height="20" width="20"><desc>Interface Essential Calendar Appointment Streamline Icon: https://streamlinehq.com</desc><title>interface-essential-calendar-appointment</title><g><path d="m1.428125 6.66875 17.14375 0 0 12.38125 0.95 0 0 -15.237499999999999 -0.95 0 0 1.9 -17.14375 0 0 -1.9 -0.95 0 0 15.237499999999999 0.95 0 0 -12.38125z" fill="#37123b" stroke-width="0.625"></path><path d="M17.621875 2.85625h0.95V3.8125h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="M1.428125 19.05h17.14375V20H1.428125Z" fill="#37123b" stroke-width="0.625"></path><path d="m15.715625 11.431249999999999 -1.90625 0 0 0.95 -0.95 0 0 -0.95 -1.90625 0 0 0.95 -0.95 0 0 1.90625 0.95 0 0 0.95 0.95 0 0 0.95 0.95625 0 0 0.95625 0.95 0 0 -0.95625 0.95 0 0 -0.95 0.95625 0 0 -0.95 0.95 0 0 -1.90625 -0.95 0 0 -0.95z" fill="#37123b" stroke-width="0.625"></path><path d="M14.759374999999999 8.568750000000001h0.95625v0.95625h-0.95625Z" fill="#37123b" stroke-width="0.625"></path><path d="M10.953125 8.568750000000001h0.95v0.95625h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="M7.140625 16.1875h0.95625v0.95625h-0.95625Z" fill="#37123b" stroke-width="0.625"></path><path d="M7.140625 12.38125h0.95625v0.95h-0.95625Z" fill="#37123b" stroke-width="0.625"></path><path d="M7.140625 8.568750000000001h0.95625v0.95625h-0.95625Z" fill="#37123b" stroke-width="0.625"></path><path d="M3.334375 16.1875h0.95v0.95625h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="M3.334375 12.38125h0.95v0.95h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="M3.334375 8.568750000000001h0.95v0.95625h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="m5.240625 2.85625 0 0.95625 0.95 0 0 -0.95625 7.6187499999999995 0 0 0.95625 0.95 0 0 -0.95625 2.8625 0 0 -0.95 -2.8625 0 0 -1.90625 -0.95 0 0 1.90625 -7.6187499999999995 0 0 -1.90625 -0.95 0 0 1.90625 -2.85625 0 0 0.95 2.85625 0z" fill="#37123b" stroke-width="0.625"></path><path d="M1.428125 2.85625h0.95625V3.8125h-0.95625Z" fill="#37123b" stroke-width="0.625"></path></g></svg>
@@ -335,7 +335,7 @@ const Calendar = () => {
             <button
               key={mode}
               onClick={() => setViewMode(mode as typeof viewMode)}
-              className={`py-2.5 px-5 text-sm font-medium ml-2 transition-all duration-300 pixel-corner-button2 ${
+              className={`py-2.5 px-5 text-sm font-medium ml-2 transition-all duration-300 pixel-corner-button ${
                 viewMode === mode
                   ? 'bg-white'
                   : 'bg-[#CBDA3D]'
