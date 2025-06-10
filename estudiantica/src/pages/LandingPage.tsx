@@ -5,10 +5,10 @@ import bgImage from '@/assets/img/background-default.jpg';
 export default function LandingPage() {
     return(
         <div 
-        className="bg-cover bg-center"
+        className="min-h-screen mx-auto pt-0 bg-cover bg-center"
         style={{backgroundImage : `url(${bgImage})`}}>
             <NavBar isLoggedIn={false} />
-           <div className="max-w-7xl mx-auto pt-0 px-6">
+           <div className="px-6">
                 <HeroSection />
             </div>
         </div>

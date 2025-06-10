@@ -10,6 +10,7 @@ import iconoCorreo from '@/assets/img/icono_correo.png'
 import bgImage from '@/assets/img/background-default.jpg';
 import { Button, ButtonReturn } from '@/components/Button';
 import { Input, PasswordInput } from '@/components/Inputs';
+import NavBar from '@/components/Navbar';
 
 
 type response = {
@@ -50,7 +51,7 @@ const fetchAuthentication = async (email: string, password: string, dispatch:any
     return {message : "Error al hacer la petición" , type : "error"}
   }
 
-  return {message : "", type : "success"}
+  return {message : "Inicio de sesión exitoso", type : "success"}
 };
 
 
@@ -70,14 +71,14 @@ export default function Login() {
   }, []); 
     return (
       <div 
-      className="w-screen h-screen bg-cover bg-center flex justify-center items-center font-[\'Pixelify Sans\']"
+      className="w-screen h-screen bg-cover bg-center"
       style={{backgroundImage : `url(${bgImage})`}}>
-        <div className="relative w-full max-w-lg p-8 rounded-lg">
-          <h2 className="text-4xl font-semibold text-center text-white mb-6">estudiantika</h2>
+        <NavBar isLoggedIn={false} />
+        <div className="w-full p-8 rounded-lg flex flex-col justify-center items-center mt-10 md:mt-20">
+          <h2 className="text-4xl font-semibold text-center text-white mb-6">estudiantica</h2>
           
           {!showEmailForm ? (
             <div className="flex flex-col justify-center items-center mt-6">
-              <ButtonReturn onClick={() => navigate('/')}/>
               <p className="text-center text-xl text-white mb-6">Ingresa para comenzar tu aventura</p>
               <Button 
                 onClick={() => setShowEmailForm(true)} 

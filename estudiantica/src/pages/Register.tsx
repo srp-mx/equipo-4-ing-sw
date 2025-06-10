@@ -1,13 +1,12 @@
-import React, { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import validator from 'validator';
 
 import { useNotification } from '@/components/NotificationProvider';
-import iconoRegister from '@/assets/img/icono_register.png'
-import iconoCorreo from '@/assets/img/icono_correo.png'
 import bgImage from '@/assets/img/background-default.jpg';
 import { Button , ButtonReturn } from '@/components/Button'
 import { Input, PasswordInput } from '@/components/Inputs';
+import NavBar from '@/components/Navbar';
 
 type response = {
   message : string,
@@ -57,15 +56,16 @@ export default function Register() {
     ]
 
     return (
-        <div className="h-screen  bg-cover bg-center flex justify-center items-center "
+        <div className="w-screen h-screen bg-cover bg-center"
         style={{backgroundImage : `url(${bgImage})`}}>
-            <div className="relative w-full max-w-lg p-8 rounded-lg">
+            <NavBar isLoggedIn={false} />
+            <div className="w-full p-8 rounded-lg flex flex-col justify-center items-center mt-10">
                 <div id="notification-container" className="hidden fixed top-[calc(50hv-270px)] left-1/2 -translate-x-1/2 z-[9999] w-full max-w-md p-4"></div>
                 <h2 className="text-4xl font-semibold text-center text-white mb-6">Estudiantica</h2>
                 <div className="flex flex-col justify-center items-center mt-6">
                     <div className="relative mb-2">
-                    <ButtonReturn onClick={() => navigate("/")} />
-                    <form className="max-w-lg mx-auto mt-4 p-4 bg-[#2d314f] rounded-lg"
+                    <ButtonReturn onClick={() => navigate("/login")} />
+                    <form className="max-w-lg mx-auto mt-4 p-4 rounded-lg"
                     onSubmit={async (e) => {
                       e.preventDefault(); 
                       const response = await fetchRegister(email, password, userName, name);

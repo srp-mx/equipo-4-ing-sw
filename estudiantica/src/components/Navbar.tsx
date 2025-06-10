@@ -28,17 +28,16 @@ export default function NavBar({ isLoggedIn }: { isLoggedIn: boolean }) {
                 <>
                 {location.pathname !== "/home" && 
                     <div 
-                    className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6"
+                    className="hidden md:inline items-center cursor-pointer"
                     onClick={() => navigate('/home')}>
-                        <img className="h-8 w-8 sm:h-7 sm:w-7 mr-2" src={iconoInicio}/>
-                        <span>Inicio</span>
+                        <img className="h-7 w-7" src={iconoInicio}/>
                     </div>
                 }
                 
                 <MenuProfile user={{name : user.name,email : user.email}}/>
                 </>
             ) : (
-                <div className="flex justify-center space-x-12 items-center">
+                <div className="flex justify-center space-x-4 md:space-x-12 items-center">
                     <Link to="/register" 
                         className="pixel-corner-button py-2 px-3 border transition-all bg-[#cbda3d]"
                         style={{ "--pixel-bg": "#0B090F", "--pixel-hover-bg": "#FFFFFF", "--size-pixel" : "10px"} as React.CSSProperties}

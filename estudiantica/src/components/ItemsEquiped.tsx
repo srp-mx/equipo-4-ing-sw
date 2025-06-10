@@ -11,7 +11,7 @@ const ItemsEquiped = () => {
         </>
     );*/
     return (
-        <div className="flex flex-col text-white justify-center items-center h-2/3">
+        <div className="flex-col text-white justify-center items-center h-2/3">
         {itemEquiped.map((item) => (
             <div 
                 className="bg-[#152442] m-2 items-center h-1/4 w-2/3 rounded-xl text-center"
