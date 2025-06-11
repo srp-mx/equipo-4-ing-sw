@@ -13,28 +13,28 @@ import MateriaImg from "@/assets/img/home/icono_materias.png";
 export const navItems = [
   {
     label: "Tareas",
-    style : { "--pixel-bg": "#0B090F", "--pixel-hover-bg": "#3992BF", "--size-pixel": "20px" } as React.CSSProperties, 
+    style : { "--pixel-bg": "#0B090F", "--pixel-hover-bg": "#3992BF"} as React.CSSProperties, 
     img : TareasImg,
     link : "/work",
     color: "#3992BF"
   },
   {
     label: "Mazmorra",
-    style : { "--pixel-bg": "#0B090F", "--pixel-hover-bg": "#BF3939", "--size-pixel": "20px" } as React.CSSProperties,
+    style : { "--pixel-bg": "#0B090F", "--pixel-hover-bg": "#BF3939"} as React.CSSProperties,
     img : DungeonImg,
     link : "/dungeon",
     color: "#BF3939"
   },
   {
     label: "Materias",
-    style : { "--pixel-bg": "#0B090F", "--pixel-hover-bg": "#39BF48", "--size-pixel": "20px" } as React.CSSProperties,
+    style : { "--pixel-bg": "#0B090F", "--pixel-hover-bg": "#39BF48"} as React.CSSProperties,
     img : MateriaImg,
     link : "/class",
     color: "#39BF48"
   },
   {
     label: "Calendario",
-    style : { "--pixel-bg": "#0B090F", "--pixel-hover-bg": "#BF7739", "--size-pixel": "20px" } as React.CSSProperties,
+    style : { "--pixel-bg": "#0B090F", "--pixel-hover-bg": "#BF7739"} as React.CSSProperties,
     img : CalendarioImg,
     link : "/calendar",
     color: "#BF7739"

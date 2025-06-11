@@ -34,7 +34,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   return (
     <NotificationContext.Provider value={{ showNotification }}>
       {children}
-      <div className="fixed top-[calc(50vh-270px)] left-1/2 -translate-x-1/2 z-[9999] w-full max-w-md p-4">
+      <div className="fixed top-[calc(50vh-200px)] left-1/2 -translate-x-1/2 z-[9999] w-full max-w-md p-4">
         {notifications.map(({ id, message, type }) => (
             <motion.div
               key={id}

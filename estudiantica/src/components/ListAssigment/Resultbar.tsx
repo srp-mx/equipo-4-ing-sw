@@ -45,16 +45,16 @@ export default function Resultbar({ assigment, onClickCard }: { assigment: Array
         },[assigment]);
 
     return (
-        <div className="rounded-lg p-4 mx-auto w-full h-full">
-            <div className={`${assigment.length >= 0 ? "" : "hidden"} w-full rounded-lg bg-gray-700 rounded flex justify-between items-center p-3 border border-gray-600`}>
-                <div className="flex items-center space-x-2">
+        <div className="rounded-lg mt-2 mx-auto w-full h-full">
+            <div className={`${assigment.length >= 0 ? "" : "hidden"} sm:flex-row w-full rounded-lg bg-gray-700 rounded flex justify-between items-center p-3 border border-gray-600`}>
+                <div className="flex items-center space-x-2 mr-2">
                     <input 
                         type="checkbox" 
-                        className="w-5 h-5 text-blue-500 bg-gray-800 border-gray-500 rounded focus:ring-0"
+                        className="w-3 h-3 md:w-5 md:h-5 text-blue-500 bg-gray-800 border-gray-500 rounded focus:ring-0"
                         onChange={handleSelectAll}
                         checked={selectedTasks.size === assigment.length}
                     />
-                    <span className="text-white text-lg font-semibold">Resultado</span>
+                    <span className="text-white text-sm md:text-lg font-semibold">Resultado</span>
                 </div>
 
                 <BottonResultBar selection={Array.from(selectedTasks)} onClickCard={onClickCard}/>

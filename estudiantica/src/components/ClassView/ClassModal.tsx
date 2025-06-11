@@ -2,6 +2,7 @@ import { updateClass } from "@/constants/classSlice";
 import { Class } from "@/Object/Class";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
+import { start } from "repl";
 
 type ModalProps = {
     isOpen: boolean;
@@ -31,7 +32,16 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
         setEditedClass((prev) => ({ ...prev, [name]: value }));
     };
     const modalRef = useRef<HTMLDivElement>(null);
-
+    let dates = [
+        {
+            name: "start_date",
+            value: new Date(editedClass.start_date).toISOString().split('T')[0] // Format to YYYY-MM-DD
+        },
+        {
+            name: "end_date",
+            value: new Date(editedClass.end_date).toISOString().split('T')[0] // Format to YYYY-MM-DD
+        }
+    ];
 
     const handleSave = async () => {
         try {
@@ -104,8 +114,8 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
     return (
         <div className="fixed inset-0 z-2 flex items-center justify-center backdrop-blur-sm">
             <div ref={modalRef} 
-            className="p-6 w-1/3 shadow-lg items-center border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black ">
-                <div className="flex mb-2 mr-4 space-x-2 justify-end">
+            className="p-6 w-4/6 md:w-1/3 shadow-lg items-center border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black ">
+                <div className="flex mb-2 space-x-2 justify-end">
                     <div className="flex space-x-2">
                         <label className={`flex items-center space-x-1 px-2 py-1 text-white ${activateClass.bgColor} rounded-full`}>
                             <span>{activateClass.text}</span>
@@ -117,50 +127,38 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
                     <input
                         type="text"
                         name="name"
-                        className="text-gray-900 text-2xl font-semibold w-full border rounded p-1"
+                        className="text-gray-900 text-xl sm:text-2xl font-semibold w-full border rounded p-1"
                         value={editedClass.name}
                         onChange={handleChange}
                     />
                 ) : (
-                    <p className="text-gray-900 text-2xl font-semibold w-2/3">{editedClass.name}</p>
+                    <p className="text-gray-900 text-xl sm:text-2xl font-semibold w-2/3">{editedClass.name}</p>
                 )}
 
-                <div className="text-gray-600 text-right text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>Fecha de Inicio: </span>
-                    {isEdit ? (
-                        <input
-                            type="date"
-                            name="start_date"
-                            className="border rounded p-1"
-                            value={editedClass.start_date}
-                            onChange={handleChange}
-                        />
-                    ) : (
-                        <span>{new Date(editedClass.start_date).toLocaleDateString()}</span>
-                    )}     
-                </div>
-                <div className="text-gray-600 text-right text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>Fecha de Fin: </span>
-                    {isEdit ? (
-                        <input
-                            type="date"
-                            name="end_date"
-                            className="border rounded p-1"
-                            value={editedClass.end_date}
-                            onChange={handleChange}
-                        />
-                    ) : (
-                        <span>{new Date (editedClass.end_date).toLocaleDateString()}</span>
-                    )}      
-                </div>
+                {dates.map((date) => (
+                    <div key={date.name} className="text-gray-600 text-right text-base sm:text-lg mr-4 px-2 py-1 rounded-full">
+                        <span>{date.name === "start_date" ? "Fecha de Inicio: " : "Fecha de Fin: "}</span>
+                        {isEdit ? (
+                            <input
+                                type="date"
+                                name={date.name}
+                                className="border rounded p-1"
+                                value={date.value}
+                                onChange={handleChange}
+                            />
+                        ) : (
+                            <span>{new Date(editedClass[date.name as "start_date" | "end_date"]).toLocaleDateString()}</span>
+                        )}
+                    </div>
+                ))}
 
-                <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
+                <div className="text-left text-base sm:text-lg mr-4 px-2 py-1 rounded-full">
                     <span>Grade formula: </span>
                     {isEdit ? (
                         <input
                             type="text"
                             name="grade_formula"
-                            className="border rounded p-1"
+                            className="border rounded p-1 w-2/3"
                             value={editedClass.grade_formula}
                             onChange={handleChange}
                         />
@@ -168,17 +166,17 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
                         <span>{editedClass.grade_formula}</span>
                     )}
                 </div>
-                <div className="flex mb-2 mr-4 space-x-2 justify-end">
+                <div className={`flex ${isEdit ? 'flex-col': 'flex-row'} mb-2 sm:mr-4 space-x-2 justify-end items-center text-base sm:text-lg`}>
                     {isEdit ? (
                         <>
                             <button
-                                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500"
+                                className="mt-4 px-4 py-2 w-[200px] bg-blue-600 text-white rounded hover:bg-blue-500"
                                 onClick={handleSave}
                             >
                                 Guardar
                             </button>
                             <button
-                                className="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500"
+                                className="mt-4 px-4 py-2 w-[200px] bg-gray-600 text-white rounded hover:bg-gray-500"
                                 onClick={handleCancel}
                             >
                                 Cancelar
@@ -193,7 +191,7 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
                         </button>
                     )}
                     <button
-                        className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
+                        className={`mt-4 px-4 py-2 bg-red-600 ${isEdit && 'w-[200px]'} text-white rounded hover:bg-red-500`}
                         onClick={onClose}
                     >
                         Cerrar

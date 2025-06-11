@@ -125,7 +125,7 @@ const Calendar = () => {
             setLoading(false);
           } catch (error) {
             console.error("Error fetching tasks: ", error);
-            window.alert("Error fetching tasks");
+            setLoading(false);
           }
       }
       fetchTasks();
@@ -137,7 +137,7 @@ const Calendar = () => {
     );
 
     return (
-      <div className="grid grid-cols-3 gap-4 p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         {months.map((month, idx) => {
           const daysInMonth = month.daysInMonth();
           const startOfMonth = month.startOf('month');
@@ -234,7 +234,7 @@ const Calendar = () => {
           {daysShort.map((day) => (
             <div
               key={day}
-              className="py-3.5 border-r border-[#364153] rounded-t-2xl bg-[#1A1538] flex items-center justify-center text-sm font-medium text-white"
+              className="py-2 md:py-3.5 md:rounded-t-2xl bg-[#1A1538] flex items-center justify-center text-sm font-medium text-white"
             >
               {day}
             </div>
@@ -244,8 +244,8 @@ const Calendar = () => {
           {calendarDays.map(({ day, currentMonth }, idx) => (
             <div
               key={idx}
-              className={`flex-col aspect-square p-3.5 border-r border-b border-[#364153] transition-all duration-300 ${
-                currentMonth ? 'cursor-pointer bg-[#ffffff] text-gray-900 hover:-translate-y-1 hover:scale-100' : 'bg-[#ffffe6] text-gray-600'
+              className={`flex-col aspect-square p-1.5 md:p-3.5 border-r border-b border-[#364153] ${
+                currentMonth ? 'cursor-pointer bg-[#ffffff] text-gray-900 ' : 'bg-[#ffffe6] text-gray-600'
               } ${idx % 7 === 6 ? 'border-r-0' : ''}`}
               onClick={() => {
                 if (currentMonth) {
@@ -291,17 +291,19 @@ const Calendar = () => {
 
 
   return (
-    <div className="px-2.5 py-2.5 rounded-2xl w-full h-full">
-      <div className="flex flex-row items-center justify-between mb-5 bg-[#364153] rounded-2xl p-4">
+    <div className="rounded-2xl w-full h-full">
+      <div className="flex flex-col sm:flex-row items-center justify-between bg-[#364153] rounded-2xl p-2 md:p-4">
         <div className="flex items-center gap-4">
-          <span className="text-2xl font-semibold title-section">Calendario</span>
-          <h5 className="text-xl leading-8 font-semibold title-section">
-            {viewMode === 'year'
-              ? currentDate.format('YYYY')
-              : viewMode === 'month' 
-              ? currentDate.format('MMMM YYYY')
-              : currentDate.format('DD MMMM YYYY')}
-          </h5>
+          <div className="flex flex-col">
+            <span className="text-xl md:text-2xl font-semibold title-section">Calendario</span>
+            <h5 className="text-sm md:text-xl leading-8 font-semibold title-section">
+              {viewMode === 'year'
+                ? currentDate.format('YYYY')
+                : viewMode === 'month' 
+                ? currentDate.format('MMMM YYYY')
+                : currentDate.format('DD MMMM YYYY')}
+            </h5>
+          </div>
           <div className={`flex items-center ${loading ? 'hidden' : ''}`}>
             <button 
                 onClick={handlePrev}
@@ -323,19 +325,19 @@ const Calendar = () => {
                     setCurrentDate(dayjs())
                 }}
                 className='py-2 px-5 ml-5 font-medium flex pixel-corner-button bg-[#cbda3d] text-[#37123B]'
-                style={{ "--pixel-bg": "#364153", "--pixel-hover-bg" : "#FFFFFF", "--size-pixel" : "10px"} as React.CSSProperties}
+                style={{ "--pixel-bg": "#364153", "--pixel-hover-bg" : "#FFFFFF"} as React.CSSProperties}
             >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" id="Interface-Essential-Calendar-Appointment--Streamline-Pixel" height="20" width="20"><desc>Interface Essential Calendar Appointment Streamline Icon: https://streamlinehq.com</desc><title>interface-essential-calendar-appointment</title><g><path d="m1.428125 6.66875 17.14375 0 0 12.38125 0.95 0 0 -15.237499999999999 -0.95 0 0 1.9 -17.14375 0 0 -1.9 -0.95 0 0 15.237499999999999 0.95 0 0 -12.38125z" fill="#37123b" stroke-width="0.625"></path><path d="M17.621875 2.85625h0.95V3.8125h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="M1.428125 19.05h17.14375V20H1.428125Z" fill="#37123b" stroke-width="0.625"></path><path d="m15.715625 11.431249999999999 -1.90625 0 0 0.95 -0.95 0 0 -0.95 -1.90625 0 0 0.95 -0.95 0 0 1.90625 0.95 0 0 0.95 0.95 0 0 0.95 0.95625 0 0 0.95625 0.95 0 0 -0.95625 0.95 0 0 -0.95 0.95625 0 0 -0.95 0.95 0 0 -1.90625 -0.95 0 0 -0.95z" fill="#37123b" stroke-width="0.625"></path><path d="M14.759374999999999 8.568750000000001h0.95625v0.95625h-0.95625Z" fill="#37123b" stroke-width="0.625"></path><path d="M10.953125 8.568750000000001h0.95v0.95625h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="M7.140625 16.1875h0.95625v0.95625h-0.95625Z" fill="#37123b" stroke-width="0.625"></path><path d="M7.140625 12.38125h0.95625v0.95h-0.95625Z" fill="#37123b" stroke-width="0.625"></path><path d="M7.140625 8.568750000000001h0.95625v0.95625h-0.95625Z" fill="#37123b" stroke-width="0.625"></path><path d="M3.334375 16.1875h0.95v0.95625h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="M3.334375 12.38125h0.95v0.95h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="M3.334375 8.568750000000001h0.95v0.95625h-0.95Z" fill="#37123b" stroke-width="0.625"></path><path d="m5.240625 2.85625 0 0.95625 0.95 0 0 -0.95625 7.6187499999999995 0 0 0.95625 0.95 0 0 -0.95625 2.8625 0 0 -0.95 -2.8625 0 0 -1.90625 -0.95 0 0 1.90625 -7.6187499999999995 0 0 -1.90625 -0.95 0 0 1.90625 -2.85625 0 0 0.95 2.85625 0z" fill="#37123b" stroke-width="0.625"></path><path d="M1.428125 2.85625h0.95625V3.8125h-0.95625Z" fill="#37123b" stroke-width="0.625"></path></g></svg>
-                <span className="ml-2">Hoy</span>
+                <span className="hidden md:block ml-2">Hoy</span>
             </button>
           </div>
         </div>
-        <div className={`flex items-center p-1 gap-px text-[#37123B] ${loading ? 'hidden' : ''}`}>
+        <div className={`flex items-center text-[#37123B] ${loading ? 'hidden' : ''}`}>
           {['day','month', 'year'].map((mode) => (
             <button
               key={mode}
               onClick={() => setViewMode(mode as typeof viewMode)}
-              className={`py-2.5 px-5 text-sm font-medium ml-2 transition-all duration-300 pixel-corner-button ${
+              className={`p-2.5 md:py-2.5 md:px-5 text-sm font-medium ml-2 transition-all duration-300 pixel-corner-button ${
                 viewMode === mode
                   ? 'bg-white'
                   : 'bg-[#CBDA3D]'
@@ -357,7 +359,7 @@ const Calendar = () => {
             </div>
         </div>
       ) : (
-        <div className="h-16/20 overflow-y-auto">
+        <div className="h-16/20 mt-2 w-full overflow-y-auto">
           {viewMode === 'year' && renderYearView()}
           {viewMode === 'month' && renderMonthView()}
           {viewMode === 'day' && renderDayView()}

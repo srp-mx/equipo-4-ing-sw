@@ -50,7 +50,11 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
             });
 
             const rawText = await response.text()
-            let json;
+            if (rawText === "") {
+                console.error("Respuesta vacía del servidor");
+                throw new Error("Respuesta vacía del servidor");
+            }
+            let json: any;
             try {
                 json = JSON.parse(rawText)
             } catch (error) {
@@ -59,11 +63,11 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
             }
 
             if(!response.ok) {
-                const error = await response.json();
+                const error = json.error || json.message || "Error desconocido";
                 console.error("El error es ", JSON.stringify(error,null,2));
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
-            const data = await response.json();
+            const data = json;
             newClass.id = data.class_id;
             dispatch(addClass(newClass)); 
             onClose();        
@@ -88,12 +92,11 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
             };
           }, [isOpen, onClose]);
 
-    //fixed inset-0 bg-black bg-opacity-30 backdrop-blur-md flex items-center justify-center ${isOpen ? 'visible' : 'invisible'}
     return (
-        <div className="fixed inset-0 z-2 bg-opacity-30 backdrop-blur-md flex items-center justify-center ${isOpen ? 'visible' : 'invisible'">
+        <div className="fixed inset-0 z-2 bg-opacity-30 backdrop-blur-md flex items-center justify-center">
             <div ref={modalRef}
-            className="p-6 w-1/3 shadow-lg border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
-                <h2 className="text-2xl font-semibold">Nueva Clase</h2>
+            className="p-6 w-4/6 md:w-1/3 shadow-lg border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
+                <h2 className="text-xl md:text-2xl font-semibold">Nueva Clase</h2>
                 <input
                     type="text"
                     name="name"

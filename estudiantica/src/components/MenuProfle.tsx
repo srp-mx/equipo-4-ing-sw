@@ -47,7 +47,7 @@ export default function MenuProfile({user} : {user: {name: string, email: string
       }, []);
 
     return (
-        <div className="flex items-center" ref={menuRef}>
+        <div className="flex items-center " ref={menuRef}>
             <button type="button" 
                 className="flex text-lg ml-3 py-2 px-3 border rounded-full bg-[#cbda3d] mr-4 transition-all hover:bg-white text-black" 
                 id="user-menu-button" aria-expanded="false" 

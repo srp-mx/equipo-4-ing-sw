@@ -8,17 +8,16 @@ import bgImage from '@/assets/img/background-default.jpg';
 export default function CalendarPage(){
     useAuth()
     return (
-        <div className="bg-[#0B090F] h-screen w-screen bg-cover bg-center">
+        <div className="bg-[#0B090F] h-screen w-screen bg-cover bg-center overflow-hidden">
             <Navbar isLoggedIn={true}/>
-            <div className="grid grid-cols-10 grid-rows-4 gap-2 h-17/20 w-full">
+            <div className="flex flex-col-reverse md:grid md:grid-cols-10 md:grid-rows-4 h-[calc(100vh-64px)] w-full">
                 <Sidebar incomplete={true}/>
-
                 <div 
-                className="col-span-9 row-span-4 h-full p-4 ml-2 mr-6 rounded-2xl"
+                className="md:col-span-9 md:row-span-4 md:mr-6 h-full p-4 mx-4 rounded-2xl flex flex-col overflow-y-auto"
                 style ={{ backgroundImage: `url(${bgImage}) `, backgroundSize: 'cover' }}>
-                    <Calendar/>
+                   <Calendar/>  
                 </div>
-            </div>                                                           
+            </div>
         </div>
     );
 }

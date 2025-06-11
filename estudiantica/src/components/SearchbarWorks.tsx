@@ -45,7 +45,6 @@ function DropdownMenuSort({ options, onSelect }: { options: { label: string, val
  * @return Work - trabajos del usuario
  */
 async function getWorks(username : string) : Promise<Assigment[]>{
-    // Ejemplo de salida
     try{
         const response = await fetch("http://localhost:3000/all_assignment",{
             method: "GET", 
@@ -169,35 +168,15 @@ export default function SearchbarWorks(){
     );
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 z-0">
             <div className="mx-auto w-full">
             {isOpen && (
             
-            <div className="flex relative">
-                <button
-                    id="filter-button"
-                    className="shrink-0 z-10 inline-flex items-center py-2.5 px-4 bg-gray-700 text-sm font-medium text-center border rounded-s-lg focus:ring-4 hover:bg-gray-600 focus:ring-gray-700 text-white border-gray-600"
-                    onClick={() => setIsFilterOpen(!isFilterOpen)}
-                >
-                    {statusMap.find((s) => s.value === selectedStatus)?.label || "Seleccionar"}
-                    <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
-                    </svg>
-                </button>
-                <button
-                    id="sort-button"
-                    className="shrink-0 z-10 inline-flex items-center py-2.5 px-4 bg-gray-700 text-sm font-medium text-center border focus:ring-4 hover:bg-gray-600 focus:ring-gray-700 text-white border-gray-600"
-                    onClick={() => setIsOrderOpen(!isOrderOpen)}
-                    >
-                    Ordenar por: {sortOptions.find((s) => s.value === `${sortCriteria}-${sortDirection}`)?.label || "Fecha más cercana"}
-                    <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
-                    </svg>
-                </button>
+            <div className="flex flex-col relative">
                 <div
                     ref={dropdownRef2}
                     id="dropSort"
-                    className={`absolute ml-22 mt-10 w-44 bg-gray-700 rounded-lg shadow-sm divide-y divide-gray-100 transition-opacity ${
+                    className={`absolute justify-end mt-30 sm:mt-24 md:mt-25 ml-33 md:ml-35 w-44 bg-gray-700 rounded-lg shadow-sm divide-y divide-gray-100 transition-opacity ${
                         isOrderOpen ? "block" : "hidden"
                     }`}
                     >
@@ -211,7 +190,7 @@ export default function SearchbarWorks(){
                 <div
                     ref={dropdownRef}
                     id="dropdown"
-                    className={`absolute mt-10 w-44 bg-gray-700 rounded-lg shadow-sm divide-y divide-gray-100 transition-opacity ${
+                    className={`absolute mt-24 md:mt-25 w-44 bg-gray-700 rounded-lg shadow-sm divide-y divide-gray-100 transition-opacity ${
                         isFilterOpen ? "block" : "hidden"
                     }`}
                 >
@@ -221,7 +200,7 @@ export default function SearchbarWorks(){
                     <input 
                         type="search" 
                         id="search-dropdown" 
-                        className="block p-2.5 w-full z-20 text-sm rounded-e-lg border bg-gray-700 border-s-gray-700 border-gray-600 placeholder-gray-400 text-white" 
+                        className="block p-2.5 w-full z-20 text-sm rounded-lg border bg-gray-700 border-s-gray-700 border-gray-600 placeholder-gray-400 text-white" 
                         placeholder="Buscar Tareas..." 
                         required 
                         value={searchTerm}
@@ -255,6 +234,29 @@ export default function SearchbarWorks(){
                         </svg>
                         <span className="sr-only">Search</span>
                     </div>
+                </div>
+                <div className="flex flex-row  items-center w-full sm:w-auto space-x-2 mt-2">
+                    <button
+                        id="filter-button"
+                        className="shrink-0 z-10 inline-flex items-center py-2.5 px-4 bg-gray-700 text-xs md:text-sm font-medium text-center border rounded-lg focus:ring-4 hover:bg-gray-600 focus:ring-gray-700 text-white border-gray-600"
+                        onClick={() => setIsFilterOpen(!isFilterOpen)}
+                    >
+                        {statusMap.find((s) => s.value === selectedStatus)?.label || "Seleccionar"}
+                        <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                    <button
+                        id="sort-button"
+                        className="shrink-0 z-10 rounded-lg flex-col sm:flex-row inline-flex items-center py-2.5 px-4 bg-gray-700 text-xs md:text-sm font-medium text-center border focus:ring-4 hover:bg-gray-600 focus:ring-gray-700 text-white border-gray-600"
+                        onClick={() => setIsOrderOpen(!isOrderOpen)}
+                        >
+                        Ordenar por: 
+                        <p>{sortOptions.find((s) => s.value === `${sortCriteria}-${sortDirection}`)?.label || "Fecha más cercana"}</p>
+                        <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
             )}

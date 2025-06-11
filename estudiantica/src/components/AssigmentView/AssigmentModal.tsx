@@ -138,9 +138,9 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
           }, [isOpen, onClose]);
 
     return (
-        <div className="fixed h-screen inset-0 flex items-center justify-center backdrop-blur-sm z-2">
+        <div className="fixed inset-0 z-2 flex items-center justify-center backdrop-blur-sm">
             <div ref={modalRef} 
-            className="p-6 w-1/3 shadow-lg items-center border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
+            className="p-6 w-4/6 md:w-1/3 shadow-lg items-center border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
                 <div className="flex mb-2 mr-4 space-x-2 justify-end">
                     <div className="flex space-x-2">
                         {assigment.optional && (
@@ -158,15 +158,15 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                     <input
                         type="text"
                         name="name"
-                        className="text-gray-900 text-2xl font-semibold w-full border rounded p-1"
+                        className="text-gray-900 text-xl sm:text-2xl font-semibold w-full border rounded p-1"
                         value={editedAssigment.name}
                         onChange={handleChange}
                     />
                 ) : (
-                    <p className="text-gray-900 text-2xl font-semibold w-2/3">{assigment.name}</p>
+                    <p className="text-gray-900 text-xl sm:text-2xl font-semibold w-2/3">{assigment.name}</p>
                 )}
 
-                <div className="text-gray-600 text-right text-lg mr-4 px-2 py-1 rounded-full">
+                <div className="text-gray-600 text-right teext-base sm:text-lg mr-4 px-2 py-1 rounded-full">
                     {isEdit ? (
                         <input
                             type="date"
@@ -180,11 +180,11 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                     )}
                 </div>
 
-                <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
+                <div className="text-left text-basic md:text-lg mr-4 px-2 py-1 rounded-full">
                     <span>Materia: {className}</span>
                 </div>
 
-                <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
+                <div className="text-left text-basic md:text-lg mr-4 px-2 py-1 rounded-full">
                     <span>Tag: </span>
                     {isEdit ? (
                         <input
@@ -199,7 +199,7 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                     )}
                 </div>
                 
-                <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
+                <div className="text-left text-basic md:text-lg mr-4 px-2 py-1 rounded-full">
                     <span>Calificacion: </span>
                     {isEdit ? (
                         <input
@@ -217,7 +217,7 @@ export default function AssigmentModal({ isOpen, onClose, assigment } : ModalPro
                     )}
                 </div>
 
-                <div className="text-left text-lg mr-4 px-2 py-1 rounded-full">
+                <div className="text-left text-basic md:text-lg mr-4 px-2 py-1 rounded-full">
                     <span>Notas: </span>
                     {isEdit ? (
                         <textarea

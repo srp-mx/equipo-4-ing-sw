@@ -64,7 +64,7 @@ export default function Register() {
                 <h2 className="text-4xl font-semibold text-center text-white mb-6">Estudiantica</h2>
                 <div className="flex flex-col justify-center items-center mt-6">
                     <div className="relative mb-2">
-                    <ButtonReturn onClick={() => navigate("/login")} />
+                    <ButtonReturn onClick={() => navigate("/")} />
                     <form className="max-w-lg mx-auto mt-4 p-4 rounded-lg"
                     onSubmit={async (e) => {
                       e.preventDefault(); 
