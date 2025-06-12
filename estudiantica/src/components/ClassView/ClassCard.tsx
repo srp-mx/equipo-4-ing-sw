@@ -35,7 +35,7 @@ export default function ClassCard({ classData, onOpen } : ClassCardProps) : Reac
             <div className="ml-5 col-span-5 row-span-3">
                 <div className="flex mb-2 mr-2 md:mr-4 space-x-2 mt-2 justify-end">
                     <div className="flex space-x-2">
-                        <label className={`flex items-center space-x-1 px-2 py-1 text-white ${activateClass.bgColor} rounded-full`}>
+                        <label className={`flex items-center text-sm md:text-basic space-x-1 px-2 py-1 text-white ${activateClass.bgColor} rounded-full`}>
                             <span>{activateClass.text}</span>
                         </label>
                     </div>

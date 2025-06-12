@@ -44,7 +44,7 @@ function DropdownMenuSort({ options, onSelect }: { options: { label: string, val
  * @param User - usuario
  * @return Work - trabajos del usuario
  */
-async function getWorks(username : string) : Promise<Assigment[]>{
+async function getWorks() : Promise<Assigment[]>{
     try{
         const response = await fetch("http://localhost:3000/all_assignment",{
             method: "GET", 
@@ -102,7 +102,7 @@ export default function SearchbarWorks(){
     useEffect(() => {
         async function fetchTasks() {
             setLoading(true);
-            const data = await getWorks(user.name);
+            const data = await getWorks();
             dispatch(setAssignments(data));
             setLoading(false);
         }
@@ -168,7 +168,7 @@ export default function SearchbarWorks(){
     );
 
     return (
-        <div className="space-y-4 z-0">
+        <div className="space-y-4">
             <div className="mx-auto w-full">
             {isOpen && (
             
@@ -176,7 +176,7 @@ export default function SearchbarWorks(){
                 <div
                     ref={dropdownRef2}
                     id="dropSort"
-                    className={`absolute justify-end mt-30 sm:mt-24 md:mt-25 ml-33 md:ml-35 w-44 bg-gray-700 rounded-lg shadow-sm divide-y divide-gray-100 transition-opacity ${
+                    className={`absolute mt-30 sm:mt-24 md:mt-25 ml-23 md:ml-25 w-44 bg-gray-700 rounded-lg shadow-sm divide-y divide-gray-100 transition-opacity ${
                         isOrderOpen ? "block" : "hidden"
                     }`}
                     >

@@ -170,13 +170,13 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
                     {isEdit ? (
                         <>
                             <button
-                                className="mt-4 px-4 py-2 w-[200px] bg-blue-600 text-white rounded hover:bg-blue-500"
+                                className="mt-2 px-4 py-2 w-[200px] bg-blue-600 text-white rounded hover:bg-blue-500"
                                 onClick={handleSave}
                             >
                                 Guardar
                             </button>
                             <button
-                                className="mt-4 px-4 py-2 w-[200px] bg-gray-600 text-white rounded hover:bg-gray-500"
+                                className="mt-2 px-4 py-2 w-[200px] bg-gray-600 text-white rounded hover:bg-gray-500"
                                 onClick={handleCancel}
                             >
                                 Cancelar
@@ -184,14 +184,14 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
                         </>
                     ) : (
                         <button
-                            className="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500"
+                            className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500"
                             onClick={() => setIsEdit(true)}
                         >
                             Editar
                         </button>
                     )}
                     <button
-                        className={`mt-4 px-4 py-2 bg-red-600 ${isEdit && 'w-[200px]'} text-white rounded hover:bg-red-500`}
+                        className={`mt-2 px-4 py-2 bg-red-600 ${isEdit && 'w-[200px]'} text-white rounded hover:bg-red-500`}
                         onClick={onClose}
                     >
                         Cerrar
