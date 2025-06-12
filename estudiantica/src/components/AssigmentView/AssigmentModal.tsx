@@ -79,6 +79,7 @@ export default function AssigmentModal({ isOpen, onClose, assigment }: ModalProp
                 alert("Por favor, completa al menos el nombre de la tarea");
                 return;
             }
+            console.log(editedAssigment.due_date)
             const dataSend = {
                 "assignment": {
                     "id": editedAssigment.id
@@ -195,7 +196,7 @@ export default function AssigmentModal({ isOpen, onClose, assigment }: ModalProp
                             onChange={handleChange}
                         />
                     ) : (
-                        <span>{new Date(assigment.due_date).toLocaleDateString()}</span>
+                        <span>{new Date(assigment.due_date).toISOString().split('T')[0]}</span>
                     )}
                 </div>
 

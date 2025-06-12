@@ -49,7 +49,7 @@ export default function AssigmentCard({ assigment, onOpen } : AssigmentCardProps
                 </div>
                 <p className="text-gray-900 font-semibold w-2/3 ml-2 text-sm sm:text-lg">{assigment.name}</p>
                 <div className="text-gray-600 text-right text-sm md:text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>{new Date(assigment.due_date).toLocaleDateString()}</span>
+                    <span>{new Date(assigment.due_date).toISOString().split('T')[0]}</span>
                 </div>
             </div>
         </div>

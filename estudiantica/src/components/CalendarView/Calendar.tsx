@@ -99,6 +99,7 @@ const Calendar = () => {
   };
 
   const handleNext = () => {
+    console.log("Next clicked");
     switch (viewMode) {
       case 'day':
         setCurrentDate(currentDate.add(1, 'day'));
@@ -307,6 +308,7 @@ const Calendar = () => {
           <div className={`flex items-center ${loading ? 'hidden' : ''}`}>
             <button 
                 onClick={handlePrev}
+                type='button'
                 className="rounded transition-all duration-300 text-[#cbda3d] hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M10.0002 11.9999L6 7.99971L10.0025 3.99719" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -314,6 +316,7 @@ const Calendar = () => {
             </button>
             <button 
                 onClick={handleNext}
+                type='button'
                 className="rounded transition-all duration-300 text-[#cbda3d] hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M6.00236 3.99707L10.0025 7.99723L6 11.9998" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>

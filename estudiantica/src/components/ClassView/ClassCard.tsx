@@ -43,10 +43,10 @@ export default function ClassCard({ classData, onOpen } : ClassCardProps) : Reac
                 </div>
                 <p className="text-gray-900 font-semibold  text-lg w-2/3">{classData.name}</p>
                 <div className="text-gray-600 text-right text-sm md:text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>Fecha de Inicio: {new Date (classData.start_date).toLocaleDateString()}</span>
+                    <span>Fecha de Inicio: {new Date (classData.start_date).toISOString().split('T')[0]}</span>
                 </div>
                 <div className="text-gray-600 text-right text-xs md:text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>Fecha de Fin: {new Date (classData.end_date).toLocaleDateString()}</span>
+                    <span>Fecha de Fin: {new Date (classData.end_date).toISOString().split('T')[0]}</span>
                 </div>
             </div>
         </div>

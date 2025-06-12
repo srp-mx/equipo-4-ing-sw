@@ -147,7 +147,7 @@ export default function ClassModal({ isOpen, onClose, classData } : ModalProps) 
                                 onChange={handleChange}
                             />
                         ) : (
-                            <span>{new Date(editedClass[date.name as "start_date" | "end_date"]).toLocaleDateString()}</span>
+                            <span>{new Date(editedClass[date.name as "start_date" | "end_date"]).toISOString().split('T')[0]}</span>
                         )}
                     </div>
                 ))}
