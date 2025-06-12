@@ -11,10 +11,8 @@ import { useState } from "react";
 
 export default function NavBar({ isLoggedIn }: { isLoggedIn: boolean }) {
     const location = useLocation();
-    const [menuOpen, setMenuOpen] = useState(false);
     const user = useSelector((state: RootState) => state.user);
     const navigate = useNavigate();
-    const toggleMenu = () => setMenuOpen(!menuOpen);
 
     return (
         <nav className="bg-[#0B090F] sticky top-0 z-2 py-3 flex justify-between items-center p-4">

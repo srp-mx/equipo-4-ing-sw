@@ -42,7 +42,7 @@ function getWorksByDate(date: dayjs.Dayjs, assigments : Assigment[]) : Assigment
     return assigments.filter((assigment) => {
         const assigmentDate = dayjs(assigment.due_date);
         return assigmentDate.month() === date.month() && assigmentDate.year() === date.year() && date.date() === assigmentDate.date();
-    });
+    }).sort((a, b) => {return a.name.localeCompare(b.name)});
 }
 
 function viewAssigmentDay(assigments : Assigment[]) {
@@ -51,16 +51,16 @@ function viewAssigmentDay(assigments : Assigment[]) {
     <div className='flex-col items-center'>
       {view.map((assigment) => (
         <div key={assigment.id}
-          className='flex items-center my-1 px-2 py-1'
+          className='hidden sm:block flex items-center sm:px-2 sm:py-1'
         >
           {
             assigment.optional ? (
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="Interface-Essential-Alert-Triangle-2--Streamline-Pixel" height="24" width="24"><desc>Interface Essential Alert Triangle 2 Streamline Icon: https://streamlinehq.com</desc><title>interface-essential-alert-triangle-2</title><g><path d="M22.86 18.285h-1.1475v-2.2874999999999996h-1.1400000000000001v-2.2800000000000002H19.424999999999997v-2.2874999999999996h-1.1400000000000001v-2.2874999999999996h-1.1400000000000001V6.855h-1.1475V4.5675h-1.1400000000000001V2.2874999999999996h-1.1400000000000001V1.1400000000000001h-1.1475V0h-1.1400000000000001v1.1400000000000001h-1.1475v1.1475h-1.1400000000000001v2.2800000000000002h-1.1400000000000001v2.2874999999999996H6.855v2.2874999999999996H5.715v2.2874999999999996H4.5675v2.2874999999999996H3.4275v2.2800000000000002H2.2874999999999996v2.2874999999999996H1.1400000000000001v2.2874999999999996H0v2.2874999999999996h1.1400000000000001V24h21.72v-1.1400000000000001H24v-2.2874999999999996h-1.1400000000000001Zm-8.0025 2.2874999999999996h-1.1400000000000001v1.1400000000000001h-3.435v-1.1400000000000001h-1.1400000000000001v-3.4275h1.1400000000000001v-1.1475h3.435v1.1475h1.1400000000000001Zm0 -8.0025h-1.1400000000000001v2.2874999999999996h-3.435v-2.2874999999999996h-1.1400000000000001v-4.5675h1.1400000000000001V6.855h3.435v1.1475h1.1400000000000001Z" fill="#bf3939" stroke-width="0.75"></path><path d="M12.57 9.1425h1.1475v2.2874999999999996h-1.1475Z" fill="#bf3939" stroke-width="0.75"></path><path d="M11.43 8.0025h1.1400000000000001v1.1400000000000001h-1.1400000000000001Z" fill="#bf3939" stroke-width="0.75"></path></g></svg>
+              <svg className="hidden sm:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="Interface-Essential-Alert-Triangle-2--Streamline-Pixel" height="24" width="24"><desc>Interface Essential Alert Triangle 2 Streamline Icon: https://streamlinehq.com</desc><title>interface-essential-alert-triangle-2</title><g><path d="M22.86 18.285h-1.1475v-2.2874999999999996h-1.1400000000000001v-2.2800000000000002H19.424999999999997v-2.2874999999999996h-1.1400000000000001v-2.2874999999999996h-1.1400000000000001V6.855h-1.1475V4.5675h-1.1400000000000001V2.2874999999999996h-1.1400000000000001V1.1400000000000001h-1.1475V0h-1.1400000000000001v1.1400000000000001h-1.1475v1.1475h-1.1400000000000001v2.2800000000000002h-1.1400000000000001v2.2874999999999996H6.855v2.2874999999999996H5.715v2.2874999999999996H4.5675v2.2874999999999996H3.4275v2.2800000000000002H2.2874999999999996v2.2874999999999996H1.1400000000000001v2.2874999999999996H0v2.2874999999999996h1.1400000000000001V24h21.72v-1.1400000000000001H24v-2.2874999999999996h-1.1400000000000001Zm-8.0025 2.2874999999999996h-1.1400000000000001v1.1400000000000001h-3.435v-1.1400000000000001h-1.1400000000000001v-3.4275h1.1400000000000001v-1.1475h3.435v1.1475h1.1400000000000001Zm0 -8.0025h-1.1400000000000001v2.2874999999999996h-3.435v-2.2874999999999996h-1.1400000000000001v-4.5675h1.1400000000000001V6.855h3.435v1.1475h1.1400000000000001Z" fill="#bf3939" stroke-width="0.75"></path><path d="M12.57 9.1425h1.1475v2.2874999999999996h-1.1475Z" fill="#bf3939" stroke-width="0.75"></path><path d="M11.43 8.0025h1.1400000000000001v1.1400000000000001h-1.1400000000000001Z" fill="#bf3939" stroke-width="0.75"></path></g></svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="Interface-Essential-Bookmark_1--Streamline-Pixel" height="24" width="24"><desc>Interface Essential Bookmark_1 Streamline Icon: https://streamlinehq.com</desc><title>interface-essential-bookmark_1</title><g><path d="m14.857499999999998 8.0025 0 -4.5675 -1.1400000000000001 0 0 19.424999999999997 1.1400000000000001 0 0 -13.71 6.855 0 0 -6.862500000000001 -1.1400000000000001 0 0 5.715 -5.715 0z" fill="#000000" stroke-width="0.75"></path><path d="M19.4325 1.1475h1.1400000000000001v1.1400000000000001h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="M14.857499999999998 2.2874999999999996h1.1400000000000001v1.1475h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="M12.57 22.86h1.1475V24h-1.1475Z" fill="#000000" stroke-width="0.75"></path><path d="M11.43 21.72h1.1400000000000001v1.1400000000000001h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="M10.290000000000001 20.572499999999998h1.1400000000000001v1.1475h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="m11.43 6.862500000000001 -2.2874999999999996 0 0 1.1400000000000001 -1.1400000000000001 0 0 -1.1400000000000001 -2.2874999999999996 0 0 1.1400000000000001 -1.1400000000000001 0 0 2.2874999999999996 1.1400000000000001 0 0 1.1400000000000001 1.1400000000000001 0 0 1.1475 1.1475 0 0 1.1400000000000001 1.1400000000000001 0 0 -1.1400000000000001 1.1475 0 0 -1.1475 1.1400000000000001 0 0 -1.1400000000000001 1.1400000000000001 0 0 -2.2874999999999996 -1.1400000000000001 0 0 -1.1400000000000001z" fill="#000000" stroke-width="0.75"></path><path d="M9.1425 19.4325h1.1475v1.1400000000000001h-1.1475Z" fill="#000000" stroke-width="0.75"></path><path d="M8.0025 18.2925h1.1400000000000001v1.1400000000000001h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="M6.855 19.4325h1.1475v1.1400000000000001H6.855Z" fill="#000000" stroke-width="0.75"></path><path d="m5.715 1.1475 10.2825 0 0 1.1400000000000001 1.1475 0 0 -1.1400000000000001 2.2874999999999996 0 0 -1.1475L5.715 0l0 1.1475z" fill="#000000" stroke-width="0.75"></path><path d="M5.715 20.572499999999998h1.1400000000000001v1.1475H5.715Z" fill="#000000" stroke-width="0.75"></path><path d="M4.574999999999999 21.72h1.1400000000000001v1.1400000000000001H4.574999999999999Z" fill="#000000" stroke-width="0.75"></path><path d="M4.574999999999999 1.1475h1.1400000000000001v1.1400000000000001H4.574999999999999Z" fill="#000000" stroke-width="0.75"></path><path d="M3.4275 22.86H4.574999999999999V24H3.4275Z" fill="#000000" stroke-width="0.75"></path><path d="M3.4275 2.2874999999999996H4.574999999999999v1.1475H3.4275Z" fill="#000000" stroke-width="0.75"></path><path d="M2.2874999999999996 3.435h1.1400000000000001v19.424999999999997H2.2874999999999996Z" fill="#000000" stroke-width="0.75"></path></g></svg>
+              <svg className="hidden sm:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="Interface-Essential-Bookmark_1--Streamline-Pixel" height="24" width="24"><desc>Interface Essential Bookmark_1 Streamline Icon: https://streamlinehq.com</desc><title>interface-essential-bookmark_1</title><g><path d="m14.857499999999998 8.0025 0 -4.5675 -1.1400000000000001 0 0 19.424999999999997 1.1400000000000001 0 0 -13.71 6.855 0 0 -6.862500000000001 -1.1400000000000001 0 0 5.715 -5.715 0z" fill="#000000" stroke-width="0.75"></path><path d="M19.4325 1.1475h1.1400000000000001v1.1400000000000001h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="M14.857499999999998 2.2874999999999996h1.1400000000000001v1.1475h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="M12.57 22.86h1.1475V24h-1.1475Z" fill="#000000" stroke-width="0.75"></path><path d="M11.43 21.72h1.1400000000000001v1.1400000000000001h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="M10.290000000000001 20.572499999999998h1.1400000000000001v1.1475h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="m11.43 6.862500000000001 -2.2874999999999996 0 0 1.1400000000000001 -1.1400000000000001 0 0 -1.1400000000000001 -2.2874999999999996 0 0 1.1400000000000001 -1.1400000000000001 0 0 2.2874999999999996 1.1400000000000001 0 0 1.1400000000000001 1.1400000000000001 0 0 1.1475 1.1475 0 0 1.1400000000000001 1.1400000000000001 0 0 -1.1400000000000001 1.1475 0 0 -1.1475 1.1400000000000001 0 0 -1.1400000000000001 1.1400000000000001 0 0 -2.2874999999999996 -1.1400000000000001 0 0 -1.1400000000000001z" fill="#000000" stroke-width="0.75"></path><path d="M9.1425 19.4325h1.1475v1.1400000000000001h-1.1475Z" fill="#000000" stroke-width="0.75"></path><path d="M8.0025 18.2925h1.1400000000000001v1.1400000000000001h-1.1400000000000001Z" fill="#000000" stroke-width="0.75"></path><path d="M6.855 19.4325h1.1475v1.1400000000000001H6.855Z" fill="#000000" stroke-width="0.75"></path><path d="m5.715 1.1475 10.2825 0 0 1.1400000000000001 1.1475 0 0 -1.1400000000000001 2.2874999999999996 0 0 -1.1475L5.715 0l0 1.1475z" fill="#000000" stroke-width="0.75"></path><path d="M5.715 20.572499999999998h1.1400000000000001v1.1475H5.715Z" fill="#000000" stroke-width="0.75"></path><path d="M4.574999999999999 21.72h1.1400000000000001v1.1400000000000001H4.574999999999999Z" fill="#000000" stroke-width="0.75"></path><path d="M4.574999999999999 1.1475h1.1400000000000001v1.1400000000000001H4.574999999999999Z" fill="#000000" stroke-width="0.75"></path><path d="M3.4275 22.86H4.574999999999999V24H3.4275Z" fill="#000000" stroke-width="0.75"></path><path d="M3.4275 2.2874999999999996H4.574999999999999v1.1475H3.4275Z" fill="#000000" stroke-width="0.75"></path><path d="M2.2874999999999996 3.435h1.1400000000000001v19.424999999999997H2.2874999999999996Z" fill="#000000" stroke-width="0.75"></path></g></svg>
             )
           }
-          <span className="w-7/8 truncate">{assigment.name}</span>
+          <span className="hidden md:block w-7/8 truncate">{assigment.name}</span>
         </div>
       ))}
       {assigments.length > 2 && (
@@ -242,7 +242,9 @@ const Calendar = () => {
           ))}
         </div>
         <div className="grid grid-cols-7 rounded-b-xl">
-          {calendarDays.map(({ day, currentMonth }, idx) => (
+          {calendarDays.map(({ day, currentMonth }, idx) => {
+            let assigments = getWorksByDate(currentDate.date(day), tasks)
+            return (
             <div
               key={idx}
               className={`flex-col aspect-square p-1.5 md:p-3.5 border-r border-b border-[#364153] ${
@@ -256,14 +258,20 @@ const Calendar = () => {
               }}
             >
               <span className={`text-xs ${day === actualDate.date() && actualDate.month() === currentDate.month()? 
-                'sm:text-white sm:w-6 sm:h-6 rounded-full sm:flex items-center justify-center sm:bg-[#364153]' : ''}`}>{day}</span>
+                'sm:text-white sm:w-6 sm:h-6 rounded-full sm:flex items-center justify-center sm:bg-[#364153]' : ''}
+                ${currentMonth ? 'text-gray-900' : 'text-gray-400'}
+                `
+                }>{day}</span>
+              {currentMonth && assigments.length > 0 && (
+                <span className='sm:hidden text-basic font-bold text-blue'>...</span>
+              )}
               <div className="flex-row justify-center h-1/2">
                 {
-                  currentMonth && viewAssigmentDay(getWorksByDate(currentDate.date(day), tasks))
+                  currentMonth && viewAssigmentDay(assigments)
                 }
               </div>
             </div>
-          ))}
+          )})}
         </div>
       </>
     );
