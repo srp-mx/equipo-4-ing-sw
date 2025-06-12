@@ -13,6 +13,7 @@ import { getPointSkill } from "./Character/Stats";
 import EditModal from '@/components/Character/EditModal'
 import ItemsEquiped from "./ItemsEquiped";
 import rachaIcon from "@/assets/img/racha.png";
+import { Button } from "./Button";
 
 export const getRefresh = async(dispatch:any) => {
     try{
@@ -107,28 +108,28 @@ const Character = () => {
     return (
         <>
         {rachaRefresh.racha.alive ?
-            (<div className="grid grid-cols-4 grid-rows-4 gap-4 justify-items-center h-15/16">
-                <div className="col-span-3 row-span-4 h-full justify-items-start">
-                    <div className="h-1/15 text-left">
-                        <div className="title-section text-start text-5xl mt-3 ml-8 ">
+            (<div className="grid grid-cols-4 grid-rows-4 gap-2 h-7/8 w-full">
+                <div className="col-span-3 row-span-4">
+                    <div className="h-1/15 text-left justify-center">
+                        <div className="title-section text-start text-[30px] sm:text-[40px] lg:text-[60px] mt-3 ml-8">
                             {user.name || "Nombre de Usuario"}
                         </div>
-                        <div className="text-start text-4xl text-red-400 ml-8">
+                        <div className="text-start text-[30px] sm:text-[40px] lg:text-[60px] text-red-400 ml-8">
                             <img src={rachaIcon} alt="" className="h-10 w-10 inline-block mr-2" />
                             {datacharacter.dataCharacter.streak}
                         </div>
                     </div>
                     <div className="flex flex-col items-center justify-center h-full">
-                        <img src={characterDates.characterURL} alt="" className="h-2/3 mb-5" />
+                        <img src={characterDates.characterURL} alt="" className="h-7/12 sm:2/3 mb-5" />
                         <button onClick={() => setShowModalEdit(true)}
-                            className="pixel-corner-button py-2 px-3 border transition-all bg-[#cbda3d]"
+                            className="pixel-corner-button py-2 px-3 border transition-all bg-[#cbda3d] text-base"
                             style={{ "--pixel-bg": "#2D304F", "--pixel-hover-bg": "#FFFFFF", "--size-pixel" : "10px"} as React.CSSProperties}
                         >Editar</button>
                         {showModalEdit && <EditModal onClose={() => setShowModalEdit(false)}/>}
                     </div>
                 </div>
-                <div className="row-span-4 col-start-4 mt-4 items-center justify-center h-full">
-                    <img src={Bandera} alt="" className="mb-2 h-1/3"/>
+                <div className="flex-col flex items-center row-span-4 col-start-4">
+                    <img src={Bandera} alt="" className="mb-2 w-30"/>
                     <ItemsEquiped />
                 </div>
             </div>)

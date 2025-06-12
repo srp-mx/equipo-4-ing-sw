@@ -33,11 +33,11 @@ export default function Home(){
                 <Sidebar/>
 
                 <div 
-                className="md:col-span-6 md:row-span-4 md:col-start-3 md:mr-6 h-full p-4 mx-4 rounded-2xl flex flex-col overflow-y-auto"
+                className="md:col-span-6 md:row-span-4 md:col-start-3 md:mr-6 h-full p-1 mx-4 rounded-2xl flex flex-col overflow-y-auto"
                 style ={{ backgroundImage: `url(${bgImage}) `, backgroundSize: 'cover' }}>
                     <Character />
                 </div>
-                <div className="hidden md:block md:col-span-2 md:row-span-4 md:col-start-9 md:ml-2 md:mb-2">
+                <div className="hidden md:block md:col-span-2 md:row-span-4 md:col-start-9 lg:ml-2 md:mb-2">
                     <Stats />
                 </div>
             </div>
