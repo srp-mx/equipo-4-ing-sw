@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useRef,useState } from "react";
 import { Button } from "../Button";
 import { Input } from "../Inputs";
-import userIcon from "@/assets/img/icono_user.svg";
 import { PasswordInput } from "../Inputs";
+import iconouser from "@/assets/img/icono_user.svg";
 
-const updateUserData = async (name: string, email: string,  newPassword: string, confirmPassword: string) => {
+
+const updateUserData = async (name: string, email: string, newPassword: string, confirmPassword: string) => {
     try {
         if (newPassword !== confirmPassword) {
             throw new Error("Las contraseñas nuevas no coinciden");
@@ -19,7 +20,7 @@ const updateUserData = async (name: string, email: string,  newPassword: string,
             body: JSON.stringify({
                 email: email,
                 name: name,
-                password : newPassword,
+                password: newPassword,
             })
         });
 
@@ -39,6 +40,49 @@ export default function UserData() {
     const [email, setEmail] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setconfirmPassword] = useState("");
+    const [iconoUser, setIconoUser] = useState<string>(iconouser);
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const updateImg = () => {
+        fileInputRef.current?.click(); // Dispara el input file oculto
+    };
+
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
+      alert("Formato no válido. Usa JPG, PNG o GIF.");
+      return;
+    }
+
+    if (file.size > 1024 * 1024) {
+      alert("La imagen no debe superar 1MB.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    try {
+      const response = await fetch("http://localhost:3000/user/avatar", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error("Error al subir la imagen");
+
+      const blob = await response.blob();
+      const imageUrl = URL.createObjectURL(blob);
+      setIconoUser(imageUrl);
+    } catch (error) {
+      console.error("Error al subir imagen:", error);
+      alert("No se pudo subir la imagen.");
+    }
+  };
 
     return (
         <div className="flex justify-center items-center ">
@@ -47,15 +91,22 @@ export default function UserData() {
                 <p>Use un correo donde pueda recibir notificaciones</p>
                 <div className="flex items-center space-x-4 mb-6 mt-2">
                     <img
-                        src={userIcon}
+                        src={iconoUser}
                         alt=""
                         className="w-15 h-15 md:w-30 md:h-30 p-2 rounded-lg bg-[#CBDA3D]"
                     />
                     <div>
-                        <Button type="button">
+                        <Button type="button" onClick={updateImg}>
                             Cambiar Avatar
                         </Button>
                         <p className="text-xs mt-2">JPG, GIF o PNG. 1MB max.</p>
+                        <input
+                            type="file"
+                            accept="image/jpeg,image/png,image/gif"
+                            ref={fileInputRef}
+                            className="hidden"
+                            onChange={handleFileChange}
+                        />
                     </div>
                 </div>
 
