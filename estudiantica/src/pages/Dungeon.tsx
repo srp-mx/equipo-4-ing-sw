@@ -203,7 +203,7 @@ export default function Dungeon(){
                         </div>
                        }
                         <div className="pl-4 pr-4 pt-4 pb-4 gap-2 w-1/2 h-full items-center flex-col rounded-4xl hidden md:flex md:gap-6 min-w-[300px] min-h-[400px] ">
-                            <div className="h-3/4 w-3/4 lg:w-60 pb-5 rounded-xl">
+                            <div className="h-3/4 w-3/4 pb-5 rounded-xl">
                                 <Stats/>
                             </div>
                             <div className="flex">
