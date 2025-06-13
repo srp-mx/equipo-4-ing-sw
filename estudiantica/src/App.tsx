@@ -10,6 +10,7 @@ import Register from './pages/Register';
 import Dungeon from './pages/Dungeon';
 import Setting from './pages/Setting';
 import Inicio from './pages/Inicio';
+import Credits from './pages/Credits';
 
 const DynamicBackground = () => {
   const location = useLocation(); // Obtiene la ruta actual
@@ -45,6 +46,7 @@ const App = () => {
         <Route path='/dungeon' element={<Dungeon/>}/>
         <Route path='/setting' element={<Setting/>}/>
         <Route path='/prueba' element={<Inicio/>}/> 
+        <Route path='/Credits' element={<Credits/>}/>
       </Routes> 
     </Router>
   );

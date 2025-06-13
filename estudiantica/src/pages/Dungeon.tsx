@@ -12,7 +12,7 @@ import { useState } from "react";
 export default function Dungeon(){
 
     const [viewAction, setViewAction] = useState(0);
-    const urls = [`url(${castle})`, `url(${forest})`, `url(${terrace})`,]
+    const urls = [`url(${castle})`, `url(${forest})`, `url(${terrace})`, `url(${throne})`]
     const names = ["Limsgrave", "Cementerio Perdido", "Capital del Rey", "Templo del mal"]
     return (
         <div className="bg-[#0B090F] h-screen w-screen bg-cover bg-center overflow-hidden">
@@ -56,9 +56,9 @@ export default function Dungeon(){
                        : 
                         <div className="flex flex-col pt-4 pb-4 pl-4 pr-4 gap-5 w-1/2 h-full items-center justify-between bg-gray-800 rounded-4xl overflow-y-auto min-w-[300px]">
                             <div 
-                            style={{backgroundImage: urls[viewAction], backgroundSize: 'cover'}}
+                            style={{backgroundImage: urls[viewAction-1], backgroundSize: 'cover'}}
                             className="flex text-white text-2xl items-center pl-5 w-full h-1/4 bg-gray-300 rounded-2xl">
-                                {names[viewAction]}
+                                {names[viewAction-1]}
                             </div>
                             <div className="bg-gray-900/80 h-3/4 w-full rounded-4xl overflow-y-auto">
 

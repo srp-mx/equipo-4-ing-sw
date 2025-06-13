@@ -11,6 +11,7 @@ import iconoUser from "@/assets/img/icono_user.svg";
 import iconoInicio from "@/assets/img/sidebar/icono_inicio.png";
 import iconoLogout from "@/assets/img/icono_logout.png"
 import { useLocation } from "react-router-dom";
+import { HandHeart } from "lucide-react";
 
 
 const handleLogout = (dispatch : any, navigate : any) => {
@@ -85,6 +86,10 @@ export default function MenuProfile({user} : {user: {name: string, email: string
                     >
                         <img src={iconoLogout} className="mr-3"/>
                         Cerrar sesión
+                    </Link>
+                    <Link to="/Credits" className="block flex items-center p-2 rounded-lg transition hover:-transtate-y-1 hover:scale-100 group">
+                        <HandHeart className="mr-5 scale-200" color="#CBDA3D" />
+                        Creditos
                     </Link>
                 </ul>
             </div>
