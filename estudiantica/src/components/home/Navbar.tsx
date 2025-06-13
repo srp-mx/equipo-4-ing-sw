@@ -1,5 +1,5 @@
 import {Menu, X} from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import logo from "@/assets/Logo.png";
 import '@/index.css'
 import { navItems } from "@/constants";
@@ -10,9 +10,11 @@ import { useNavigate } from "react-router-dom";
 import { clearUser } from "@/constants/userSlice";
 import { clearClases } from "@/constants/classSlice";
 import { clearAssignments } from "@/constants/assignmentSlice";
-import { clearDataCharacter } from "@/constants/dataCharacterSlice";
+import { clearArmor, clearDataCharacter, clearItemEquiped, clearPet, clearWeapon } from "@/constants/dataCharacterSlice";
 import { clearStats } from "@/constants/StatsSlice";
-import { clearRacha } from "@/constants/rachaSlice";
+import { clearRacha, setRacha } from "@/constants/rachaSlice";
+import { getCharacterDefaultInfo, getRefresh } from "../Character";
+import { current } from "@reduxjs/toolkit";
 
 const handleLogout = (dispatch : any, navigate : any) => {
     dispatch(clearUser());
@@ -21,10 +23,33 @@ const handleLogout = (dispatch : any, navigate : any) => {
     dispatch(clearStats());
     dispatch(clearDataCharacter());
     dispatch(clearRacha());
+    dispatch(clearArmor());
+    dispatch(clearWeapon());
+    dispatch(clearPet());
     localStorage.removeItem("token");
 
     navigate("/");
 } 
+
+const refreshToken = async(dispatch:any) => {
+    try{
+        const response = await fetch("http://localhost:3000/refresh_token", {
+            method: "GET", 
+            headers: {
+                "Content-Type": "application/json", 
+                "Authorization": "Bearer " + localStorage.getItem("token"), 
+            }
+        });
+        if(!response.ok){
+            throw new Error(`E: ${response.status} ${response.body}`)
+        }
+        const data = await response.json();
+        localStorage.setItem("token", data.token);
+        console.log("Ya hice refresh del token");
+    }catch(error){
+        console.error("Error ", error);
+    }
+}
 
 const NavBar = () => {
     const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
@@ -34,6 +59,45 @@ const NavBar = () => {
     };
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const racha = useSelector((state : RootState ) => state.racha);
+/*    const [timer, setTimer] = useState(1000*60);
+    //setTimer(racha.racha.next_check);
+
+    useEffect(() => {
+        if (timer <= 0) {
+            console.error("Intervalo inválido:", timer);
+            return;
+          }
+
+        console.log(timer);
+
+        let timeoutRef:number;
+
+        const execute = async () => {
+            try{
+                await getRefresh(dispatch);
+                await getCharacterDefaultInfo(dispatch);
+            } catch(error){
+                console.error("Error en las peticiones:", error);
+            } finally {
+                timeoutRef = window.setTimeout(execute, timer);
+                setTimer(racha.racha.next_check);
+            }
+            
+            timeoutRef = window.setTimeout(execute, timer);
+
+            return () => clearTimeout(timeoutRef)
+        }
+
+    },[timer, dispatch]);*/
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            refreshToken(dispatch);
+        }, 60*60*1000);
+        return () => clearInterval(interval);
+    },[dispatch]);
+
     return (
         <nav className="sticky top-0 z-50 py-3 backdrop-blur-lg border-b
         border-neutral-700 opacity-80">

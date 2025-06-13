@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BiChevronDown } from 'react-icons/bi';
 import { Class } from "@/Object/Class";
 import { AiOutlineSearch } from 'react-icons/ai';

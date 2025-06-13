@@ -23,6 +23,7 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
@@ -41,7 +42,7 @@ type Dbinstance struct {
 var DB Dbinstance
 
 // Initializes the connection to the database
-func ConnectDb() {
+func ConnectDb() error {
 	dsn := fmt.Sprintf("host=db user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=Asia/Shanghai",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
@@ -54,7 +55,7 @@ func ConnectDb() {
 
 	if err != nil {
 		log.Fatal("Failed to connect to database. \n", err)
-		os.Exit(2)
+		return err
 	}
 
 	log.Println("connected")
@@ -77,13 +78,24 @@ func ConnectDb() {
 
 	if err != nil {
 		log.Fatal("Failed to automigrate the database. \n", err)
-		os.Exit(2)
+		return err
 	}
 
 	setupMock(db)
 	DB = Dbinstance{
 		Db: db,
 	}
+
+	return nil
+}
+
+// Initializes the connection to the database asynchronously
+func ConnectDbAsync(errChan chan<- error, wg *sync.WaitGroup) {
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		errChan <- ConnectDb()
+	}()
 }
 
 // Sets up some base data

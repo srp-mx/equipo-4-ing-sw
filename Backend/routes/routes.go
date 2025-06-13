@@ -29,6 +29,8 @@ func SetupRoutes(app *fiber.App) {
 
 	app.Post("/login", handlers.Login)
 	app.Post("/register", handlers.Register)
+	app.Post("/remove_account", handlers.RemoveAccount)
+	app.Post("/update_profile", handlers.UpdateProfile)
 	app.Post("/verify_formula", handlers.VerifyFormula)
 
 	app.Get("/refresh_token", jwt, handlers.RefreshToken)
@@ -71,4 +73,6 @@ func SetupRoutes(app *fiber.App) {
 	app.Post("/rename_armor", jwt, handlers.RenameArmor)
 	app.Post("/rename_weapon", jwt, handlers.RenameWeapon)
 	app.Post("/rename_pet", jwt, handlers.RenamePet)
+
+	app.Post("/post_dungeon", jwt, handlers.GetDungeon)
 }
