@@ -18,11 +18,16 @@
 package handlers
 
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
 	"github.com/srp-mx/equipo-4-ing-sw/models"
 )
+
+const PFP_PATH string = "/resources/uploads/pfp/"
 
 // Handles /user_classes
 func GetUserClasses(c *fiber.Ctx) error {
@@ -97,15 +102,12 @@ func UpdateProfile(c *fiber.Ctx) error {
 
 	// Parses the request
 	body, err := parseRequestBody[Req](c)
-
 	if body.Name != nil {
 		user.Name = *body.Name
 	}
-
 	if body.Password != nil {
 		user.Password = *body.Password
 	}
-
 	if body.Email != nil {
 		user.Email = *body.Email
 	}
@@ -118,4 +120,68 @@ func UpdateProfile(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(user)
+}
+
+// Handles /upload_pfp
+func UploadPfp(c *fiber.Ctx) error {
+	// Get the user
+	user, err := getCredentials(c)
+	if err != nil {
+		return err
+	}
+
+	// Get the file
+	file, err := c.FormFile("image")
+	if err != nil {
+		return getBadReq(c, "No se recibió un archivo")
+	}
+
+	// Save the file
+	savePath := filepath.Join(PFP_PATH, user.Username)
+	if err := c.SaveFile(file, savePath); err != nil {
+		return getServerErr(c)
+	}
+
+	return c.JSON(fiber.Map{
+		"ok": true,
+	})
+}
+
+// Handles /get_pfp
+func GetPfp(c *fiber.Ctx) error {
+	// Verify logged in
+	_, err := getCredentials(c)
+	if err != nil {
+		return err
+	}
+
+	// Request type
+	type Req struct {
+		Username string `json:"username"`
+	}
+
+	// Parse request
+	req, err := parseRequestBody[Req](c)
+	if err != nil {
+		return err
+	}
+
+	// Check if the user exists
+	users := controllers.NewUserController(database.DB.Db)
+	exists, err := users.ExistsUsername(req.Username)
+	if err != nil {
+		return getServerErr(c)
+	}
+	if !exists {
+		return getNotFound(c, "No se encontró la imagen")
+	}
+
+	// Check if the image exists
+	savePath := filepath.Join(PFP_PATH, req.Username)
+	if _, err := os.Stat(savePath); os.IsNotExist(err) {
+		return getNotFound(c, "No se encontró la imagen")
+	}
+
+	// Send the file
+	return c.SendFile(req.Username)
 }
