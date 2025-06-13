@@ -6,7 +6,8 @@ import { clearClases } from "@/constants/classSlice";
 import { clearAssignments } from "@/constants/assignmentSlice";
 import { clearDataCharacter } from "@/constants/dataCharacterSlice";
 import { clearStats } from "@/constants/StatsSlice";
-import { clearRacha, setRacha } from "@/constants/rachaSlice";import { useDispatch } from "react-redux";
+import { clearRacha, setRacha } from "@/constants/rachaSlice";
+import { useDispatch } from "react-redux";
 import iconoUser from "@/assets/img/icono_user.svg";
 import iconoInicio from "@/assets/img/sidebar/icono_inicio.png";
 import iconoLogout from "@/assets/img/icono_logout.png"

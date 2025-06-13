@@ -32,6 +32,7 @@ async function getClass() : Promise<Class[]> {
                 "Authorization": "Bearer " + localStorage.getItem("token"),
                 "Content-Type": "application/json",
             },
+            body: "{}"
         });
         if(!response.ok) throw new Error(`Error: ${response.status} ${response.statusText}`);
         const data = await response.json();
