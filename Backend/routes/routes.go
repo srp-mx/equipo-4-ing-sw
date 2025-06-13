@@ -71,4 +71,6 @@ func SetupRoutes(app *fiber.App) {
 	app.Post("/rename_armor", jwt, handlers.RenameArmor)
 	app.Post("/rename_weapon", jwt, handlers.RenameWeapon)
 	app.Post("/rename_pet", jwt, handlers.RenamePet)
+
+	app.Get("/get_dungeon", jwt, handlers.GetDungeon)
 }
