@@ -29,6 +29,7 @@ func SetupRoutes(app *fiber.App) {
 
 	app.Post("/login", handlers.Login)
 	app.Post("/register", handlers.Register)
+	app.Post("/remove_account", handlers.RemoveAccount)
 	app.Post("/verify_formula", handlers.VerifyFormula)
 
 	app.Get("/refresh_token", jwt, handlers.RefreshToken)
