@@ -38,7 +38,7 @@ services:
     ports:
       - 3001:3001
     volumes:
-      - ./estudiantica/.:/usr/src/app/frontend
+      - ./estudiantica/.:/usr/src/app/
     command: npm run dev
 volumes:
   postgres-db:

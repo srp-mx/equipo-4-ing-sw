@@ -58,7 +58,6 @@ export default function SearchbarClass(){
     const [loading, setLoading] = useState(true);
     const [isDrowOpen, setIsDrowOpen] = useState(true);
 
-    const user = useSelector((state: RootState) => state.user);
     const clases = useSelector((state: RootState) => state.clases.clases);
     const dispatch = useDispatch();
     
@@ -66,7 +65,7 @@ export default function SearchbarClass(){
     useEffect(() => {
         async function fetchTasks() {
             setLoading(true);
-            const data = await getClass(); // Cambia por el usuario real
+            const data = await getClass();
             dispatch(setClases(data));
             setLoading(false);
         }
@@ -89,7 +88,7 @@ export default function SearchbarClass(){
     }, []);
 
     const filteredClasses = clases.filter((classItem) => 
-        ( // Por fecha
+        ( 
             (selectedStatus === null) || 
             (selectedStatus === 0 && new Date(classItem.end_date) < new Date()) || 
             (selectedStatus === -1 && new Date(classItem.end_date) > new Date())
@@ -106,7 +105,7 @@ export default function SearchbarClass(){
                         id="dropdown-button"
                         className="shrink-0 z-10 inline-flex items-center py-2.5 px-4 bg-gray-700 text-sm font-medium text-center border rounded-s-lg focus:ring-4 hover:bg-gray-600 focus:ring-gray-700 text-white border-gray-600"
                         type="button"
-                        onClick={() => setIsOpen((prev) => !prev)}
+                        onClick={() => setIsOpen(!isOpen)}
                     >
                         {statusMap.find((s) => s.value === selectedStatus)?.label || "Seleccionar"}
                         <svg className="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
