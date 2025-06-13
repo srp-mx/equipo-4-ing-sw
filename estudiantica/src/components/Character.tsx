@@ -100,20 +100,7 @@ const Character = () => {
             console.log("Mobile view enabled", isMobile, "View Stats:", viewStats);
         }
     }, [isMobile]);
-    /*
-    useEffect(() => {
-        async function characterHome(){
-            await getRefresh(dispatch);
-            if(rachaRefresh.racha.alive){
-                console.log("hola");
-                await getCharacterDefaultInfo(dispatch);
-                await getStats(dispatch);
-                await getPointSkill(dispatch);
-            }
-        }
-        characterHome();
-    },[dispatch, rachaRefresh.racha.alive]);
-*/
+
     return (
         <>
             {rachaRefresh.racha.alive ?

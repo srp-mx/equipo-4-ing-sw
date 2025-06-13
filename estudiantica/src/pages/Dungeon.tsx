@@ -13,6 +13,7 @@ import { RootState } from "@/constants/store";
 import { getCharacterDefaultInfo } from "@/components/Character";
 
 export const getDungeon = async(name: string, id : number ) => {
+    let message = ""
     try {
         const response = await fetch("http://localhost:3000/post_dungeon",{
             method: "POST", 
@@ -33,19 +34,20 @@ export const getDungeon = async(name: string, id : number ) => {
                 case 409: 
                     alert("El nombre ya ha sido tomado, elige otro");
                     throw new Error(`Error 409 (Conflict): ${response.body}`);
-                case 500: 
+                case 500:
+                    message = "No tienes suficientes puntos de habilidad para entrar a la mazmorra";
                     throw new Error(`Error 500 (Internal Server Error): ${response.body}`);
                 default:
                     throw new Error(`Error ${response.status}: ${response.statusText}`);
             }
         }
         const data = await response.json();
-        return data.string;
+        message = data.string;
             
     }catch(error){
         console.error(error)
-        return "";
     }
+    return message;
 }
 
 const TextoLento = ({text, delay = 100} : { text:string, delay?:number}) => {
@@ -76,7 +78,7 @@ export default function Dungeon(){
     const clicker = async (num : number) => {
         setViewAction(num);
         const dungeonText = await getDungeon(characterName, num);
-        await getCharacterDefaultInfo(dispatch)
+        await getCharacterDefaultInfo(dispatch);
         setTexto(dungeonText);
     }
     return (

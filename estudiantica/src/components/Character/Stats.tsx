@@ -5,6 +5,7 @@ import { Skills } from "@/Object/Character";
 import { ArrowBigUpDash, BicepsFlexed, Brain, Cat, Heart, Shield } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { data } from "react-router-dom";
 
 export const getPointSkill = async (dispatch: any) => {
     try {
@@ -27,7 +28,6 @@ export const getPointSkill = async (dispatch: any) => {
         }
         const data = await response.json();
         dispatch(setPoints(data.points));
-        console.log(`Puntos ${data.points}`);
     } catch (error) {
         console.error("Error ", error);
     }
@@ -47,6 +47,8 @@ export default function Stats() {
         heart: 0,
         intelligence: 0
     });
+
+    console.log("Stats ", stats);
 
     useEffect(() => {
         if (stats.stats.skills && dataCharacter.points !== undefined) {
@@ -125,7 +127,7 @@ export default function Stats() {
         return (
             <div className="flex flex-col justify-end mr-3 h-full" >
                 <div className="bg-[#152442] text-white p-4 space-y-2.5 justify-center flex flex-col text-sm"
-                    >
+                >
                     <p className="text-center"> Puntos: {pointLeft} </p>
 
                     <div className="flex flex-row justify-between ml-3 mr-3">
@@ -231,7 +233,7 @@ export default function Stats() {
                             onClick={() => saveSkills(dispatch, () => setIsEdit(false))}
                             className="pixel-corner-button mt-2 px-4 bg-[#39BF48]"
                             style={{
-                                "--pixel-bg": "#1B1539",
+                                "--pixel-bg": "#152442",
                                 "--pixel-hover-bg": "#39BF48",
                                 "--size-pixel": "7px"
                             } as React.CSSProperties}
@@ -242,7 +244,7 @@ export default function Stats() {
                             onClick={() => setIsEdit(false)}
                             className="pixel-corner-button mt-2 px-4 bg-[#BF3939]"
                             style={{
-                                "--pixel-bg": "#1B1539",
+                                "--pixel-bg": "#152442",
                                 "--pixel-hover-bg": "#BF3939",
                                 "--size-pixel": "7px"
                             } as React.CSSProperties}
@@ -260,7 +262,7 @@ export default function Stats() {
         return (
             <div className="flex flex-col justify-end mr-3 h-full" >
                 <div className="bg-[#152442] text-white p-4 space-y-2.5 justify-center flex flex-col text-sm lg:text-base rounded-lg"
-                    >
+                >
                     <p className="text-center"> Estadisticas </p>
 
                     <div className="flex flex-row justify-between ml-3 mr-3">
@@ -319,7 +321,7 @@ export default function Stats() {
                             onClick={() => setIsEdit(true)}
                             className="pixel-corner-button mt-2 px-4 bg-[#39BF48]"
                             style={{
-                                "--pixel-bg": "#1B1539",
+                                "--pixel-bg": "#152442",
                                 "--pixel-hover-bg": "#39BF48",
                                 "--size-pixel": "10px"
                             } as React.CSSProperties}

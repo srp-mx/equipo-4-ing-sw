@@ -34,18 +34,19 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   return (
     <NotificationContext.Provider value={{ showNotification }}>
       {children}
-      <div className="fixed top-[calc(50vh-100px)] left-1/2 -translate-x-1/2 z-[9999] w-full max-w-md p-4">
+      <div id="Notification" className={`fixed top-[5vh] left-1/2 -translate-x-1/2 z-[9999] w-full max-w-md p-4 transition-opacity duration-300 ${notifications.length === 0 ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}>
         {notifications.map(({ id, message, type }) => (
-            <motion.div
-              key={id}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className={`pointer-events-auto pixel-corner-notification flex items-center justify-between px-4 py-2 text-white shadow-lg mb-2
+          <motion.div
+            key={id}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className={`pointer-events-auto pixel-corner-notification flex items-center justify-between px-4 py-2 text-white shadow-lg mb-2
                 ${type === "success" ? "bg-green-500" : type === "error" ? "bg-red-500" : "bg-yellow-500"}`}
-              style={{ "--pixel-bg": "#2D304F", "--size-pixel" : "10px"} as React.CSSProperties}
-            >
+            style={{ "--pixel-bg": "#2D304F", "--size-pixel": "10px" } as React.CSSProperties}
+          >
             <span>{message}</span>
             <button
               className="ml-4 text-xl"

@@ -35,7 +35,7 @@ async function getClass() : Promise<Class[]> {
         });
         if(!response.ok) throw new Error(`Error: ${response.status} ${response.statusText}`);
         const data = await response.json();
-        const clases : Class[] = data; // Tengo la duda si esto es necesario
+        const clases : Class[] = data;
         return clases;
     }catch(error){
         console.error("Error", error);
