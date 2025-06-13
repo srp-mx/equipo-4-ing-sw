@@ -124,8 +124,8 @@ export default function Stats() {
     if (isEdit) {
         return (
             <div className="flex flex-col justify-end mr-3 h-full" >
-                <div className="pixel-corner-button bg-[#1B1539] text-white p-4 space-y-2.5 justify-center flex flex-col text-sm"
-                    style={{ "--pixel-bg": "#0B090F", "--pixel-hover-bg": "#1B1539", "--size-pixel": "20px" } as React.CSSProperties}>
+                <div className="bg-[#1B1539] text-white p-4 space-y-2.5 justify-center flex flex-col text-sm"
+                    >
                     <p className="text-center"> Puntos: {pointLeft} </p>
 
                     <div className="flex flex-row justify-between ml-3 mr-3">
@@ -259,8 +259,8 @@ export default function Stats() {
     else {
         return (
             <div className="flex flex-col justify-end mr-3 h-full" >
-                <div className="pixel-corner-button bg-[#1B1539] text-white p-4 space-y-2.5 justify-center flex flex-col text-sm lg:text-base"
-                    style={{ "--pixel-bg": "#0B090F", "--pixel-hover-bg": "#1B1539" } as React.CSSProperties}>
+                <div className="bg-[#1B1539] text-white p-4 space-y-2.5 justify-center flex flex-col text-sm lg:text-base rounded-lg"
+                    >
                     <p className="text-center"> Estadisticas </p>
 
                     <div className="flex flex-row justify-between ml-3 mr-3">

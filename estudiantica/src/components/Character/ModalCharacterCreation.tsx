@@ -61,25 +61,25 @@ export default function ModalCharacterCreation({onClose} : ModalProps) {
     return (
         <div ref={modalRef} onClick={closeModal} 
             className="h-screen fixed inset-0 z-2 flex justify-center items-center bg-black/30 backdrop-blur-sm">
-            <div className="flex text-center items-center flex-col p-6 w-1/3 border-gray-400 rounded-lg bg-[#ffffe6] text-black">
-                <h1> Ingresa el nombre del personaje</h1>
+            <div className="flex text-center items-center flex-col p-6 w-2/3 md:w-1/3 border-gray-400 rounded-lg bg-[#ffffe6] text-black">
+                <h1 className="text-lg md:text-xl font-semibold"> Ingresa el nombre del personaje</h1>
                 <form className="flex flex-col items-center "action="">
                     <input 
                     type="text" 
                     placeholder="Ingresa el Nombre"
-                    className="text-center border rounded p-1 text-gray-600"
+                    className="text-center text-sm md:text-base border rounded p-1 text-gray-600"
                     name="nombre"
                     onChange={handleChange}
                     />
                     <div className="flex flex-row">
                         <button
-                        className="mt-5 flex px-1 py-2 bg-green-600 font-bold rounded-full hover:bg-green-500 text-white items-center"
+                        className="mt-5 text-sm md:text-base flex px-1 py-2 bg-green-600 font-bold rounded-full hover:bg-green-500 text-white items-center"
                         onClick={(e) => {e.preventDefault(); crearPersornaje(nombre); onClose(); }}
                         > 
                             Crear Personaje
                         </button>
                         <button
-                        className="ml-7 mt-5 flex px-1 py-2 bg-red-600 font-bold rounded-full hover:bg-red-500 text-white items-center"
+                        className="ml-7 text-sm md:text-base mt-5 flex px-1 py-2 bg-red-600 font-bold rounded-full hover:bg-red-500 text-white items-center"
                         onClick={(e) => {e.preventDefault();setNombre("");onClose();}}
                         > 
                             Cancelar

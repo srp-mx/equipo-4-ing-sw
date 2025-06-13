@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { setAlive, setRacha } from "@/constants/rachaSlice";
 import ModalCharacterCreation from '@/components/Character/ModalCharacterCreation'
 import { Flame } from "lucide-react";
-import { getPointSkill } from "./Character/Stats";
+import Stats, { getPointSkill } from "./Character/Stats";
 import EditModal from '@/components/Character/EditModal'
 import ItemsEquiped from "./ItemsEquiped";
 import rachaIcon from "@/assets/img/racha.png";
@@ -91,6 +91,7 @@ const Character = () => {
     const stats = useSelector((state: RootState) => state.stats);
     const rachaRefresh = useSelector((state: RootState) => state.racha);
     const dispatch = useDispatch();
+    const [viewStats, setViewStats] = useState(false);
     /*
     useEffect(() => {
         async function characterHome(){
@@ -108,29 +109,34 @@ const Character = () => {
     return (
         <>
         {rachaRefresh.racha.alive ?
-            (<div className="grid grid-cols-4 grid-rows-4 gap-2 h-7/8 w-full">
-                <div className="col-span-3 row-span-4">
+            (<div className="grid grid-cols-4 grid-rows-4 gap-2 h-15/16 md:h-7/8 w-full">
+                <div className="col-span-2 row-span-4 sm:col-span-3 sm:row-span-4 ">
                     <div className="h-1/15 text-left justify-center">
                         <div className="title-section text-start text-[30px] sm:text-[40px] lg:text-[60px] mt-3 ml-8">
                             {user.name || "Nombre de Usuario"}
                         </div>
                         <div className="text-start text-[30px] sm:text-[40px] lg:text-[60px] text-red-400 ml-8">
-                            <img src={rachaIcon} alt="" className="h-10 w-10 inline-block mr-2" />
+                            <img src={rachaIcon} alt="" className="h-6 w-6 sm:w-10 sm:h-10 inline-block mr-2" />
                             {datacharacter.dataCharacter.streak}
                         </div>
                     </div>
-                    <div className="flex flex-col items-center justify-center h-full">
-                        <img src={characterDates.characterURL} alt="" className="h-7/12 sm:2/3 mb-5" />
+                    <div className="flex flex-col items-center justify-center h-full space-y-2 md:space-y-0">
+                        <img src={characterDates.characterURL} alt="" className="h-7/12 sm:h-2/3 mb-5" />
                         <button onClick={() => setShowModalEdit(true)}
-                            className="pixel-corner-button py-2 px-3 border transition-all bg-[#cbda3d] text-base"
+                            className={`pixel-corner-button py-2 px-3 border transition-all bg-[#cbda3d] text-sm sm:text-base`}
                             style={{ "--pixel-bg": "#2D304F", "--pixel-hover-bg": "#FFFFFF", "--size-pixel" : "10px"} as React.CSSProperties}
                         >Editar</button>
+
+                        <button onClick={() => setViewStats(!viewStats)}
+                            className="block md:hidden pixel-corner-button py-2 px-3 border transition-all bg-[#cbda3d] text-sm sm:text-base"
+                            style={{ "--pixel-bg": "#2D304F", "--pixel-hover-bg": "#FFFFFF", "--size-pixel" : "10px"} as React.CSSProperties}
+                        >{`Ver ${!viewStats ? 'Stats' : 'Items'}`}</button>
                         {showModalEdit && <EditModal onClose={() => setShowModalEdit(false)}/>}
                     </div>
                 </div>
-                <div className="flex-col flex items-center row-span-4 col-start-4">
+                <div className="flex-col flex items-center col-span-2 row-span-4 col-start-3 sm:row-span-4 sm:col-start-4">
                     <img src={Bandera} alt="" className="mb-2 w-30"/>
-                    <ItemsEquiped />
+                    { viewStats ? <Stats /> : <ItemsEquiped /> }
                 </div>
             </div>)
             :
