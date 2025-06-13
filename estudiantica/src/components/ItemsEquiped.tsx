@@ -95,8 +95,6 @@ const getWeaponEquiped = async (dispatch:any) => {
 }
 
 const ItemsEquiped = () => {
-    /*return (
-=======
     const [modalArmor, setModalArmor] = useState(false);
     const [modalWeapon, setModalWeapon] = useState(false); 
     const [modalPet, setModalPet] = useState(false);
@@ -112,9 +110,8 @@ const ItemsEquiped = () => {
     }, [dispatch])
 
     return (
->>>>>>> 3d62cd6 (Modal Armor without hover)
         <>
-            <button className="bg-gray-900 m-2 rounded-xl h-1/2 w-6/10 flex flex-col justify-center items-center text-center ml-4" 
+            <button className="bg-[#152442]  m-2 rounded-xl h-full w-6/10 flex flex-col justify-center items-center text-center ml-4" 
             onClick={() => setModalArmor(true)}
             >
                 {itemEquiped.armor.id === 0 ? 
@@ -123,7 +120,7 @@ const ItemsEquiped = () => {
                 <img src={itemEquiped.armor.image_uri} alt="armadura" />
                 }
             </button>
-            <button className="bg-gray-900 m-2 rounded-xl h-1/2 w-6/10 flex items-center justify-center text-center ml-4" 
+            <button className="bg-[#152442] m-2 rounded-xl h-full w-6/10 flex items-center justify-center text-center ml-4" 
             onClick={() => setModalWeapon(true)}
             >
                 {itemEquiped.weapon.id === 0 ? 
@@ -132,7 +129,7 @@ const ItemsEquiped = () => {
                 <img src={itemEquiped.weapon.image_uri} alt="arma" />
                 }
             </button>
-            <button className="bg-gray-900 m-2 rounded-xl h-1/2 w-6/10 flex justify-center items-center text-center ml-4" 
+            <button className="bg-[#152442]  m-2 rounded-xl h-full w-6/10 flex justify-center items-center text-center ml-4" 
             onClick={() => setModalPet(true)}
             >
                 {0 === 0 ? 
@@ -145,8 +142,8 @@ const ItemsEquiped = () => {
         {modalPet && <ModalPet onClose={() => setModalPet(false)} />}
         {modalWeapon && <ModalWeapon onClose={() => setModalWeapon(false)}  />}
         </>
-    );*/
-    return (
+    );
+    /*return (
         <div className="flex-col items-center text-white text-xs sm:text-sm h-2/3 ">
         {itemEquiped.map((item) => (
             <div 
@@ -156,7 +153,7 @@ const ItemsEquiped = () => {
             </div>
         ))}
         </div>
-    )
+    )*/
 }
 
 export default ItemsEquiped;
