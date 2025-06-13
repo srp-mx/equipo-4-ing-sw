@@ -6,10 +6,21 @@
   src: url('./assets/fonts/Wagon-Bold.otf') format('opentype');
 }
 
+body {
+  font-family: 'Pixelify Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
 
 :root {
   font-family: "Pixelify Sans", sans-serif;
-  color-scheme: dark;
+  --size-pixel: 10px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --size-pixel: 15px
+  }
 }
 
 .pixelify-sans {
@@ -19,6 +30,10 @@
   font-style: normal;
 }
 
+.title-section {
+  font-family: 'Wagon-Bold';
+  color : #cbda3b ;
+}
 
 .tektur-font{
   font-family: "Tektur", sans-serif;
@@ -36,3 +51,50 @@
   font-weight: 400;
   font-style: normal;
 }
+
+.pixel-corner-notification,
+.pixel-corner-button {
+position: relative;
+border: 2px solid transparent; /* Transparent border for styling purposes */
+cursor: pointer;
+outline: none;
+transition: all 0.3s ease;
+}
+
+.pixel-corner-notification::before,
+.pixel-corner-notification::after,
+.pixel-corner-button::before,
+.pixel-corner-button::after {
+content: '';
+position: absolute;
+width: var(--size-pixel);
+height: var(--size-pixel);
+background: var(--pixel-bg); /* Color for the pixel effect */
+z-index: 1;
+transition: all 0.3s ease;
+}
+
+.pixel-corner-notification::before,
+.pixel-corner-button::before {
+top: -4px;
+left: -4px;
+}
+
+.pixel-corner-notification::after,
+.pixel-corner-button::after {
+bottom: -4px;
+right: -4px;
+}
+
+.pixel-corner-button:hover {
+background-color: var(--pixel-hover-bg); /* Hover effect to change the background */
+}
+
+
+.pixel-corner-notification::after,
+.pixel-corner-notification::before,
+.pixel-corner-button:hover::before,
+.pixel-corner-button:hover::after {
+transform: scale(1.5);
+}
+

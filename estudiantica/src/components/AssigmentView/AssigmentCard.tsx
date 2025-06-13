@@ -1,5 +1,6 @@
 import { Assigment } from '../../Object/Assigment';
 import React from 'react'
+import bandera from '@/assets/img/bandera.png'
 
 const getProgressStatus = (progress: number) => {
     let progressStatus = { text : "En progreso", bgColor : "bg-gray-600"};
@@ -27,28 +28,28 @@ export default function AssigmentCard({ assigment, onOpen } : AssigmentCardProps
         <div 
             key={assigment.id}
             onClick = {onOpen}
-            className="grid grid-cols-6 grid-rows-3 items-center border-gray-400 rounded-lg w-4/5 bg-[#ffffe6] shadow-md"
+            className="grid grid-cols-6 grid-rows-3 border-gray-400 rounded-lg w-7/8 md:w-3/4 bg-[#ffffe6] shadow-md "
         >
-            <div className="row-span-3 flex w-30 h-30 items-center justify-center">
-                <img src="assets/img/bandera.png"/>
+            <div className="row-span-3 flex w-15 h-15 sm:w-20 sm:h-20 md:w-23 md:h-23 lg:w-30 lg:h-30 items-center col-span-1">
+                <img src={bandera}/>
             </div>
-            <div className="ml-3 col-span-5 row-span-3">
-                <div className="flex mb-2 mr-4 space-x-2 justify-end">
-                    <div className="flex space-x-2">
+            <div className="ml-5 col-span-5 row-span-3">
+                <div className="flex mb-2 mr-2 sm:mr-3 md:mr-4 space-x-2 mt-2 justify-end">
+                    <div className="flex flex-col sm:flex-row space-x-2 space-y-1 sm:space-y-0">
                         {assigment.optional && (
-                            <label className="flex items-center space-x-1 text-white bg-gray-600 px-2 py-1 rounded-full">
+                            <label className="flex items-center text-xs md:text-basic space-x-1 text-white bg-gray-600 px-2 py-1 rounded-full">
                                 <span>Opcional</span>
                             </label>
                         )}
-                        <label className={`flex items-center space-x-1 px-2 py-1 text-white ${progressStatus.bgColor} rounded-full`}>
+                        <label className={`flex items-center text-xs md:text-basic space-x-1 px-2 py-1 text-white ${progressStatus.bgColor} rounded-full`}>
                             <span>{progressStatus.text}</span>
                         </label>
                     </div>
                     
                 </div>
-                <p className="text-gray-900 font-semibold w-2/3">{assigment.name}</p>
-                <div className="text-gray-600 text-right text-lg mr-4 px-2 py-1 rounded-full">
-                    <span>{new Date(assigment.due_date).toLocaleDateString()}</span>
+                <p className="text-gray-900 font-semibold w-2/3 ml-2 text-sm sm:text-lg">{assigment.name}</p>
+                <div className="text-gray-600 text-right text-sm md:text-lg mr-4 px-2 py-1 rounded-full">
+                    <span>{new Date(assigment.due_date).toISOString().split('T')[0]}</span>
                 </div>
             </div>
         </div>

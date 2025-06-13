@@ -19,6 +19,22 @@ Disfruta de nuestra historia y llega a tu objetivo de vida acompañado del mejor
 amigo del estudiante 😼. Cambia tu relación con tu vida estudiantil y disfruta
 aprender.
 
+## Instrucciones
+
+Para clonar y usar adecuadamente el repositorio, necesitarás `docker`,
+`husky` y `docker-compose`. Adicionalmente, si quieres trabajar en
+el backend necesitarás `go` para las pruebas automatizadas.
+
+Para construir el proyecto usa
+```bash
+docker compose build
+```
+
+Una vez construido puedes levantarlo con
+```bash
+docker compose up
+```
+
 ## Recursos
 - [Wiki](https://github.com/srp-mx/equipo-4-ing-sw/wiki)
 - [Projectos](https://github.com/srp-mx/equipo-4-ing-sw/projects)
