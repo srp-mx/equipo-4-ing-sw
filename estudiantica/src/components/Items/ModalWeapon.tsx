@@ -94,7 +94,7 @@ export default function ModalPet({onClose} : ModalProps){
     
     return (
         <div ref={modalRef} onClick={closeModal}
-            className="h-screen fixed inset-0 flex justify-center items-center bg-black/30 backdrop-blur-sm"
+            className="h-screen fixed inset-0 flex z-2 justify-center items-center bg-black/30 backdrop-blur-sm"
         >
             <div className="pl-2 pt-2 pr-2 pb-2 grid gap-2 grid-cols-2 grid-rows-2 text-center items-center w-1/3 h-3/4 border-gray-400 rounded-lg bg-[#ffffe6] text-black">
                 <div className=" rounded-xl border-2 w-full h-full border-black/80 col-start-1 col-end-2 row-start-1 row-end-2 flex justify-center items-center">
