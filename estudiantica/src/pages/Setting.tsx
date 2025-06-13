@@ -3,7 +3,6 @@ import { Sidebar } from "@/components/Sidebar";
 import bgImage from '@/assets/img/background-default.jpg';
 
 import UserData from "@/components/settings/UserData";
-import PasswordData from "@/components/settings/PasswordData";
 import DeleteAccount from "@/components/settings/DeleteAccount";
 import { useAuth } from "@/constants";
 
@@ -23,7 +22,6 @@ export default function Setting(){
                     </h1>
                     <div className="overflow-y-auto flex-grow justify-center items-center">
                         <UserData/>
-                        <PasswordData/>
                         <DeleteAccount/>
                     </div> 
                 </div>
