@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/constants/store";
 import { getCharacterDefaultInfo } from "@/components/Character";
+import { Star } from "lucide-react";
 
 export const getDungeon = async(name: string, id : number ) => {
     let message = ""
@@ -74,13 +75,40 @@ export default function Dungeon(){
     const urls = [`url(${castle})`, `url(${forest})`, `url(${terrace})`, `url(${throne})`]
     const names = ["Limsgrave", "Cementerio Perdido", "Capital del Rey", "Templo del mal"]
     const [texto, setTexto] = useState("");
-
+    const estrellas = [
+  <div key={0} className="flex flex-row gap-2"><Star /></div>,
+  <div key={1} className="flex flex-row gap-2"><Star /><Star /></div>,
+  <div key={2} className="flex flex-row gap-2"><Star /><Star /><Star /></div>,
+  <div key={3} className="flex flex-row gap-2"><Star /><Star /><Star /><Star /></div>
+];
     const clicker = async (num : number) => {
         setViewAction(num);
         const dungeonText = await getDungeon(characterName, num);
         await getCharacterDefaultInfo(dispatch);
         setTexto(dungeonText);
     }
+    if(characterName === '')
+            return(
+            <div className="bg-[#0B090F] h-screen w-screen bg-cover bg-center overflow-hidden">
+                        <Navbar isLoggedIn={true}/>
+                        <div className="flex flex-col-reverse md:grid md:grid-cols-10 md:grid-rows-4 h-[calc(100vh-64px)] w-full">
+                            <Sidebar incomplete={true}/>
+
+                            <div 
+                            className="md:col-span-9 md:row-span-4 md:mr-6 h-full p-4 mx-4 rounded-2xl overflow-y-auto"
+                            style ={{ backgroundImage: `url(${bgImage}) `, backgroundSize: 'cover' }}>
+                                <h1 className="title-section text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+                                    Mazmorras
+                                </h1>
+                                <div className="flex flex-row pt-5 pb-5 pr-5 pl-5 justify-center w-full h-5/6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white items-center pb-50">
+                                    Debes crear un personaje primero
+                                </div>
+                            </div>
+                        </div>
+            </div>
+        
+        );
+
     return (
         <div className="bg-[#0B090F] h-screen w-screen bg-cover bg-center overflow-hidden">
             <Navbar isLoggedIn={true}/>
@@ -99,33 +127,68 @@ export default function Dungeon(){
                             
                             <div style={{backgroundImage: `url(${castle})`, backgroundSize: 'cover'}} 
                             onClick={() => clicker(1)}
-                            className="flex text-white text-2xl items-center pl-5 w-full h-1/4 bg-gray-300 rounded-2xl hover:backdrop-blur-2xl cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
-                                Limgrave
+                            className="flex text-white text-2xl justify-between gap-5 items-center pl-10 pr-10 w-full h-1/4 bg-gray-300 rounded-2xl hover:backdrop-blur-2xl cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
+                                    <div>
+                                        Limgrave
+                                    </div>
+                                    <div>
+                                        Dificultad: <Star />
+                                    </div>
                             </div>
                             <div style={{backgroundImage: `url(${forest})`, backgroundSize: 'cover'}}
                             onClick={() => clicker(2)}
-                            className="flex text-white text-2xl items-center pl-5 w-full h-1/4 bg-gray-300 rounded-2xl hover:backdrop-blur-2xl cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
-                                Cementerio Perdido
+                            className="flex text-white text-2xl justify-between gap-5 items-center pl-10 pr-10 w-full h-1/4 bg-gray-300 rounded-2xl hover:backdrop-blur-2xl cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
+                                    <div>
+                                        Cementerio Perdido
+                                    </div>
+                                    <div >
+                                        Dificultad: 
+                                        <div className="flex flex-row gap-2">
+                                        <Star /> <Star />
+                                        </div>
+                                    </div>
                             </div>
                             <div
                             onClick={() => clicker(3)} 
                             style={{backgroundImage: `url(${terrace})`, backgroundSize: 'cover'}}
-                            className="flex text-white text-2xl items-center pl-5 w-full h-1/4 bg-gray-300 rounded-2xl hover:backdrop-blur-2xl cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
-                                Capital del Rey
+                            className="flex text-white text-2xl justify-between gap-5 items-center pl-10 pr-10 w-full h-1/4 bg-gray-300 rounded-2xl hover:backdrop-blur-2xl cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
+                                    <div>
+                                        Capital del Rey
+                                    </div>
+                                    <div >
+                                        Dificultad: 
+                                        <div className="flex flex-row gap-2">
+                                        <Star /> <Star /> <Star />
+                                        </div>
+                                    </div>
                             </div>
                             <div style={{backgroundImage: `url(${throne})`, backgroundSize: 'cover'}} 
                             onClick={() => clicker(4)}
-                            className="flex text-white text-2xl items-center pl-5 w-full h-1/4 bg-gray-300 rounded-2xl hover:backdrop-blur-2xl cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
-                                Templo del mal 
+                            className="flex text-white text-2xl justify-between gap-5 items-center pl-10 pr-10 w-full h-1/4 bg-gray-300 rounded-2xl hover:backdrop-blur-2xl cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
+                                    <div>
+                                        Templo del mal
+                                    </div>
+                                    <div >
+                                        Dificultad: 
+                                        <div className="flex flex-row gap-2">
+                                        <Star /> <Star /> <Star /> <Star />
+                                        </div>
+                                    </div>
                             </div>
-
                         </div>
                        : 
                         <div className="flex flex-col pt-4 pb-4 pl-4 pr-4 gap-5 w-1/2 h-full items-center justify-between bg-gray-800 rounded-4xl overflow-y-auto min-w-[300px]">
                             <div 
                             style={{backgroundImage: urls[viewAction-1], backgroundSize: 'cover'}}
-                            className="flex text-white text-2xl items-center pl-5 w-full h-1/4 bg-gray-300 rounded-2xl">
-                                {names[viewAction-1]}
+                            className="flex text-white text-2xl justify-between gap-5 items-center pl-10 pr-10 w-full h-1/4 bg-gray-300 rounded-2xl hover:backdrop-blur-2xl cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
+                                <div>
+                                    {names[viewAction-1]}
+                                </div>                   
+                                <div>
+                                    Dificultad    
+                                {estrellas[viewAction-1]}
+                                </div>         
+
                             </div>
                             <div className="text-white pl-5 pt-5 pr-5 pb-5 bg-gray-900/80 h-3/4 w-full rounded-4xl overflow-y-auto">
                                 <TextoLento text={texto} delay={50} />
