@@ -17,72 +17,95 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
     const modalRef = useRef<HTMLDivElement>(null);
 
     const [newClass, setNewClass] = useState({
-        id : 0,
+        id: 0,
         name: "",
-        start_date : "",
-        end_date : "",
-        grade_formula : "",
-        color: "ffffffff", 
+        start_date: "",
+        end_date: "",
+        grade_formula: "",
+        color: "ffffffff",
         owner_username: user.name
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
+        if (name === "color") {
+            const hexValue = value.startsWith("#") ? value.slice(1) : value;
+            if (hexValue.length === 6) {
+                setNewClass((prev) => ({ ...prev, [name]: hexValue + "ff" })); // Add alpha channel
+                return;
+            }
+            console.error("Color must be in hex format (e.g., #RRGGBB)");
+            return;
+        }
         setNewClass((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleCreate = async () => {
-        try{
+        try {
             const dataSend = {
                 ...newClass,
-                start_date: new Date(newClass.start_date).toISOString(), 
+                start_date: new Date(newClass.start_date).toISOString(),
                 end_date: new Date(newClass.end_date).toISOString(),
             }
-            const response = await fetch("http://localhost:3000/post_class",{
-                method: "POST", 
+
+            const response = await fetch("http://localhost:3000/post_class", {
+                method: "POST",
                 headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`,
                     "Content-Type": "application/json"
 
                 },
                 body: JSON.stringify(dataSend)
             });
-            if(!response.ok) {
-                const error = await response.json();
-                console.error("EL error es ", error);
+
+            const rawText = await response.text()
+            if (rawText === "") {
+                console.error("Respuesta vacía del servidor");
+                throw new Error("Respuesta vacía del servidor");
+            }
+            let json: any;
+            try {
+                json = JSON.parse(rawText)
+            } catch (error) {
+                console.error('No se pudo parsear JSON:', rawText)
+                throw error
+            }
+
+            if (!response.ok) {
+                const error = json.error || json.message || "Error desconocido";
+                console.error("El error es ", JSON.stringify(error, null, 2));
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
-            const data = await response.json();
+            const data = json;
             newClass.id = data.class_id;
-            dispatch(addClass(newClass)); 
-            onClose();        
-        }catch( error ){
+            dispatch(addClass(newClass));
+            onClose();
+        } catch (error) {
             console.error("Error: ", error);
         }
     };
 
     useEffect(() => {
-        function handleClickOutside(event: MouseEvent){
+        function handleClickOutside(event: MouseEvent) {
             if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
                 onClose();
-              }
             }
-        
-            if (isOpen) {
-              document.addEventListener("mousedown", handleClickOutside);
-            }
-        
-            return () => {
-              document.removeEventListener("mousedown", handleClickOutside);
-            };
-          }, [isOpen, onClose]);
+        }
 
-    //fixed inset-0 bg-black bg-opacity-30 backdrop-blur-md flex items-center justify-center ${isOpen ? 'visible' : 'invisible'}
+        if (isOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isOpen, onClose]);
+
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-md flex items-center justify-center ${isOpen ? 'visible' : 'invisible'">
+        <div className="fixed inset-0 z-2 bg-opacity-30 backdrop-blur-md flex items-center justify-center">
             <div ref={modalRef}
-            className="p-6 w-1/3 shadow-lg border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
-                <h2 className="text-2xl font-semibold">Nueva Clase</h2>
+                className="p-6 w-4/6 md:w-1/3 shadow-lg border-gray-400 rounded-lg bg-[#ffffe6] shadow-md text-black">
+                <h2 className="text-xl md:text-2xl font-semibold">Nueva Clase</h2>
                 <input
                     type="text"
                     name="name"
@@ -91,6 +114,16 @@ export default function CreateClassModal({ isOpen, onClose }: ModalProps) {
                     value={newClass.name}
                     onChange={handleChange}
                 />
+
+                Agrega un marcador de color:
+                <input
+                    type="color"
+                    name="color"
+                    className="w-full border rounded p-1 mb-2 mt-2"
+                    value={`#${newClass.color.slice(0,6)}`}
+                    onChange={handleChange}
+                />
+
                 Fecha de inicio:
                 <input
                     type="date"

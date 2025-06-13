@@ -26,12 +26,12 @@
     "baseUrl": ".",
     "paths": {
       "@/*":["./src/*", "./dist/", ""],
-      "assets/*": ["src/assets/*"],
+      "@assets/*": ["assets/*"],
       "@app/*": ["./app/*"],
-      "@assets/*": ["./assets/*"],
-      "@components/*": ["./components/*"],
+      "@components/*": ["components/*"],
       "@styles/*": ["./styles/*"],
-      "@utils/*": ["./utils/*"]
+      "@utils/*": ["./utils/*"],
+      "@Object/*": ["./Object/*"],
     }
   },
   "include": ["src"],

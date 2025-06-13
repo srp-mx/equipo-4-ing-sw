@@ -4,13 +4,15 @@ export class Class {
     start_date : string;
     end_date : string;
     grade_formula : string;
+    color? : string;
 
     constructor(classObj : {
         id : number,
         name : string,
         start_date : string,
         end_date : string,
-        grade_formula : string
+        grade_formula : string,
+        color?: string,
     }){
         this.id = classObj.id;
         this.name = classObj.name;

@@ -25,7 +25,7 @@ import (
 	"unicode"
 
 	"github.com/gofiber/fiber/v2"
-	jwt "github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
 	"github.com/srp-mx/equipo-4-ing-sw/models"
