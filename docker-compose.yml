@@ -8,6 +8,7 @@ services:
       - 3000:3000
     volumes:
       - ./Backend/.:/usr/src/app/backend
+      - ./resources:/resources:ro
     environment:
       - JWT_SECRET=${JWT_SECRET}
     depends_on:

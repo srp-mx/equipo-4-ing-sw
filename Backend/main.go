@@ -20,17 +20,18 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/srp-mx/equipo-4-ing-sw/assets"
 	"github.com/srp-mx/equipo-4-ing-sw/database"
 	"github.com/srp-mx/equipo-4-ing-sw/routes"
 )
 
 // Entry-point
 func main() {
-	database.ConnectDb()
 	app := fiber.New()
 
 	// Added to debug requests
@@ -44,6 +45,7 @@ func main() {
 		return c.Next()
 	})
 
+	// Added CORS setup
 	app.Use(cors.New(cors.Config{
 		AllowHeaders: strings.Join([]string{
 			fiber.HeaderOrigin,
@@ -68,7 +70,20 @@ func main() {
 		}, ","),
 	}))
 
+	// Routes
 	routes.SetupRoutes(app)
 
+	// Wait for assets and database
+	if err := database.ConnectDb(); err != nil {
+		log.Fatal("Database connection failed\n", err)
+		os.Exit(2)
+	}
+	if err := assets.LoadAssetRepository(); err != nil {
+		log.Fatal("Asset loading failed\n", err)
+		os.Exit(2)
+	}
+
+	// Start listening
+	log.Println("Listening...")
 	log.Fatal(app.Listen(":3000"))
 }
