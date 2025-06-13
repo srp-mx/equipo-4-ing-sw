@@ -7,13 +7,78 @@ import terrace from '@/assets/img/Mazmorras/terrace.png';
 import throne from '@/assets/img/Mazmorras/throne room.png';
 import ItemEquiped from "@/components/ItemsEquiped";
 import Stats from "@/components/Character/Stats";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/constants/store";
+import { getCharacterDefaultInfo } from "@/components/Character";
+
+export const getDungeon = async(name: string, id : number ) => {
+    try {
+        const response = await fetch("http://localhost:3000/post_dungeon",{
+            method: "POST", 
+            headers: {
+                "Content-Type": "application/json", 
+                "Authorization": "Bearer " + localStorage.getItem("token"),
+            }, 
+            body: JSON.stringify({
+                    "name": name,
+                    "dungeon": id
+                })
+
+        });
+        if (!response.ok){
+            switch(response.status) {
+                case 400:
+                    throw new Error(`Error 400 (Bad Request): ${response.body}`);
+                case 409: 
+                    alert("El nombre ya ha sido tomado, elige otro");
+                    throw new Error(`Error 409 (Conflict): ${response.body}`);
+                case 500: 
+                    throw new Error(`Error 500 (Internal Server Error): ${response.body}`);
+                default:
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+        }
+        const data = await response.json();
+        return data.string;
+            
+    }catch(error){
+        console.error(error)
+        return "";
+    }
+}
+
+const TextoLento = ({text, delay = 100} : { text:string, delay?:number}) => {
+    const [actualText, setActualText] = useState('');
+    const [actualIndex, setActualIndex] = useState(0);
+
+    useEffect(() => {
+        if(actualIndex < text.length) {
+            const timeout = setTimeout(() => {
+                setActualText(prevText => prevText + text[actualIndex]);
+                setActualIndex(prevIndex => prevIndex +1 );
+            }, delay);
+            return () => clearTimeout(timeout)
+        }
+    }, [actualIndex, delay, text])
+    return <span>{actualText}</span>
+}
 
 export default function Dungeon(){
 
     const [viewAction, setViewAction] = useState(0);
+    const characterName = useSelector((state:RootState) => state.dataCharacter.dataCharacter.name)
+    const dispatch = useDispatch();
     const urls = [`url(${castle})`, `url(${forest})`, `url(${terrace})`, `url(${throne})`]
     const names = ["Limsgrave", "Cementerio Perdido", "Capital del Rey", "Templo del mal"]
+    const [texto, setTexto] = useState("");
+
+    const clicker = async (num : number) => {
+        setViewAction(num);
+        const dungeonText = await getDungeon(characterName, num);
+        await getCharacterDefaultInfo(dispatch)
+        setTexto(dungeonText);
+    }
     return (
         <div className="bg-[#0B090F] h-screen w-screen bg-cover bg-center overflow-hidden">
             <Navbar isLoggedIn={true}/>
@@ -31,23 +96,23 @@ export default function Dungeon(){
                         <div className="pl-4 pr-4 pt-4 pb-4 flex flex-wrap items-center justify-between w-1/2 h-full bg-gray-800 rounded-4xl gap-5 overflow-y-auto min-w-[300px]">
                             
                             <div style={{backgroundImage: `url(${castle})`, backgroundSize: 'cover'}} 
-                            onClick={() => setViewAction(1)}
+                            onClick={() => clicker(1)}
                             className="flex text-white text-2xl items-center pl-5 w-full h-1/4 bg-gray-300 rounded-2xl hover:backdrop-blur-2xl cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
                                 Limgrave
                             </div>
                             <div style={{backgroundImage: `url(${forest})`, backgroundSize: 'cover'}}
-                            onClick={() => setViewAction(2)}
+                            onClick={() => clicker(2)}
                             className="flex text-white text-2xl items-center pl-5 w-full h-1/4 bg-gray-300 rounded-2xl hover:backdrop-blur-2xl cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
                                 Cementerio Perdido
                             </div>
                             <div
-                            onClick={() => setViewAction(3)} 
+                            onClick={() => clicker(3)} 
                             style={{backgroundImage: `url(${terrace})`, backgroundSize: 'cover'}}
                             className="flex text-white text-2xl items-center pl-5 w-full h-1/4 bg-gray-300 rounded-2xl hover:backdrop-blur-2xl cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
                                 Capital del Rey
                             </div>
                             <div style={{backgroundImage: `url(${throne})`, backgroundSize: 'cover'}} 
-                            onClick={() => setViewAction(4)}
+                            onClick={() => clicker(4)}
                             className="flex text-white text-2xl items-center pl-5 w-full h-1/4 bg-gray-300 rounded-2xl hover:backdrop-blur-2xl cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95">
                                 Templo del mal 
                             </div>
@@ -60,8 +125,8 @@ export default function Dungeon(){
                             className="flex text-white text-2xl items-center pl-5 w-full h-1/4 bg-gray-300 rounded-2xl">
                                 {names[viewAction-1]}
                             </div>
-                            <div className="bg-gray-900/80 h-3/4 w-full rounded-4xl overflow-y-auto">
-
+                            <div className="text-white pl-5 pt-5 pr-5 pb-5 bg-gray-900/80 h-3/4 w-full rounded-4xl overflow-y-auto">
+                                <TextoLento text={texto} delay={50} />
                             </div>
                             <div className="flex flex-row gap-10 items-center justify-center">
                                 <button onClick={() => setViewAction(0)} 

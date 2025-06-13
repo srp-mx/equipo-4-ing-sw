@@ -35,7 +35,6 @@ type RequestBody struct {
 // Handles /getDungeon
 func GetDungeon(c *fiber.Ctx) error {
 	_, err := getCredentials(c)
-
 	if err != nil {
 		return err
 	}
@@ -43,7 +42,6 @@ func GetDungeon(c *fiber.Ctx) error {
 	if err := c.BodyParser(&body); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("JSON inválido")
 	}
-
 	d := body.Dungeon
 
 	type Req struct {
@@ -54,14 +52,12 @@ func GetDungeon(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
 	request.Name = cleanDisplayName(request.Name)
 	characters := controllers.NewCharacterController(database.DB.Db)
 	character, err := characters.FindByName(request.Name)
 	if err != nil {
 		return err
 	}
-
 	switch {
 	case d == 1:
 		return dungeon1(c, character)
