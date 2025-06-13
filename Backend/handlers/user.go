@@ -59,3 +59,23 @@ func GetAllAssignments(c *fiber.Ctx) error {
 
 	return c.JSON(ass)
 }
+
+// Handles /remove_account
+func RemoveAccount(c *fiber.Ctx) error {
+	// Get the user
+	user, err := getCredentials(c)
+	if err != nil {
+		return err
+	}
+
+	// Remove
+	users := controllers.NewUserController(database.DB.Db)
+	err = users.DeleteUser(user)
+	if err != nil {
+		return getServerErr(c)
+	}
+
+	return c.JSON(fiber.Map{
+		"ok": true,
+	})
+}
