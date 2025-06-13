@@ -33,14 +33,13 @@ type characterTestData struct {
 	itemController *controllers.ItemController
 	controller *controllers.CharacterController
 	user *models.User
-	character *models.CharacterController
+	character *models.Character
 	pet1 *models.Pet
 	weapon1 *models.Weapon
 	armor1 *models.Armor
 	pet2 *models.Pet
 	weapon2 *models.Weapon
 	armor2 *models.Armor
-	dungeon *handlers.dungeon
 }
 
 func newCharacterTestData() (result characterTestData) {
@@ -194,7 +193,6 @@ func newCharacterTestData() (result characterTestData) {
 		DamageReceived: 70,
 		WearsID:        nil,
 	}
-	result.dungeon = newDungeon(1, data.character)
 	return result	
 }
 
@@ -206,11 +204,9 @@ func checkHPTest(t *testing.T){
 	resetDb()
 	data := newCharacterTestData()
 	data.user.Hp = 20;
-	db.Create(data.user)
-	db.Create(data.character)
-	err := data.dungeon.checkHP(50)
+	err := checkHP(50, data.Character)
 	assert.Error(t,err)
-	err := data.dungeon.checkHP(10)
+	err := checkHP(10, data.Character)
 	assert.NoError(t,err)
 }
 
@@ -218,22 +214,20 @@ func checkHPTest(t *testing.T){
 func getItemTest(t *testing.T){
 	resetDb()	
 	data := newCharacterTestData()
-	db.Create(data.user)
-	db.Create(data.character)
-	err := data.dungeon.getArmor(data.armor2)
+	err := data.dungeon.getArmor(data.armor2.Item, data.itemController, data.character)
 	assert.NoError(t,err)
-	err2 := data.ItemController.getArmor(data.armor2)
+	err2 := data.ItemController.getArmor(data.armor2.Item, data.itemController, data.character)
 	assert.NoError(t,err2)
 	
-	err3 := data.dungeon.getWeapon(data.weapon2)
+	err3 := data.dungeon.getWeapon(data.weapon2.Item, data.itemController, data.character)
 	assert.NoError(t,err3)
-	err4 := data.ItemController.getWeapon(data.weapon2)
+	err4 := data.ItemController.getWeapon(data.weapon2.Item, data.itemController, data.character)
 	assert.NoError(t,err4)
 
 	
-	err5 := data.dungeon.getPet(data.pet2)
+	err5 := data.dungeon.getPet(data.pet2.Item, data.itemController, data.character)
 	assert.NoError(t,err5)
-	err6 := data.ItemController.getPet(data.pet2)
+	err6 := data.ItemController.getPet(data.pet2.Item, data.itemController, data.character)
 	assert.NoError(t,err6)
 }
 
@@ -243,9 +237,7 @@ func resistanceTest(t *testing.T){
 	data.character.Wears = data.armor1
 	data.character.Equips = data.weapon1
 	data.character.Accompanies = data.pet1
-	db.Create(data.user)
-	db.Create(data.character)
-	data.dungeon.start()
+	assert.NotError(t,dungeon1(data.character))
 	assert.NotEqual(t, data.character.Wears.Bond, 5)
 	assert.NotEqual(t, data.character.Equips.SlayCount, 500)
 	assert.NotEqual(t, data.character.Accompanies.DamageReceived, 70)
