@@ -7,7 +7,8 @@ var Repo *AssetRepository = nil
 
 // Struct with all asset data
 type AssetRepository struct {
-	Credits *CreditTable
+	Credits      *CreditTable
+	Spritesheets *SpritesheetRepo
 }
 
 // Sets up the entire asset repository
@@ -16,13 +17,16 @@ func LoadAssetRepository() error {
 	sprites := res + "sprite_generator/"
 
 	Repo = &AssetRepository{
-		Credits: NewCreditTable(make(map[string]Credit)),
+		Credits:      NewCreditTable(make(map[string]Credit)),
+		Spritesheets: NewSpritesheetRepo(),
 	}
 
 	err := Repo.Credits.LoadFromCsvZip(sprites+"CREDITS.csv.zip", "CREDITS.csv")
 	if err != nil {
 		return err
 	}
+
+	// TODO: Load spritesheets into their repo
 
 	return nil
 }
