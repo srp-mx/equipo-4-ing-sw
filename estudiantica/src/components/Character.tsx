@@ -97,7 +97,6 @@ const Character = () => {
     useEffect(() => {
         if (isMobile) {
             setViewStats(false);
-            console.log("Mobile view enabled", isMobile, "View Stats:", viewStats);
         }
     }, [isMobile]);
 

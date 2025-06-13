@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { data } from "react-router-dom";
 
+
 export const getPointSkill = async (dispatch: any) => {
     try {
         const response = await fetch("http://localhost:3000/character_free_skill", {
