@@ -64,13 +64,13 @@ func GetDungeon(c *fiber.Ctx) error {
 
 	switch {
 	case d == 1:
-		return dungeon1(character)
+		return dungeon1(c, character)
 	case d == 2:
-		return dungeon2(character)
+		return dungeon2(c, character)
 	case d == 3:
-		return dungeon3(character)
+		return dungeon3(c, character)
 	case d == 4:
-		return dungeon4(character)
+		return dungeon4(c, character)
 	default:
 		return errors.New("No coindide la dungeon")
 	}
@@ -96,7 +96,7 @@ func getPet(pet *models.Item, itemController *controllers.ItemController, charac
 	return itemController.CreatePet(character, pet)
 }
 
-func dungeon1(character *models.Character) error {
+func dungeon1(c *fiber.Ctx, character *models.Character) error {
 	rand.Seed(time.Now().UnixNano())
 	err := checkHP(20, character)
 	if err != nil {
@@ -146,10 +146,13 @@ func dungeon1(character *models.Character) error {
 		return err
 	}
 
-	return errors.New(story)
+	return c.JSON(fiber.Map{
+		"string": story,
+	})
+
 }
 
-func dungeon2(character *models.Character) error {
+func dungeon2(c *fiber.Ctx, character *models.Character) error {
 	rand.Seed(time.Now().UnixNano())
 	err := checkHP(30, character)
 	if err != nil {
@@ -199,10 +202,12 @@ func dungeon2(character *models.Character) error {
 		return err
 	}
 
-	return errors.New(story)
+	return c.JSON(fiber.Map{
+		"string": story,
+	})
 }
 
-func dungeon3(character *models.Character) error {
+func dungeon3(c *fiber.Ctx, character *models.Character) error {
 	rand.Seed(time.Now().UnixNano())
 	err := checkHP(40, character)
 	if err != nil {
@@ -252,10 +257,12 @@ func dungeon3(character *models.Character) error {
 		return err
 	}
 
-	return errors.New(story)
+	return c.JSON(fiber.Map{
+		"string": story,
+	})
 }
 
-func dungeon4(character *models.Character) error {
+func dungeon4(c *fiber.Ctx, character *models.Character) error {
 	rand.Seed(time.Now().UnixNano())
 	err := checkHP(50, character)
 	if err != nil {
@@ -305,7 +312,9 @@ func dungeon4(character *models.Character) error {
 		return err
 	}
 
-	return errors.New(story)
+	return c.JSON(fiber.Map{
+		"string": story,
+	})
 }
 func dungeonSuccess(character *models.Character, dungeonLevel int) bool {
 	characterController := controllers.NewCharacterController(database.DB.Db)

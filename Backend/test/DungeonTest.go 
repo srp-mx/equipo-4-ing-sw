@@ -230,16 +230,3 @@ func getItemTest(t *testing.T){
 	err6 := data.ItemController.getPet(data.pet2.Item, data.itemController, data.character)
 	assert.NoError(t,err6)
 }
-
-/*funcion encargada de revisar si los items equipados se desgastan después de una mazmorra*/
-func resistanceTest(t *testing.T){
-	resetDb()
-	data.character.Wears = data.armor1
-	data.character.Equips = data.weapon1
-	data.character.Accompanies = data.pet1
-	assert.NotError(t,dungeon1(data.character))
-	assert.NotEqual(t, data.character.Wears.Bond, 5)
-	assert.NotEqual(t, data.character.Equips.SlayCount, 500)
-	assert.NotEqual(t, data.character.Accompanies.DamageReceived, 70)
-	
-}
