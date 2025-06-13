@@ -111,7 +111,7 @@ const ItemsEquiped = () => {
     }, [dispatch])
 
     return (
-        <div className="flex-col items-center text-white text-xs sm:text-sm h-2/3 ">
+        <div className={`${location.pathname === "/dungeon" ? "flex-row space-x-2": "flex-col"} flex items-center text-white text-xs sm:text-sm h-2/3`}>
             <button className="bg-[#152442] md:mb-2 mt-2 items-center h-15 w-15 sm:h-20 sm:w-20 rounded-xl text-xs md:text-sm text-center  flex flex-col justify-center items-center text-center" 
             onClick={() => setModalArmor(true)}
             >
