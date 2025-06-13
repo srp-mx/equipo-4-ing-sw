@@ -8,6 +8,7 @@ import ModalPet from "./Items/ModalPet";
 import { RootState } from "@/constants/store";
 import { CircleOff } from "lucide-react";
 import ModalWeapon from "./Items/ModalWeapon";
+import { Bot, Pickaxe , PawPrint} from "lucide-react"
 
 const getPetEquiped = async (dispatch:any) => {
     try{
@@ -110,50 +111,39 @@ const ItemsEquiped = () => {
     }, [dispatch])
 
     return (
-        <>
-            <button className="bg-[#152442]  m-2 rounded-xl h-full w-6/10 flex flex-col justify-center items-center text-center ml-4" 
+        <div className="flex-col items-center text-white text-xs sm:text-sm h-2/3 ">
+            <button className="bg-[#152442] md:mb-2 mt-2 items-center h-15 w-15 sm:h-20 sm:w-20 rounded-xl text-xs md:text-sm text-center  flex flex-col justify-center items-center text-center" 
             onClick={() => setModalArmor(true)}
             >
-                {itemEquiped.armor.id === 0 ? 
-                    <CircleOff color="black" className="w-4/5 h-4/5" />
-                : 
-                <img src={itemEquiped.armor.image_uri} alt="armadura" />
+                {itemEquiped.armor.id ?
+                    (<img src={itemEquiped.armor.image_uri} alt="armor" className="w-4/5 h-4/5" />)
+                :
+                    <Bot color="black" className="w-4/5 h-4/5" />
                 }
             </button>
-            <button className="bg-[#152442] m-2 rounded-xl h-full w-6/10 flex items-center justify-center text-center ml-4" 
+            <button className="bg-[#152442] md:mb-2 mt-2 items-center h-15 w-15 sm:h-20 sm:w-20 rounded-xl text-center flex flex-col justify-center items-center text-center" 
             onClick={() => setModalWeapon(true)}
             >
-                {itemEquiped.weapon.id === 0 ? 
-                    <CircleOff color="black" className="w-4/5 h-4/5" />
-                : 
-                <img src={itemEquiped.weapon.image_uri} alt="arma" />
+                {itemEquiped.weapon.id ?
+                    (<img src={itemEquiped.weapon.image_uri} alt="weapon" className="w-4/5 h-4/5" />)
+                :
+                    <Pickaxe color="black" className="w-4/5 h-4/5" />
                 }
             </button>
-            <button className="bg-[#152442]  m-2 rounded-xl h-full w-6/10 flex justify-center items-center text-center ml-4" 
+            <button className="bg-[#152442] md:mb-2 mt-2 items-center h-15 w-15 sm:h-20 sm:w-20 rounded-xl text-center flex flex-col justify-center items-center text-center" 
             onClick={() => setModalPet(true)}
             >
-                {0 === 0 ? 
-                    <CircleOff color="black" className="w-4/5 h-4/5" />
-                : 
-                <img src={itemEquiped.pet.image_uri} alt="mascota" />
+                {itemEquiped.pet.id ?
+                    (<img src={itemEquiped.pet.image_uri} alt="pet" className="w-4/5 h-4/5" />)
+                :
+                    <PawPrint color="black" className="w-4/5 h-4/5" />
                 }
             </button>
         {modalArmor && <ModalArmor onClose={() => setModalArmor(false)} />}
         {modalPet && <ModalPet onClose={() => setModalPet(false)} />}
         {modalWeapon && <ModalWeapon onClose={() => setModalWeapon(false)}  />}
-        </>
-    );
-    /*return (
-        <div className="flex-col items-center text-white text-xs sm:text-sm h-2/3 ">
-        {itemEquiped.map((item) => (
-            <div 
-                className="bg-[#152442] md:mb-2 mt-2 items-center h-15 w-15 sm:h-20 sm:w-20 rounded-xl text-center"
-             >
-                <img src={item.url} alt={item.label} />
-            </div>
-        ))}
         </div>
-    )*/
+    );
 }
 
 export default ItemsEquiped;

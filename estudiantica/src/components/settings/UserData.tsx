@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "../Button";
 import { Input } from "../Inputs";
-const userIcon = "/assets/img/user.png";
+import userIcon from "@/assets/img/icono_user.svg";
 
 export default function UserData(){
     const [name, setName] = useState("");
@@ -16,7 +16,7 @@ export default function UserData(){
                     <img
                         src={userIcon}
                         alt=""
-                        className="w-15 h-15 md:w-30 md:h-30 rounded-lg bg-white"
+                        className="w-15 h-15 md:w-30 md:h-30 p-2 rounded-lg bg-[#CBDA3D]"
                     />
                     <div>
                         <Button type="button">

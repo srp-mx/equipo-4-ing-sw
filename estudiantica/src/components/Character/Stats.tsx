@@ -124,7 +124,7 @@ export default function Stats() {
     if (isEdit) {
         return (
             <div className="flex flex-col justify-end mr-3 h-full" >
-                <div className="bg-[#1B1539] text-white p-4 space-y-2.5 justify-center flex flex-col text-sm"
+                <div className="bg-[#152442] text-white p-4 space-y-2.5 justify-center flex flex-col text-sm"
                     >
                     <p className="text-center"> Puntos: {pointLeft} </p>
 
@@ -259,7 +259,7 @@ export default function Stats() {
     else {
         return (
             <div className="flex flex-col justify-end mr-3 h-full" >
-                <div className="bg-[#1B1539] text-white p-4 space-y-2.5 justify-center flex flex-col text-sm lg:text-base rounded-lg"
+                <div className="bg-[#152442] text-white p-4 space-y-2.5 justify-center flex flex-col text-sm lg:text-base rounded-lg"
                     >
                     <p className="text-center"> Estadisticas </p>
 
