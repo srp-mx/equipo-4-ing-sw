@@ -79,3 +79,43 @@ func RemoveAccount(c *fiber.Ctx) error {
 		"ok": true,
 	})
 }
+
+// Handles /update_profile
+func UpdateProfile(c *fiber.Ctx) error {
+	// Get the user
+	user, err := getCredentials(c)
+	if err != nil {
+		return err
+	}
+
+	// Request type
+	type Req struct {
+		Name     *string `json:"name"`
+		Password *string `json:"password"`
+		Email    *string `json:"email"`
+	}
+
+	// Parses the request
+	body, err := parseRequestBody[Req](c)
+
+	if body.Name != nil {
+		user.Name = *body.Name
+	}
+
+	if body.Password != nil {
+		user.Password = *body.Password
+	}
+
+	if body.Email != nil {
+		user.Email = *body.Email
+	}
+
+	// Updates the record
+	users := controllers.NewUserController(database.DB.Db)
+	err = users.UpdateUser(user)
+	if err != nil {
+		return getServerErr(c)
+	}
+
+	return c.JSON(user)
+}
