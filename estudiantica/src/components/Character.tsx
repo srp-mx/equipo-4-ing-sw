@@ -13,7 +13,9 @@ import EditModal from '@/components/Character/EditModal'
 import ItemsEquiped from "./ItemsEquiped";
 import rachaIcon from "@/assets/img/racha.png";
 import { useIsMobile } from "@/constants/utils/useIsMobile";
-import iconoUser from "@/assets/img/icono_user.svg";
+import iconouser from "@/assets/img/icono_user.svg";
+
+
 
 export const getRefresh = async (dispatch: any) => {
     try {
@@ -93,6 +95,32 @@ const Character = () => {
     const dispatch = useDispatch();
     const [viewStats, setViewStats] = useState(false);
     const isMobile = useIsMobile();
+    const [iconoUser, setIconoUser] = useState<string>(iconouser);
+
+    useEffect(() => {
+        const fetchImageUrl = async () => {
+            try {
+                const response = await fetch("http://localhost:300/get_pfp", 
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("No se pudo obtener la imagen");
+                }
+                const blob = await response.blob();
+                const imageUrl = URL.createObjectURL(blob);
+                setIconoUser(imageUrl);
+            } catch (error) {
+                console.error("Error al cargar la imagen del usuario", error);
+            }
+        };
+
+        fetchImageUrl();
+    }, []);
 
     useEffect(() => {
         if (isMobile) {
