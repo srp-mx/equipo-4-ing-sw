@@ -18,72 +18,74 @@
 package test
 
 import (
+	"math"
 	"testing"
 	"time"
-	"math"
-	
+
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
-	"github.com/srp-mx/equipo-4-ing-sw/models"
 	"github.com/srp-mx/equipo-4-ing-sw/handlers"
-	"github/stretchr/testify/assert"	
+	"github.com/srp-mx/equipo-4-ing-sw/models"
+	"github/stretchr/testify/assert"
 )
 
-type characterTestData struct {
+// Test data struct
+type dungeonTestData struct {
 	userController *controllers.UserController
 	itemController *controllers.ItemController
-	controller *controllers.CharacterController
-	user *models.User
-	character *models.Character
-	pet1 *models.Pet
-	weapon1 *models.Weapon
-	armor1 *models.Armor
-	pet2 *models.Pet
-	weapon2 *models.Weapon
-	armor2 *models.Armor
+	controller     *controllers.CharacterController
+	user           *models.User
+	character      *models.Character
+	pet1           *models.Pet
+	weapon1        *models.Weapon
+	armor1         *models.Armor
+	pet2           *models.Pet
+	weapon2        *models.Weapon
+	armor2         *models.Armor
 }
 
-func newCharacterTestData() (result characterTestData) {
-	result = characterTestData{}
+// Creates test data
+func newDungeonTestData() (result dungeonTestData) {
+	result = dungeonTestData{}
 	result.userController = controllers.NewUserController(db)
 	result.itemController = controllers.NewItemController(db)
 	result.controller = controllers.NewCharacterController(db)
 
 	result.user = &models.User{
 		Username: "testuser",
-		Name: "Testing Testington",
-		Email: "test@test.com",
+		Name:     "Testing Testington",
+		Email:    "test@test.com",
 		Password: "securepassword",
 	}
 
 	result.character = &models.Character{
-		ID: 0,
-		UserUsername: result.user.Username,
-		Name: "quijote",
+		ID:                   0,
+		UserUsername:         result.user.Username,
+		Name:                 "quijote",
 		MomentOfLatestAction: time.Now(),
-		Streak: 10,
-		Hp: 100,
-		StrengthExtra: 1,
-		DefenseExtra: 2,
-		IntelligenceExtra: 3,
-		HeartExtra: 4,
-		ExtraPoints: 5,
+		Streak:               10,
+		Hp:                   100,
+		StrengthExtra:        1,
+		DefenseExtra:         2,
+		IntelligenceExtra:    3,
+		HeartExtra:           4,
+		ExtraPoints:          5,
 		Wears: models.Wears{
-			ID: 0,
+			ID:          0,
 			CharacterID: 0,
-			Armor: nil,
-			Since: time.Now(),
+			Armor:       nil,
+			Since:       time.Now(),
 		},
 		Equips: models.Equips{
-			ID: 0,
+			ID:          0,
 			CharacterID: 0,
-			Weapon: nil,
-			Since: time.Now(),
+			Weapon:      nil,
+			Since:       time.Now(),
 		},
 		Accompanies: models.Accompanies{
-			ID: 0,
+			ID:          0,
 			CharacterID: 0,
-			Pet: nil,
-			Since: time.Now(),
+			Pet:         nil,
+			Since:       time.Now(),
 		},
 	}
 	result.pet1 = &models.Pet{
@@ -193,40 +195,5 @@ func newCharacterTestData() (result characterTestData) {
 		DamageReceived: 70,
 		WearsID:        nil,
 	}
-	return result	
-}
-
-
-/*
-Función encargada de revisar si la vida del character es suficiente para enfrentarse a la Dungeon
-*/
-func checkHPTest(t *testing.T){
-	resetDb()
-	data := newCharacterTestData()
-	data.user.Hp = 20;
-	err := checkHP(50, data.Character)
-	assert.Error(t,err)
-	err := checkHP(10, data.Character)
-	assert.NoError(t,err)
-}
-
-/*Función encargada de revisar si se obtiene un item al llamar a la función getItem que se guarde en los datos del personaje*/
-func getItemTest(t *testing.T){
-	resetDb()	
-	data := newCharacterTestData()
-	err := data.dungeon.getArmor(data.armor2.Item, data.itemController, data.character)
-	assert.NoError(t,err)
-	err2 := data.ItemController.getArmor(data.armor2.Item, data.itemController, data.character)
-	assert.NoError(t,err2)
-	
-	err3 := data.dungeon.getWeapon(data.weapon2.Item, data.itemController, data.character)
-	assert.NoError(t,err3)
-	err4 := data.ItemController.getWeapon(data.weapon2.Item, data.itemController, data.character)
-	assert.NoError(t,err4)
-
-	
-	err5 := data.dungeon.getPet(data.pet2.Item, data.itemController, data.character)
-	assert.NoError(t,err5)
-	err6 := data.ItemController.getPet(data.pet2.Item, data.itemController, data.character)
-	assert.NoError(t,err6)
+	return result
 }
