@@ -18,14 +18,10 @@
 package test
 
 import (
-	"math"
-	"testing"
 	"time"
 
 	"github.com/srp-mx/equipo-4-ing-sw/controllers"
-	"github.com/srp-mx/equipo-4-ing-sw/handlers"
 	"github.com/srp-mx/equipo-4-ing-sw/models"
-	"github/stretchr/testify/assert"
 )
 
 // Test data struct
