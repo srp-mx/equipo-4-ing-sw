@@ -3,11 +3,13 @@ import { Button } from "../Button";
 import { Input } from "../Inputs";
 import { PasswordInput } from "../Inputs";
 import iconouser from "@/assets/img/icono_user.svg";
+import { useNotification } from "../NotificationProvider";
 
 
-const updateUserData = async (name: string, email: string, newPassword: string, confirmPassword: string) => {
+const updateUserData = async (name: string, email: string, newPassword: string, confirmPassword: string, showNotification) => {
     try {
         if (newPassword !== confirmPassword) {
+            showNotification("Las contraseñas nuevas no coinciden", "error");
             throw new Error("Las contraseñas nuevas no coinciden");
         }
 
@@ -25,17 +27,20 @@ const updateUserData = async (name: string, email: string, newPassword: string, 
         });
 
         if (!response.ok) {
+            showNotification("No se pudo actualizar la configuración", "error");
             throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
 
         const data = await response.json();
         console.log("User data updated successfully:", data);
+        showNotification("Datos de usuario actualizados con éxito", "success");
     } catch (error) {
         console.error("Error updating user data:", error);
     }
 }
 
 export default function UserData() {
+    const { showNotification } = useNotification();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -133,7 +138,7 @@ export default function UserData() {
                     </div>
                 </div>
 
-                <Button type="button" onClick={() => updateUserData(name, email, newPassword, confirmPassword)}>
+                <Button type="button" onClick={() => updateUserData(name, email, newPassword, confirmPassword, showNotification)}>
                     Guardar Cambios
                 </Button>
             </div>
