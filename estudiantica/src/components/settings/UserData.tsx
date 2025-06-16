@@ -47,48 +47,6 @@ export default function UserData() {
     const [confirmPassword, setconfirmPassword] = useState("");
     const [iconoUser, setIconoUser] = useState<string>(iconouser);
 
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const updateImg = () => {
-        fileInputRef.current?.click(); // Dispara el input file oculto
-    };
-
-    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    if (!["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
-      alert("Formato no válido. Usa JPG, PNG o GIF.");
-      return;
-    }
-
-    if (file.size > 1024 * 1024) {
-      alert("La imagen no debe superar 1MB.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("avatar", file);
-
-    try {
-      const response = await fetch("http://localhost:3000/user/avatar", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error("Error al subir la imagen");
-
-      const blob = await response.blob();
-      const imageUrl = URL.createObjectURL(blob);
-      setIconoUser(imageUrl);
-    } catch (error) {
-      console.error("Error al subir imagen:", error);
-      alert("No se pudo subir la imagen.");
-    }
-  };
-
     return (
         <div className="flex justify-center items-center ">
             <div className="shadow-lg rounded-lg p-5 w-11/12 md:w-5/6 text-white">
@@ -100,19 +58,6 @@ export default function UserData() {
                         alt=""
                         className="w-15 h-15 md:w-30 md:h-30 p-2 rounded-lg bg-[#CBDA3D]"
                     />
-                    <div>
-                        <Button type="button" onClick={updateImg}>
-                            Cambiar Avatar
-                        </Button>
-                        <p className="text-xs mt-2">JPG, GIF o PNG. 1MB max.</p>
-                        <input
-                            type="file"
-                            accept="image/jpeg,image/png,image/gif"
-                            ref={fileInputRef}
-                            className="hidden"
-                            onChange={handleFileChange}
-                        />
-                    </div>
                 </div>
 
                 <div className="space-y-2">
