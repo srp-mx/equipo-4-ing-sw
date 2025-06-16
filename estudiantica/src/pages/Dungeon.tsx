@@ -10,7 +10,7 @@ import Stats from "@/components/Character/Stats";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/constants/store";
-import { getCharacterDefaultInfo } from "@/components/Character";
+import { getCharacterDefaultInfo, getStats } from "@/components/Character";
 import { Star } from "lucide-react";
 
 export const getDungeon = async(name: string, id : number ) => {
@@ -85,6 +85,7 @@ export default function Dungeon(){
         setViewAction(num);
         const dungeonText = await getDungeon(characterName, num);
         await getCharacterDefaultInfo(dispatch);
+        await getStats(dispatch);
         setTexto(dungeonText);
     }
     if(characterName === '')
