@@ -70,6 +70,14 @@ func main() {
 		}, ","),
 	}))
 
+	// Added to debug responses
+	app.Use(func(c *fiber.Ctx) error {
+		fmt.Println(">>> EMITTING NEW RESPONSE <<<")
+		err := c.Next()
+		fmt.Println("Body:", c.Response().String())
+		return err
+	})
+
 	// Routes
 	routes.SetupRoutes(app)
 

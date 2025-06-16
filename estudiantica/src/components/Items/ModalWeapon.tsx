@@ -7,7 +7,7 @@ import {clearWeapon, setWeapon } from "@/constants/dataCharacterSlice";
 
 const getWeapons = async () => {
     try {
-        const response = await fetch("http://localhost:3000/character_pets",{
+        const response = await fetch("http://localhost:3000/character_weapons",{
             method: "GET", 
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("token"), 

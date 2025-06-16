@@ -218,6 +218,9 @@ func (self Dungeon) reward(character *models.Character, result *DungeonResult) {
 		rewardRarity = 0
 	}
 
+	// Reward stats
+	stats := models.CharacterStats{}
+
 	// Construct weapon name and stats bonus
 	suffix := raritySuffixes[rewardRarity]
 	itemName := ""
@@ -225,14 +228,24 @@ func (self Dungeon) reward(character *models.Character, result *DungeonResult) {
 	switch result.RewardType {
 	case models.ITEM_ARMOR:
 		itemName = fmt.Sprintf("%s %s", armorTypes[rng.Intn(len(armorTypes))], suffix)
-		statsBonus = self.level * (rng.Intn(3) + 1)
+		stats.Strength = self.level * (rng.Intn(2))
+		stats.Defense = self.level * (rng.Intn(3) + 1 + rewardRarity)
+		stats.Intelligence = self.level * (rng.Intn(3))
+		stats.Heart = self.level * (rng.Intn(2))
 	case models.ITEM_WEAPON:
 		itemName = fmt.Sprintf("%s %s", weaponTypes[rng.Intn(len(weaponTypes))], suffix)
-		statsBonus = self.level * (rng.Intn(3) + 1)
+		stats.Strength = self.level * (rng.Intn(3) + 1 + rewardRarity)
+		stats.Defense = self.level * (rng.Intn(3))
+		stats.Intelligence = self.level * (rng.Intn(2))
+		stats.Heart = self.level * (rng.Intn(3))
 	case models.ITEM_PET:
 		itemName = fmt.Sprintf("%s %s", petTypes[rng.Intn(len(petTypes))], suffix)
-		statsBonus = self.level * (rng.Intn(2) + 1)
+		stats.Strength = self.level * (rng.Intn(4))
+		stats.Defense = self.level * (rng.Intn(4))
+		stats.Intelligence = self.level * (rng.Intn(2))
+		stats.Heart = self.level * (rng.Intn(3) + 1 + rewardRarity)
 	}
+	statsBonus = stats.Strength + stats.Defense + stats.Intelligence + stats.Heart
 
 	// Add to story
 	result.Story += fmt.Sprintf("¡Has obtenido %s! (+%d a tus stats)",
@@ -240,8 +253,12 @@ func (self Dungeon) reward(character *models.Character, result *DungeonResult) {
 
 	// Set to reward
 	result.Reward = &models.Item{
-		Name:    itemName,
-		OwnerID: character.ID,
+		Name:         itemName,
+		OwnerID:      character.ID,
+		Strength:     stats.Strength,
+		Defense:      stats.Defense,
+		Intelligence: stats.Intelligence,
+		Heart:        stats.Heart,
 	}
 }
 
