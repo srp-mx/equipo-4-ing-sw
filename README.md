@@ -59,3 +59,10 @@ docker compose restart
 cd equipo-4-ing-sw
 docker compose start
 ```
+
+- Para correr las pruebas del backend
+
+```bash
+cd equipo-4-ing-sw/Backend
+go test ./test
+```
