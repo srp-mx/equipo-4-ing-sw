@@ -317,9 +317,11 @@ Las documentación de cada ruta son las siguientes.
   generates a new one.
 * [/register](./.repo/API/register): Receives register data, creates the user
   if possible, and returns the data created as confirmation.
+* [/remove_account](.repo/API/remove_account) Removes Account
 * [/rename_armor](./.repo/API/rename_armor): Changes the name of an armor.
 * [/rename_pet](./.repo/API/rename_pet): Changes the name of a pet.
 * [/rename_weapon](./.repo/API/rename_weapon): Changes the name of a weapon.
+* [/update_profile](.repo/API/update_profile) Update information from user.
 * [/user_classes](./.repo/API/user_classes): Gets all classes a user is
   enrolled in.
 * [/verify_formula](./.repo/API/verify_formula): Receives a formula and checks
