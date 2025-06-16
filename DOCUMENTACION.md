@@ -87,7 +87,8 @@ Para esto, tendremos las siguientes entidades, resumidas a continuación:
   - Assignment: es la lista de deberes del estudiante, la cual debe de tener
      nombre, calificación, tipo, fecha de finalización, notas, si es opcional y
      tags (las cuales pueden ser varias).
-    ![AssignmentEntidadRelacion](.repo/EntidadRelacion/Assignment.png)
+
+      ![AssignmentEntidadRelacion](.repo/EntidadRelacion/Assignment.png)
 Las entidades se tomaron de esta manera, ya que engloba la mayoría de las
 acciones que hará la aplicación y nos permite acoplarlo con el resto de los
 módulos, los cuales se detallarán en la siguiente sección.
