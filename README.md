@@ -19,23 +19,50 @@ Disfruta de nuestra historia y llega a tu objetivo de vida acompañado del mejor
 amigo del estudiante 😼. Cambia tu relación con tu vida estudiantil y disfruta
 aprender.
 
-## Instrucciones
+## Instalación
 
-Para clonar y usar adecuadamente el repositorio, necesitarás `docker`,
-`husky` y `docker-compose`. Adicionalmente, si quieres trabajar en
-el backend necesitarás `go` para las pruebas automatizadas.
+Para esto, se requiere tener instalado el software Docker en el servidor (computadora)
+en el que se desea desplegar la aplicación. De este modo:
 
-Para construir el proyecto usa
+1. Clonar el repositorio
+
 ```bash
-docker compose build
+git clone https://github.com/srp-mx/equipo-4-ing-sw
+cd equipo-4-ing-sw
 ```
 
-Una vez construido puedes levantarlo con
+2. Inicializar los servicios de Backend (GO), Frontend(Vite.js) y DB (Postgres)
+
 ```bash
-docker compose up
+docker compose up --build (-d -> Para que corra en segundo plano)  
+```
+3. Acceder a la página [principal](http://localhost:3000/)
+
+Para el manejo de los contenedores dirigirte a la carpeta raíz del proyecto.
+- Para finalizar la ejecución:
+
+```bash
+cd equipo-4-ing-sw
+docker compose stop
 ```
 
-## Recursos
-- [Wiki](https://github.com/srp-mx/equipo-4-ing-sw/wiki)
-- [Projectos](https://github.com/srp-mx/equipo-4-ing-sw/projects)
-- [Discusiones](https://github.com/srp-mx/equipo-4-ing-sw/discussions)
+- Para reiniciar el proyecto:
+
+```bash
+cd equipo-4-ing-sw
+docker compose restart
+```
+
+- Para inicializar el proyecto:
+
+```bash
+cd equipo-4-ing-sw
+docker compose start
+```
+
+- Para correr las pruebas del backend
+
+```bash
+cd equipo-4-ing-sw/Backend
+go test ./test
+```

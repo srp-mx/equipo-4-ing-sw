@@ -42,6 +42,7 @@ const fetchAuthentication = async (email: string, password: string, dispatch: an
       email: data.user.email,
       token: data.token,
       username: data.username,
+      img : data.img,
     }))
   } catch (error) {
     if (error instanceof Error) {

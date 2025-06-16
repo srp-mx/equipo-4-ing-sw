@@ -98,15 +98,15 @@ func UpdateProfile(c *fiber.Ctx) error {
 	// Parses the request
 	body, err := parseRequestBody[Req](c)
 
-	if body.Name != nil {
+	if body.Name != nil && *(body.Name) != "" {
 		user.Name = *body.Name
 	}
 
-	if body.Password != nil {
+	if body.Password != nil && *(body.Password) != "" {
 		user.Password = *body.Password
 	}
 
-	if body.Email != nil {
+	if body.Email != nil && *(body.Email) != "" {
 		user.Email = *body.Email
 	}
 
