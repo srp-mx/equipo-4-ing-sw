@@ -29,10 +29,6 @@ siguientes aspectos: la materia a la que pertenece el trabajo, su fecha de
 entrega y a qué grupo de trabajos pertenece, el cual llamaremos su *tag* o
 *etiqueta*.
 
-El estudiante tendrá acceso a distintas métricas respecto a su desempeño como:
-calificación por materia y porcentaje de trabajos entregados. Además, podrá ver
-una lista de todos sus pendientes en el orden en el que se entregan.
-
 En el aspecto más básico de *ludificación* tu personaje tendrá métricas como
 salud, experiencia, fuerza, inteligencia, defensa y corazón. El personaje podrá
 subir de nivel a través de buen desempeño académico y buena organización al
@@ -103,16 +99,6 @@ Partiendo por el usuario, esta entidad se encargará de toda la información de
 la cuenta separada de las mecánicas de juego mismas. Sus atributos serán el
 nombre de usuario, un hash de la contraseña, y correo electrónico para los
 recordatorios y recuperación de la cuenta.
-
-Un usuario puede agregar como amigo a otro usuario. Ambos deben agregarse como
-amigos para que tengan acceso a las características de amistad, por lo tanto
-será una tupla no conmutativa.
-
-Los clanes son grupos de estudio, en los cuales puede un estudiante pertenecer
-sólo a uno, y es administrado por sólo un usuario. Además, un clan puede
-invitar a varios usuarios, con una fecha de expiración por invitación. Cuentan
-con un logo, descripción, nombre, su propio XP por actividades completadas, y
-número de victorias.
 
 Un usuario puede tomar varias clases. Se puede registrar una fórmula para
 calcular el promedio, que pueden ser construidas componiendo funciones
