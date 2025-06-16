@@ -82,12 +82,12 @@ Para esto, tendremos las siguientes entidades, resumidas a continuación:
    - Class: son las materias que los usuarios tienen las cuales deben de tener
      su nombre, fecha de inicio y fin, y fórmula de calificación.
   
-      ![ClassEntidadRelacion](.repo/EntidadRelacion/Class.png)
+     ![ClassEntidadRelacion](.repo/EntidadRelacion/Class.png)
 
   - Assignment: es la lista de deberes del estudiante, la cual debe de tener
      nombre, calificación, tipo, fecha de finalización, notas, si es opcional y
      tags (las cuales pueden ser varias).
-  ![AssignmentEntidadRelacion](.repo/EntidadRelacion/Assignment.png)
+    ![AssignmentEntidadRelacion](.repo/EntidadRelacion/Assignment.png)
 Las entidades se tomaron de esta manera, ya que engloba la mayoría de las
 acciones que hará la aplicación y nos permite acoplarlo con el resto de los
 módulos, los cuales se detallarán en la siguiente sección.
