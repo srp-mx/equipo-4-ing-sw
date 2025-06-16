@@ -1,0 +1,30 @@
+Description: Try to change user information from database and app 
+
+Type: POST 
+
+INPUT: 
+{
+    "name": ...
+    "email": ...
+    "password": ...
+}
+
+RETURNS: 
+{
+    "ok": ...
+}
+
+"ok" -> boolean // true if everything is okay.
+
+ERRORS:
+400 (Bad request)
+    Cause: Malformed JSON
+
+401 (Unauthorized)
+    Cause: Bad credentials
+
+404 (Not found)
+    Cause: The user has no character
+
+500 (Internal server error)
+    Cause: Internal error

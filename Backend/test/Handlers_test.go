@@ -467,7 +467,6 @@ func testCharacterStats(t *testing.T) {
 	assert.Greater(t, interpResp.Stats.StreakBonusPercent, 0.0)
 	assert.Greater(t, interpResp.Stats.Xp, uint64(0))
 
-	// TODO: Modify this when we take items into account for skills
 	streakBonus := interpResp.Stats.StreakBonusPercent
 	expStrength := user.Character.StrengthExtra
 	expStrength += int(math.Round(float64(expStrength) * streakBonus))
@@ -477,6 +476,10 @@ func testCharacterStats(t *testing.T) {
 	expIntelligence += int(math.Round(float64(expIntelligence) * streakBonus))
 	expHeart := user.Character.HeartExtra
 	expHeart += int(math.Round(float64(expHeart) * streakBonus))
+	expStrength += 5 + 3 // account for equipped items strength
+	expDefense += 1 + 1  // account for equipped items defense
+	expIntelligence += 1 // account for equipped items intelligence
+	expHeart += 1 + 1    // account for equipped items heart
 	assert.Equal(t, expStrength, interpResp.Stats.Skills.Strength)
 	assert.Equal(t, expDefense, interpResp.Stats.Skills.Defense)
 	assert.Equal(t, expIntelligence, interpResp.Stats.Skills.Intelligence)

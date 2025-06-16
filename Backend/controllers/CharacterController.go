@@ -192,7 +192,39 @@ func (self *CharacterController) ComputeStats(character *models.Character) (mode
 	stats.Intelligence += character.IntelligenceExtra
 	stats.Heart += character.HeartExtra
 
-	// TODO: Add additional calculations based on items equipped once that's implemented
+	// Load armor worn and add effects
+	err = self.LoadWearing(character)
+	if err != nil {
+		return stats, 0, err
+	}
+	if character.Wears.Armor != nil {
+		stats.Strength += character.Wears.Armor.Strength
+		stats.Defense += character.Wears.Armor.Defense
+		stats.Intelligence += character.Wears.Armor.Intelligence
+		stats.Heart += character.Wears.Armor.Heart
+	}
+	// Load weapon equipped and add effects
+	err = self.LoadEquipped(character)
+	if err != nil {
+		return stats, 0, err
+	}
+	if character.Equips.Weapon != nil {
+		stats.Strength += character.Equips.Weapon.Strength
+		stats.Defense += character.Equips.Weapon.Defense
+		stats.Intelligence += character.Equips.Weapon.Intelligence
+		stats.Heart += character.Equips.Weapon.Heart
+	}
+	// Load pet accompanying and add effects
+	err = self.LoadAccompanying(character)
+	if err != nil {
+		return stats, 0, err
+	}
+	if character.Accompanies.Pet != nil {
+		stats.Strength += character.Accompanies.Pet.Strength
+		stats.Defense += character.Accompanies.Pet.Defense
+		stats.Intelligence += character.Accompanies.Pet.Intelligence
+		stats.Heart += character.Accompanies.Pet.Heart
+	}
 
 	multiplier := self.streakBonusMultiplier(character.Streak)
 	stats.Strength += int(math.Round(float64(stats.Strength) * multiplier))

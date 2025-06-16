@@ -1,5 +1,5 @@
 import { Class } from '../../Object/Class';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import bandera from '@/assets/img/bandera.png'
 
 const getEndDateStatus = (endDate: Date) => {
@@ -18,11 +18,51 @@ type ClassCardProps = {
     onOpen: () => void;
 }
 
+const Calcgrade = async(id:number) => {
+    try {
+            const response = await fetch(`http://localhost:3000/class_grade?id=${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                }
+            });
+            if (!response.ok) {
+                switch (response.status) {
+                    case 400:
+                        throw new Error(`Bad Request ${response.body}`)
+                    case 401:
+                        throw new Error(`Unauthorized: ${response.body}`)
+                    case 500:
+                        throw new Error(`Internal Server Error: ${response.body}`)
+                }
+            }
+            const data = await response.json();
+            return data.grade;
+        } catch (error) {
+            console.error("Error ", error);
+            return null;
+        }
+}
+
 export default function ClassCard({ classData, onOpen }: ClassCardProps): React.ReactNode {
+    const [grade, setGrade] = useState<string | number | null>(null);
     const activateClass = getEndDateStatus(new Date(classData.end_date))
     const color = classData.color?.slice(0, 6) || "ffffff";
 
-    console.log(classData)
+    useEffect(() => {
+        const loadGrade = async () => {
+            const result = await Calcgrade(classData.id);
+            if (typeof result === 'number') {
+                setGrade(result.toFixed(2));
+            } else {
+                setGrade(result);
+            }
+        };
+        
+        loadGrade();
+    }, [classData.id]); // Solo se ejecuta cuando classData.id cambia
+
     if (classData.start_date == null) console.log("Fecha Inicio null");
 
     return (
@@ -49,6 +89,9 @@ export default function ClassCard({ classData, onOpen }: ClassCardProps): React.
                         style={{ backgroundColor: `#${color}` }}
                     >
                     </div>
+                </div>
+                <div className="text-gray-600 text-right text-sm md:text-lg mr-4 px-2 py-1 rounded-full">
+                    <span> Calificación:  {grade ?? "...Cargando"}</span>
                 </div>
                 <div className="text-gray-600 text-right text-sm md:text-lg mr-4 px-2 py-1 rounded-full">
                     <span>Fecha de Inicio: {new Date(classData.start_date).toISOString().split('T')[0]}</span>

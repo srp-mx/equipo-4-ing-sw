@@ -1,0 +1,27 @@
+Description: Try to remove a account from database and app. 
+
+Type: POST 
+
+Input:{}
+
+Returns: 
+{
+    "ok": ...
+}
+
+"ok" -> boolean // true if everything is okay
+
+ERROR:
+
+400 (Bad request) 
+  Cause: Malformed JSON 
+
+401 (Unauthorized)
+  Cause: Bad credentials 
+
+404 (Not found)
+  Cause: The user not found
+
+500 (Internal server error) 
+  Cause: Internal error
+
