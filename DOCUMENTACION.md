@@ -11,28 +11,6 @@
 * [API](#api)
     * [Fórmulas de calificación](#fórmulas-de-calificación)
 
-## Argumento
-Convertirse en el mejor estudiante que uno puede ser es difícil. A pesar de
-saber lo que debemos hacer, es fácil distraerse con algo más. Las buenas
-prácticas son buenas y las malas prácticas son malas, pero no basta con
-saber cuál es cuál.
-
-Nuestro producto no sólo facilita que el estudiante planee su trayectoria
-académica, sino también que pueda administrar su vida escolar y mantenerse fiel
-a sus metas con ayuda de la
-[*ludificación*](https://es.wikipedia.org/wiki/Ludificaci%C3%B3n).
-El estudiante
-podrá organizar sus tareas, prácticas y exámenes, evaluando su progreso y
-también sus logros. A lo largo del ciclo escolar se planteará metas y se verá
-recompensado al cumplirlas.
-
-Con *Estudiántica*, buscamos darle un poco de emoción a la vida del estudiante
-promedio, ayudando a que tome el control de sus estudios a través de incentivos
-en forma de un *videojuego-agenda*. El estudiante va a generar hábitos positivos
-con recompensas estilo *RPG* como: habilidades, items, mascotas y armaduras con
-estilo. Enfrentándose a las hordas de tareas y a los malvados profesores (por
-supuesto no todos) que se encuentre en su camino, el estudiante podrá recolectar
-distintas mejoras para su personaje, así como para su vida académica.
 
 ## Especificación
 El componente más esencial de la aplicación es una agenda escolar. El aspecto
@@ -81,14 +59,17 @@ de los módulos y de la vista para el usuario.
 Para esto, tendremos las siguientes entidades, resumidas a continuación:
    - User: contiene la información de los usuarios para la aplicación, de esta
      manera se requiere un nombre de usuario, correo y contraseña.
-   - Clan: es un grupo social dentro de la aplicación donde los distintos
-     usuarios se pueden relacionar, el cuál contiene un nombre,una descripción,
-     números de victorias, logotipo y experiencia.
+
+  ![UserEntidadRelacion](.repo/EntidadRelacion/User.png)
+
    - Character: es el personaje del usuario dentro del videojuego, donde existe
      tres distintas clases (mago, caballero y erudito), donde cada personaje
      tiene su nombre, experiencia, nivel, leyenda, vida, última vez que estuvo
      en acción, su racha y sus stats (máximo de vida, inteligencia, defensa y
      fuerza).
+
+  ![CharacterEntidadRelacion](.repo/EntidadRelacion/Character.png)
+
    - Item: son los objetos que el personaje puede llevar, el cual tiene
      información de los mismos stats (fuerza, defensa, inteligencia y vida),
      rareza y dependiendo de su tipo puede tener las siguientes
@@ -96,12 +77,17 @@ Para esto, tendremos las siguientes entidades, resumidas a continuación:
      - Weapon: debe tener el número de eliminaciones.
      - Armor: debe de tener el nivel de daño recibido.
      - Pet: tiene el vinculo y su nombre.
+
+  ![ItemEntidadRelacion](.repo/EntidadRelacion/Item.png)
    - Class: son las materias que los usuarios tienen las cuales deben de tener
      su nombre, fecha de inicio y fin, y fórmula de calificación.
-   - Assignment: es la lista de deberes del estudiante, la cual debe de tener
+  
+  ![ClassEntidadRelacion](.repo/EntidadRelacion/Class.png)
+
+  - Assignment: es la lista de deberes del estudiante, la cual debe de tener
      nombre, calificación, tipo, fecha de finalización, notas, si es opcional y
      tags (las cuales pueden ser varias).
-
+  ![AssignmentEntidadRelacion](.repo/EntidadRelacion/Assignment.png)
 Las entidades se tomaron de esta manera, ya que engloba la mayoría de las
 acciones que hará la aplicación y nos permite acoplarlo con el resto de los
 módulos, los cuales se detallarán en la siguiente sección.
@@ -185,6 +171,13 @@ Además, cada clase tiene alguna propiedad a conservar para que el usuario
 conozca su apego a aquél *item*. Para el arma es sus eliminaciones, para la
 armadura es el daño que ha evitado recibir al personaje, y para la mascota es
 su lazo.
+
+### Diagrama-Relacional
+
+El Diagrama previo a la base de datos donde podemos visualizar como se relacionan 
+las distintas tablas:
+
+![DiagramaRelacional](.repo/Relacional/)
 
 ### Diagrama de clases
 El programa se divide en varias clases, las cuales componen todo el
