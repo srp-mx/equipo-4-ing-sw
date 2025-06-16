@@ -180,95 +180,55 @@ su lazo.
 El Diagrama previo a la base de datos donde podemos visualizar como se relacionan 
 las distintas tablas:
 
-![DiagramaRelacional](.repo/Relacional/)
+![DiagramaRelacional](.repo/Relacional/Relacional.png)
 
 ### Diagrama de clases
 El programa se divide en varias clases, las cuales componen todo el
 comportamiento, de este modo se divide en las siguientes secciones.
 
-#### User module
-Este módulo esta encargado de realizar las operaciones con la clase User y las
-relaciones con Clans, utilizando clases tipo DAO. Las clases de este módulo
-son:
-   - User: clase que tiene la información del usuario y a su vez, maneja la
-     información de su login.
-   - Clans: clase que tiene la información del Clan, basada en el modelo
-     entidad-relación, con las
-     operaciones para agregar o eliminar integrantes.
-   - UserDao y ClansDao: clases para realizar las operaciones en bases de
-     datos.
+#### Models
 
-#### Student Module
-Este módulo se encarga de manejar la información relacionada a la parte de la
-vida estudiantil (respecto a tareas) del usuario, principalmente la clase Class
-y Assignment, con su respectivo DAO. La información especifica de cada uno esta
-dada por lo siguiente:
-   - Class: clase que refleja la materia basada en el modelo entidad-relación.
-   - Assignment: es la clase que refleja las tareas de un alumno.
-   - Class Dao y Assignment Dao: clases que realizan las operaciones internas
-     de la base de datos.
+Este módulo es el encargado de realizar todas las estructuras que a través del ORM serán 
+convertidas en nuestra base de datos. Siendo una correspondencia entre el diagrama relacional 
+y las estructuras generadas en models.
 
-#### Event module
-Se encarga de realizar las notificaciones para el usuario con respecto a las
-tareas de su escuela, donde se tiene las notificaciones de los eventos y sus
-descripciones.
+![Models](./repo/DiagramaDeClases/Models.png)
 
-#### RPG module
-Es el encargado de simular toda la parte de RPG de la aplicación,
-principalmente del uso del personaje y de los items que este puede llevar con
-sus respectivos DAO, donde cada esta detallada como:
-   - Character: clase que es el personaje del usuario con las distintas
-     acciones del mismo.
-   - Item: indica el comportamiento de los items, donde se tiene la información
-     y deriva en Armor, Weapon y Pet
-   - BackPack: indica todos los elementos que tiene el usuario.
+#### Handlers
 
-#### Controller module y ORM module
-Indica todos los controladores para las clases principales y el ORM general,
-utilizando un singleton.
+Este Modulo es el encargado de hacer la gestión entre lo recibido a través de la API y el backend,
+Siendo las funciones pertenecientes a este modulo las encargadas de hacer la gestión y principal cuerpo 
+del programa
 
-#### Cuenta Module, Stats Module y Agenda Module
-Estos módulos se encargan de mostrar en la parte visual del programa la
-información de las entidades del programa, específicamente de la información
-del usuario.
+![handlers](.repo/DiagramaDeClases/Handlers.png)
 
-Para Cuenta module, se tienen las siguientes clase:
-   - User view, es la vista de la información del usuario.
-   - User Settings, clase que ayuda a modificar la información del usuario.
-   - Clan, indica los detalles del clan del usuario.
-   - Friends, muestra los amigos del usuario.
+#### Utils
 
-Para Stats module, contiene las siguientes clases:
-   - Stats view: vista de los stats del usuario.
-   - ClassProgress: clase que muestra el progreso de la materia.
-   - AssignmentProgress: progreso de las tareas.
-   - Stats y Average: muestra los stats del usuario y el promedio del mismo
+Son las utilidades relacionadas a las funcionalidades de nuestra aplicación, es por ello que aquí se encuentra 
+la gestión de fórmulas y el diseño de niveles.
 
-#### View module y Resources module
-Clase que muestra la parte visual de la aplicación y de los recursos que
-utilice el mismo.
+![Utils](.repo/DiagramaDeClases/Utils.png)
 
-#### Dungeon module y DungeonView module
-Estos módulos se encargan de mostrar y modificar la información de las Dungeon,
-las cuales es un aditamento especial de nuestro sistema.
+#### Middlewares
 
-Las clases del módulo Dungeon, tiene la siguiente información:
-   - DungeonEvent: tiene el calabozo del momento, donde guarda el listado de
-     usuarios que estan completando, los que ya se retiraron de la contienda y
-     notifica al usuario de su avance. De este modo, se tiene tres tipos de
-     calabozo:
-     - BasicDungeon
-     - AdvancedDungeon
-     - SpecialDungeon
-   - itemGenerator: contiene la generación de los items del calabozo.
+Se encarga de construir el objeto con el contexto de JWT fungiendo así la parte de seguridad para verificar que los tokens fueron producidos por nosotros y verificar que el token es fiaable y la información recibida por el corresponde. 
 
-Las clases que tiene el módulo DungeonView son:
-   - DungeonView: clase que encapsula la vista del calabozo.
-   - Items: clase que muestra la vista de los items.
-   - Progress: muestra la información del progreso de la clase.
-   - Character: clase que visualiza el personaje del usuario en el calabozo.
+![Middlewares](.repo/DiagramaDeClases/Middlewares.png)
 
-![Diagrama-clase](.repo/DiagramaDeClases/DiagramaDeClases.png)
+#### Controllers 
+
+Este modulo se encarga de crear la conexión entre la base de datos y el codigo del programa, realizando la gestión de la base de datos desde el programa.
+
+![Controllers1](.repo/DiagramaDeClases/Controllers1.png)
+![Controllers2](.repo/DiagramaDeClases/Controllers2.png)
+![Controllers3](.repo/DiagramaDeClases/Controllers3.png)
+
+#### Database 
+
+Genera la conexión con la base de datos.
+
+![Database](.repo/DiagramaDeClases/Database.png)
+![Diagrama-clase](.repo/DiagramaDeClases/EstudianticaClasess.png)
 
 ### Interfaz de usuario
 
