@@ -78,11 +78,11 @@ Para esto, tendremos las siguientes entidades, resumidas a continuación:
      - Armor: debe de tener el nivel de daño recibido.
      - Pet: tiene el vinculo y su nombre.
 
-  ![ItemEntidadRelacion](.repo/EntidadRelacion/Item.png)
+      ![ItemEntidadRelacion](.repo/EntidadRelacion/Item.png)
    - Class: son las materias que los usuarios tienen las cuales deben de tener
      su nombre, fecha de inicio y fin, y fórmula de calificación.
   
-  ![ClassEntidadRelacion](.repo/EntidadRelacion/Class.png)
+      ![ClassEntidadRelacion](.repo/EntidadRelacion/Class.png)
 
   - Assignment: es la lista de deberes del estudiante, la cual debe de tener
      nombre, calificación, tipo, fecha de finalización, notas, si es opcional y
