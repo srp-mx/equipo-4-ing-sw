@@ -100,12 +100,14 @@ const Character = () => {
     useEffect(() => {
         const fetchImageUrl = async () => {
             try {
-                const response = await fetch("http://localhost:300/get_pfp", 
+                const response = await fetch("http://localhost:3000/get_pfp", 
                 {
                     method: "GET",
                     headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    }
+                        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ username: user.name })
                 });
 
                 if (!response.ok) {

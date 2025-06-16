@@ -22,7 +22,6 @@ export default function ClassCard({ classData, onOpen }: ClassCardProps): React.
     const activateClass = getEndDateStatus(new Date(classData.end_date))
     const color = classData.color?.slice(0, 6) || "ffffff";
 
-    console.log(classData)
     if (classData.start_date == null) console.log("Fecha Inicio null");
 
     return (

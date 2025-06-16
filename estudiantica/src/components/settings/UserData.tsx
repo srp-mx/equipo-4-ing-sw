@@ -1,4 +1,6 @@
-import { useEffect, useRef,useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/constants/store";
 import { Button } from "../Button";
 import { Input } from "../Inputs";
 import { PasswordInput } from "../Inputs";
@@ -7,21 +9,34 @@ import iconouser from "@/assets/img/icono_user.svg";
 
 const updateUserData = async (name: string, email: string, newPassword: string, confirmPassword: string) => {
     try {
+        if (name === "" && email === "") {
+            throw new Error("No se puede mandar email y name sin valor")
+        }
+
         if (newPassword !== confirmPassword) {
             throw new Error("Las contraseñas nuevas no coinciden");
         }
 
+        let password = newPassword
+
+        let body: { name?: string; email?: string; password?: string } = {
+            name,
+            email,
+            password
+        }
+
+        if (body.name === "") delete body.name;
+        if (body.email === "") delete body.email;
+        if (body.password === "") delete body.password;
+
+
         const response = await fetch("http://localhost:3000/update_profile", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
                 "Authorization": "Bearer " + localStorage.getItem("token"),
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                email: email,
-                name: name,
-                password: newPassword,
-            })
+            body: JSON.stringify(body)
         });
 
         if (!response.ok) {
@@ -43,6 +58,7 @@ export default function UserData() {
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setconfirmPassword] = useState("");
     const [iconoUser, setIconoUser] = useState<string>(iconouser);
+    const user = useSelector((state: RootState) => state.user);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const updateImg = () => {
@@ -52,13 +68,14 @@ export default function UserData() {
     useEffect(() => {
         const fetchImageUrl = async () => {
             try {
-                const response = await fetch("http://localhost:300/get_pfp",
+                const response = await fetch("http://localhost:3000/get_pfp",
                     {
                         method: "GET",
                         headers: {
                             "Authorization": `Bearer ${localStorage.getItem("token")}`,
-                            "ContentType": "application/json"
-                        }
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ username: user.name })
                     });
 
                 if (!response.ok) {
@@ -77,41 +94,41 @@ export default function UserData() {
 
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+        const file = event.target.files?.[0];
+        if (!file) return;
 
-    if (!["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
-      alert("Formato no válido. Usa JPG, PNG o GIF.");
-      return;
-    }
+        if (!["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
+            alert("Formato no válido. Usa JPG, PNG o GIF.");
+            return;
+        }
 
-    if (file.size > 1024 * 1024) {
-      alert("La imagen no debe superar 1MB.");
-      return;
-    }
+        if (file.size > 1024 * 1024) {
+            alert("La imagen no debe superar 1MB.");
+            return;
+        }
 
-    const formData = new FormData();
-    formData.append("avatar", file);
+        const formData = new FormData();
+        formData.append("avatar", file);
 
-    try {
-      const response = await fetch("http://localhost:3000/user/avatar", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: formData,
-      });
+        try {
+            const response = await fetch("http://localhost:3000/upload_pfp", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token"),
+                },
+                body: formData
+            });
 
-      if (!response.ok) throw new Error("Error al subir la imagen");
+            if (!response.ok) throw new Error(await response.text());
 
-      const blob = await response.blob();
-      const imageUrl = URL.createObjectURL(blob);
-      setIconoUser(imageUrl);
-    } catch (error) {
-      console.error("Error al subir imagen:", error);
-      alert("No se pudo subir la imagen.");
-    }
-  };
+            const blob = await response.blob();
+            const imageUrl = URL.createObjectURL(blob);
+            setIconoUser(imageUrl);
+        } catch (error) {
+            console.error("Error al subir imagen:", error);
+            alert("No se pudo subir la imagen.");
+        }
+    };
 
     return (
         <div className="flex justify-center items-center ">
@@ -144,6 +161,7 @@ export default function UserData() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         contentText="Nombre de usuario"
+                        type="text"
                     />
 
                     <Input
