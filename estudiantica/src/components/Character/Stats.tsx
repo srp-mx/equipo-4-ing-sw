@@ -49,8 +49,6 @@ export default function Stats() {
         intelligence: 0
     });
 
-    console.log("Stats ", stats);
-
     useEffect(() => {
         if (stats.stats.skills && dataCharacter.points !== undefined) {
             setTempStats({
