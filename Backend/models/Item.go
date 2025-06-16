@@ -21,6 +21,15 @@ import (
 	"time"
 )
 
+// Enum type for item type
+type ItemType int
+
+const (
+	ITEM_ARMOR ItemType = iota
+	ITEM_WEAPON
+	ITEM_PET
+)
+
 type Item struct {
 	ID             uint      `json:"id" gorm:"primaryKey;autoIncrement"`
 	CreatedAt      time.Time `json:"created_at" gorm:"datetime;autoCreateTime"`
