@@ -324,6 +324,8 @@ Las documentación de cada ruta son las siguientes.
   enrolled in.
 * [/verify_formula](./.repo/API/verify_formula): Receives a formula and checks
   if the syntax is valid.
+* [/remove_account](.repo/API/remove_account) Removes Account
+* [/update_profile](.repo/API/update_profile) Update information from user.
 
 
 
