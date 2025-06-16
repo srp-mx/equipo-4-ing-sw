@@ -1,4 +1,4 @@
-import { useRef,useState } from "react";
+import { useEffect, useRef,useState } from "react";
 import { Button } from "../Button";
 import { Input } from "../Inputs";
 import { PasswordInput } from "../Inputs";
@@ -35,6 +35,8 @@ const updateUserData = async (name: string, email: string, newPassword: string, 
     }
 }
 
+
+
 export default function UserData() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -46,6 +48,33 @@ export default function UserData() {
     const updateImg = () => {
         fileInputRef.current?.click(); // Dispara el input file oculto
     };
+
+    useEffect(() => {
+        const fetchImageUrl = async () => {
+            try {
+                const response = await fetch("http://localhost:300/get_pfp",
+                    {
+                        method: "GET",
+                        headers: {
+                            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                            "ContentType": "application/json"
+                        }
+                    });
+
+                if (!response.ok) {
+                    throw new Error("No se pudo obtener la imagen");
+                }
+                const blob = await response.blob();
+                const imageUrl = URL.createObjectURL(blob);
+                setIconoUser(imageUrl);
+            } catch (error) {
+                console.error("Error al cargar la imagen del usuario", error);
+            }
+        };
+
+        fetchImageUrl();
+    }, []);
+
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
