@@ -29,7 +29,7 @@ import (
 var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 // Rarity names
-var rarityPrefixes = []string{
+var raritySuffixes = []string{
 	"Común",
 	"Raro",
 	"Épico",
@@ -219,18 +219,18 @@ func (self Dungeon) reward(character *models.Character, result *DungeonResult) {
 	}
 
 	// Construct weapon name and stats bonus
-	prefix := rarityPrefixes[rewardRarity]
+	suffix := raritySuffixes[rewardRarity]
 	itemName := ""
 	statsBonus := 0
 	switch result.RewardType {
 	case models.ITEM_ARMOR:
-		itemName = fmt.Sprintf("%s %s", prefix, armorTypes[rng.Intn(len(armorTypes))])
+		itemName = fmt.Sprintf("%s %s", armorTypes[rng.Intn(len(armorTypes))], suffix)
 		statsBonus = self.level * (rng.Intn(3) + 1)
 	case models.ITEM_WEAPON:
-		itemName = fmt.Sprintf("%s %s", prefix, weaponTypes[rng.Intn(len(weaponTypes))])
+		itemName = fmt.Sprintf("%s %s", weaponTypes[rng.Intn(len(weaponTypes))], suffix)
 		statsBonus = self.level * (rng.Intn(3) + 1)
 	case models.ITEM_PET:
-		itemName = fmt.Sprintf("%s %s", prefix, petTypes[rng.Intn(len(petTypes))])
+		itemName = fmt.Sprintf("%s %s", petTypes[rng.Intn(len(petTypes))], suffix)
 		statsBonus = self.level * (rng.Intn(2) + 1)
 	}
 

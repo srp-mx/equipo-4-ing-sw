@@ -88,7 +88,7 @@ func GetDungeon(c *fiber.Ctx) error {
 	}
 
 	// Ping character activity
-	_, err = characters.ActivityUpdate(user.Character, true)
+	_, err = characters.ActivityUpdate(user.Character, false)
 	if err != nil {
 		return getServerErr(c)
 	}
