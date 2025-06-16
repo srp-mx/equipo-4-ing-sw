@@ -85,7 +85,7 @@ export default function Dungeon(){
         setViewAction(num);
         const dungeonText = await getDungeon(characterName, num);
         await getCharacterDefaultInfo(dispatch);
-        await getStats(dispatch)
+        await getStats(dispatch);
         setTexto(dungeonText);
     }
     if(characterName === '')
